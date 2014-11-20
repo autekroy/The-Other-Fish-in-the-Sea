@@ -173,6 +173,7 @@ window.onload = function init() {
     diffuseProduct = mult(lightDiffuse, materialDiffuse);
     specularProduct = mult(lightSpecular, materialSpecular);
 
+    // for cubes
     vertices = [
         vec3(  length,   length, length ), //vertex 0
         vec3(  length,  -length, length ), //vertex 1
@@ -187,8 +188,8 @@ window.onload = function init() {
     
     tetrahedron(va, vb, vc, vd, numTimesToSubdivide);
     
-    var uv = [], uv2 = [];
-    Cube(vertices, points, normals, uv, uv2);
+    // var uv = [], uv2 = [];
+    // Cube(vertices, points, normals, uv, uv2);
 
     var nBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, nBuffer);
@@ -264,9 +265,6 @@ function render() {
     for( var i=0; i<index; i+=3) 
         gl.drawArrays( gl.TRIANGLES, i, 3 );
     
-    // draw cube        
-    // gl.drawArrays( gl.TRIANGLES, index,  36);
-
     // draw right hand
     ctm = mat4();
     ctm = mult(ctm, modelViewMatrix);
