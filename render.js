@@ -5,10 +5,10 @@ var gl;
 
 var numTimesToSubdivide = 5;
  
-var index = 0; 
+var index = 0;  // triangle points number
 
-var pointsArray = [];
-var normalsArray = [];
+var points = [];
+var normals = [];
 
 var near = -10;
 var far = 10;
@@ -45,7 +45,7 @@ var modelViewMatrixLoc, projectionMatrixLoc;
 var eye;
 var at = vec3(0.0, 0.0, 0.0);
 var up = vec3(0.0, 1.0, 0.0);
-    
+
 function triangle(a, b, c) {
 
      var t1 = subtract(b, a);
@@ -53,18 +53,69 @@ function triangle(a, b, c) {
      var normal = normalize(cross(t1, t2));
      normal = vec4(normal);
 
-     normalsArray.push(normal);
-     normalsArray.push(normal);
-     normalsArray.push(normal);
+     normals.push(normal);
+     normals.push(normal);
+     normals.push(normal);
 
      
-     pointsArray.push(a);
-     pointsArray.push(b);      
-     pointsArray.push(c);
+     points.push(a);
+     points.push(b);      
+     points.push(c);
 
      index += 3;
 }
 
+
+function Cube(vertices, points, normals, uv, uv2){
+    // six faces of a cube
+    Quad(vertices, points, normals, uv, uv2, 0, 1, 2, 3, vec3(0, 0, 1));
+    Quad(vertices, points, normals, uv, uv2, 4, 0, 6, 2, vec3(0, 1, 0));
+    Quad(vertices, points, normals, uv, uv2, 4, 5, 0, 1, vec3(1, 0, 0));
+    Quad(vertices, points, normals, uv, uv2, 2, 3, 6, 7, vec3(1, 0, 1));
+    Quad(vertices, points, normals, uv, uv2, 6, 7, 4, 5, vec3(0, 1, 1));
+    Quad(vertices, points, normals, uv, uv2, 1, 5, 3, 7, vec3(1, 1, 0));
+}
+
+function Quad( vertices, points, normals, uv, uv2, v1, v2, v3, v4, normal){
+
+    normals.push(normal);
+    normals.push(normal);
+    normals.push(normal);
+    normals.push(normal);
+    normals.push(normal);
+    normals.push(normal);
+
+    // for normal texture coordinate
+    uv.push(vec2(0,0));
+    uv.push(vec2(1,0));
+    uv.push(vec2(1,1));
+    uv.push(vec2(0,0));
+    uv.push(vec2(1,1));
+    uv.push(vec2(0,1));
+
+    // for zoom-out
+    uv2.push(vec2(0,0));
+    uv2.push(vec2(2,0));
+    uv2.push(vec2(2,2));
+    uv2.push(vec2(0,0));
+    uv2.push(vec2(2,2));
+    uv2.push(vec2(0,2));
+
+    // 6 points to form 2 triangels, which can combine to a
+    // points.push(vertices[v1]);
+    // points.push(vertices[v3]);
+    // points.push(vertices[v4]);
+    // points.push(vertices[v1]);
+    // points.push(vertices[v4]);
+    // points.push(vertices[v2]);
+
+    points.push(vec4(vertices[v1], 1));
+    points.push(vec4(vertices[v3], 1));
+    points.push(vec4(vertices[v4], 1));
+    points.push(vec4(vertices[v1], 1));
+    points.push(vec4(vertices[v4], 1));
+    points.push(vec4(vertices[v2], 1));
+}
 
 function divideTriangle(a, b, c, count) {
     if ( count > 0 ) {
@@ -118,12 +169,26 @@ window.onload = function init() {
     diffuseProduct = mult(lightDiffuse, materialDiffuse);
     specularProduct = mult(lightSpecular, materialSpecular);
 
+    vertices = [
+        vec3(  length,   length, length ), //vertex 0
+        vec3(  length,  -length, length ), //vertex 1
+        vec3( -length,   length, length ), //vertex 2
+        vec3( -length,  -length, length ),  //vertex 3 
+        vec3(  length,   length, -length ), //vertex 4
+        vec3(  length,  -length, -length ), //vertex 5
+        vec3( -length,   length, -length ), //vertex 6
+        vec3( -length,  -length, -length )  //vertex 7   
+    ];
+
     
     tetrahedron(va, vb, vc, vd, numTimesToSubdivide);
+    
+    var uv = [], uv2 = [];
+    Cube(vertices, points, normals, uv, uv2);
 
     var nBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, nBuffer);
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(normalsArray), gl.STATIC_DRAW );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(normals), gl.STATIC_DRAW );
     
     var vNormal = gl.getAttribLocation( program, "vNormal" );
     gl.vertexAttribPointer( vNormal, 4, gl.FLOAT, false, 0, 0 );
@@ -132,7 +197,7 @@ window.onload = function init() {
 
     var vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
     
     var vPosition = gl.getAttribLocation( program, "vPosition");
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
@@ -164,13 +229,34 @@ function render() {
         radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
 
     modelViewMatrix = lookAt(eye, at , up);
+    
+    // draw head
+    ctm = mat4();
+    ctm = mult(ctm, translate(0, 2, 0));
+    ctm = mult(ctm, scale(0.5, 0.5, 0.5));
+    ctm = mult(ctm, modelViewMatrix);
+
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
-            
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix) );
+    
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
         
     for( var i=0; i<index; i+=3) 
         gl.drawArrays( gl.TRIANGLES, i, 3 );
+
+    // draw body
+    ctm = mat4();
+    ctm = mult(ctm, translate(0, 0, 0));
+    ctm = mult(ctm, scale(0.3, 2, 0.3));
+    ctm = mult(ctm, modelViewMatrix);
+
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+    
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
+        
+    gl.drawArrays( gl.TRIANGLES, index,  36);
+
 
     window.requestAnimFrame(render);
 }
