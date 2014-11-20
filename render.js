@@ -3,7 +3,7 @@
 var canvas;
 var gl;
 
-var numTimesToSubdivide = 5;
+var numTimesToSubdivide = 6;
  
 var index = 0;  // triangle points number
 
@@ -12,7 +12,7 @@ var normals = [];
 
 var near = -10;
 var far = 10;
-var radius = 3;
+var radius = 1.5;
 var theta  = 0.0;
 var phi    = 0.0;
 var dr = 5.0 * Math.PI/180.0;
@@ -27,7 +27,7 @@ var vb = vec4(0.0, 0.942809, 0.333333, 1);
 var vc = vec4(-0.816497, -0.471405, 0.333333, 1);
 var vd = vec4(0.816497, -0.471405, 0.333333,1);
     
-var lightPosition = vec4(1.0, 1.0, 1.0, 0.0 );
+var lightPosition = vec4(3.0, -3.0, -3.0, 0.0 ); // vec4(1.0, 1.0, 1.0, 0.0 );
 var lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
 var lightDiffuse = vec4( 1.0, 1.0, 1.0, 1.0 );
 var lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 );
@@ -247,15 +247,82 @@ function render() {
     // draw body
     ctm = mat4();
     ctm = mult(ctm, translate(0, 0, 0));
-    ctm = mult(ctm, scale(0.3, 2, 0.3));
+    ctm = mult(ctm, scale(0.3, 1.5, 0.3));
     ctm = mult(ctm, modelViewMatrix);
 
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
     
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
-        
-    gl.drawArrays( gl.TRIANGLES, index,  36);
+
+    for( var i=0; i<index; i+=3) 
+        gl.drawArrays( gl.TRIANGLES, i, 3 );
+    
+    // draw cube        
+    // gl.drawArrays( gl.TRIANGLES, index,  36);
+
+    // draw right hand
+    ctm = mat4();
+    ctm = mult(ctm, translate(0.8, 0.3, 0));
+    ctm = mult(ctm, rotate(45, [0, 0, 1]));
+    ctm = mult(ctm, scale(0.2, 0.8, 0.2));
+    ctm = mult(ctm, modelViewMatrix);
+
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+    
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
+
+    for( var i=0; i<index; i+=3) 
+        gl.drawArrays( gl.TRIANGLES, i, 3 );
+
+    // draw left hand
+    ctm = mat4();
+    ctm = mult(ctm, translate(-0.8, 0.3, 0));
+    ctm = mult(ctm, rotate(-45, [0, 0, 1]));
+    ctm = mult(ctm, scale(0.2, 0.8, 0.2));
+    ctm = mult(ctm, modelViewMatrix);
+
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+    
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
+
+    for( var i=0; i<index; i+=3) 
+        gl.drawArrays( gl.TRIANGLES, i, 3 );
+
+
+
+
+    // draw right foot
+    ctm = mat4();
+    ctm = mult(ctm, translate(0.6, -2, 0));
+    ctm = mult(ctm, rotate(45, [0, 0, 1]));
+    ctm = mult(ctm, scale(0.2, 0.8, 0.2));
+    ctm = mult(ctm, modelViewMatrix);
+
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+    
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
+
+    for( var i=0; i<index; i+=3) 
+        gl.drawArrays( gl.TRIANGLES, i, 3 );
+
+    // draw left foot
+    ctm = mat4();
+    ctm = mult(ctm, translate(-0.6, -2, 0));
+    ctm = mult(ctm, rotate(-45, [0, 0, 1]));
+    ctm = mult(ctm, scale(0.2, 0.8, 0.2));
+    ctm = mult(ctm, modelViewMatrix);
+
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+    
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
+
+    for( var i=0; i<index; i+=3) 
+        gl.drawArrays( gl.TRIANGLES, i, 3 );
 
 
     window.requestAnimFrame(render);
