@@ -27,7 +27,7 @@ var vb = vec4(0.0, 0.942809, 0.333333, 1);
 var vc = vec4(-0.816497, -0.471405, 0.333333, 1);
 var vd = vec4(0.816497, -0.471405, 0.333333,1);
     
-var lightPosition = vec4(3.0, -3.0, -3.0, 0.0 ); // vec4(1.0, 1.0, 1.0, 0.0 );
+var lightPosition = vec4(2.0, 0, -3.0, 0.0 ); // vec4(1.0, 1.0, 1.0, 0.0 );
 var lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
 var lightDiffuse = vec4( 1.0, 1.0, 1.0, 1.0 );
 var lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 );
@@ -45,6 +45,11 @@ var modelViewMatrixLoc, projectionMatrixLoc;
 var eye;
 var at = vec3(0.0, 0.0, 0.0);
 var up = vec3(0.0, 1.0, 0.0);
+
+// for naviggation system
+var unit = 0.5;
+var altitude = 0;
+var theta = 0.0;
 
 function triangle(a, b, c) {
 
@@ -64,7 +69,6 @@ function triangle(a, b, c) {
 
      index += 3;
 }
-
 
 function Cube(vertices, points, normals, uv, uv2){
     // six faces of a cube
@@ -229,12 +233,14 @@ function render() {
         radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
 
     modelViewMatrix = lookAt(eye, at , up);
-    
+    modelViewMatrix = mult(modelViewMatrix, rotate(altitude, [1, 0, 0])); //change the altitude of the whold world
+    modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world
+
     // draw head
     ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
     ctm = mult(ctm, translate(0, 2, 0));
     ctm = mult(ctm, scale(0.5, 0.5, 0.5));
-    ctm = mult(ctm, modelViewMatrix);
 
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
     
@@ -246,9 +252,9 @@ function render() {
 
     // draw body
     ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);    
     ctm = mult(ctm, translate(0, 0, 0));
     ctm = mult(ctm, scale(0.3, 1.5, 0.3));
-    ctm = mult(ctm, modelViewMatrix);
 
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
     
@@ -263,10 +269,10 @@ function render() {
 
     // draw right hand
     ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
     ctm = mult(ctm, translate(0.8, 0.3, 0));
     ctm = mult(ctm, rotate(45, [0, 0, 1]));
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
-    ctm = mult(ctm, modelViewMatrix);
 
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
     
@@ -278,10 +284,10 @@ function render() {
 
     // draw left hand
     ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);    
     ctm = mult(ctm, translate(-0.8, 0.3, 0));
     ctm = mult(ctm, rotate(-45, [0, 0, 1]));
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
-    ctm = mult(ctm, modelViewMatrix);
 
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
     
@@ -296,10 +302,10 @@ function render() {
 
     // draw right foot
     ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
     ctm = mult(ctm, translate(0.6, -2, 0));
     ctm = mult(ctm, rotate(45, [0, 0, 1]));
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
-    ctm = mult(ctm, modelViewMatrix);
 
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
     
@@ -311,10 +317,11 @@ function render() {
 
     // draw left foot
     ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
     ctm = mult(ctm, translate(-0.6, -2, 0));
     ctm = mult(ctm, rotate(-45, [0, 0, 1]));
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
-    ctm = mult(ctm, modelViewMatrix);
+
 
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
     
