@@ -35,6 +35,13 @@ var materialDiffuse = vec4( 1.0, 0.8, 0.0, 1.0 );
 var materialSpecular = vec4( 1.0, 0.8, 0.0, 1.0 );
 var materialShininess = 100.0;
 
+var square = [
+    vec3(0, 0, 0),
+    vec3(1, 0, 0),
+    vec3(1, 1, 0),
+    vec3(0, 1, 0)
+];
+
 var ctm;
 var ambientColor, diffuseColor, specularColor;
 
@@ -48,6 +55,17 @@ var up = vec3(0.0, 1.0, 0.0);
 var unit = 0.5;
 var altitude = 0;
 var theta = 1.5;
+
+
+var diffuseProductLoc;
+var specularProductLoc;
+var lightPositionLoc;
+var shininessLoc;
+
+// for texture
+// var imageSrc = "/resource/head.png"
+var uv = [];
+
 
 function triangle(a, b, c) {
 
@@ -156,7 +174,7 @@ window.onload = function init() {
     if ( !gl ) { alert( "WebGL isn't available" ); }
 
     gl.viewport( 0, 0, canvas.width, canvas.height );
-    gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
+    gl.clearColor( 0.5, 0.5, 1.0, 1.0 );
     
     gl.enable(gl.DEPTH_TEST);
 
@@ -185,9 +203,29 @@ window.onload = function init() {
 
     
     tetrahedron(va, vb, vc, vd, numTimesToSubdivide);
+
+
+    // first cube with texture
+    myTexture = gl.createTexture();
+    myTexture.image = new Image();
+
+    myTexture.image.onload = function(){
+        gl.bindTexture(gl.TEXTURE_2D, myTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, myTexture.image);
+        
+        //use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    // myTexture.image.src = imageSrc;
     
-    var uv = [], uv2 = [];
-    Cube(vertices, points, normals, uv, uv2);
+    // Cube(vertices, points, normals, uv, uv2);
 
     var nBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, nBuffer);
@@ -209,41 +247,43 @@ window.onload = function init() {
     modelViewMatrixLoc = gl.getUniformLocation( program, "modelViewMatrix" );
     projectionMatrixLoc = gl.getUniformLocation( program, "projectionMatrix" );
 
-    gl.uniform4fv( gl.getUniformLocation(program, 
-       "ambientProduct"),flatten(ambientProduct) );
-    gl.uniform4fv( gl.getUniformLocation(program, 
-       "diffuseProduct"),flatten(diffuseProduct) );
-    gl.uniform4fv( gl.getUniformLocation(program, 
-       "specularProduct"),flatten(specularProduct) );	
-    gl.uniform4fv( gl.getUniformLocation(program, 
-       "lightPosition"),flatten(lightPosition) );
-    gl.uniform1f( gl.getUniformLocation(program, 
-       "shininess"),materialShininess );
+    ambientProductLoc = gl.getUniformLocation(program, "ambientProduct");
+    diffuseProductLoc = gl.getUniformLocation(program, "diffuseProduct");
+    specularProductLoc = gl.getUniformLocation(program, "specularProduct");
+    lightPositionLoc = gl.getUniformLocation(program, "lightPosition");
+    shininessLoc = gl.getUniformLocation(program, "shininess");
 
     render();
+}
+
+
+function worldViewMatrix(){
+    modelViewMatrix = lookAt(eye, at , up);
+    modelViewMatrix = mult(modelViewMatrix, rotate(altitude, [1, 0, 0])); //change the altitude of the whold world
+    modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world    
 }
 
 var deg  = 180;
 var degUnit = 20;
 
-function render() {
-    
-    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    
-    eye = vec3(radius*Math.sin(theta)*Math.cos(phi), 
-        radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
+function drawPeople(){
+    worldViewMatrix();
 
-    modelViewMatrix = lookAt(eye, at , up);
-    modelViewMatrix = mult(modelViewMatrix, rotate(altitude, [1, 0, 0])); //change the altitude of the whold world
-    modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world
-    // modelViewMatrix = mult(modelViewMatrix, rotate(90, [0, 1, 0]));
-    // modelViewMatrix = mult(modelViewMatrix, rotate(20, [1, 0, 0]));
+    modelViewMatrix = mult(modelViewMatrix, rotate(-20, [1, 0, 0]));
 
-    ctm = mat4();
-    ctm = mult(ctm, modelViewMatrix);
-    ctm = mult(ctm, scale(2, 2, 2));
-    gl.drawArrays(gl.TRIANGLES, index, 36);
+    materialAmbient = vec4( 1.0, 0.0, 1.0, 1.0 );
+    materialDiffuse = vec4( 1.0, 0.8, 0.0, 1.0 );
+    materialSpecular = vec4( 1.0, 0.8, 0.0, 1.0 );
+    materialShininess = 100.0;
 
+    ambientProduct = mult(lightAmbient, materialAmbient);
+    diffuseProduct = mult(lightDiffuse, materialDiffuse);
+    specularProduct = mult(lightSpecular, materialSpecular);
+
+    gl.uniform4fv( ambientProductLoc, flatten(ambientProduct) );
+    gl.uniform4fv( diffuseProductLoc, flatten(diffuseProduct) );
+    gl.uniform4fv( specularProductLoc,flatten(specularProduct) );   
+    gl.uniform1f( shininessLoc ,materialShininess );
 
     // draw head
     ctm = mat4();
@@ -255,7 +295,10 @@ function render() {
     
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
-        
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, myTexture);
+
     for( var i=0; i<index; i+=3) 
         gl.drawArrays( gl.TRIANGLES, i, 3 );
 
@@ -268,7 +311,7 @@ function render() {
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
     
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
-    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
+    // gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
 
     for( var i=0; i<index; i+=3) 
         gl.drawArrays( gl.TRIANGLES, i, 3 );
@@ -289,7 +332,7 @@ function render() {
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
     
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
-    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
+    // gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
 
     for( var i=0; i<index; i+=3) 
         gl.drawArrays( gl.TRIANGLES, i, 3 );
@@ -310,13 +353,10 @@ function render() {
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
     
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
-    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
+    // gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
 
     for( var i=0; i<index; i+=3) 
         gl.drawArrays( gl.TRIANGLES, i, 3 );
-
-
-
 
     // draw right foot
     ctm = mat4();
@@ -330,7 +370,7 @@ function render() {
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
     
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
-    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
+    // gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
 
     for( var i=0; i<index; i+=3) 
         gl.drawArrays( gl.TRIANGLES, i, 3 );
@@ -345,13 +385,63 @@ function render() {
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
 
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
-    
+
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
-    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
+    // gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
 
     for( var i=0; i<index; i+=3) 
         gl.drawArrays( gl.TRIANGLES, i, 3 );
 
+}
+
+var upDis = -2, bubbleSize = 0.1;
+function drawBubble(up, larger){
+
+    worldViewMatrix();
+    
+    upDis += 0.03;
+    bubbleSize += 0.001;
+
+    if(upDis >= 2.5){
+        upDis = -2.5;
+        bubbleSize = 0.1;
+    }
+
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
+    ctm = mult(ctm, translate(4, upDis, 1.5));
+    ctm = mult(ctm, scale(bubbleSize, bubbleSize, bubbleSize));
+
+    materialAmbient = vec4( 0.7, 0.7, 1.0, 1.0 );
+    materialDiffuse = vec4( 0.6, 0.6, 1.0, 1.0 );
+    materialSpecular = vec4( 0.8, 0.8, 1.0, 1.0 );
+    materialShininess = 200.0;
+
+    ambientProduct = mult(lightAmbient, materialAmbient);
+    diffuseProduct = mult(lightDiffuse, materialDiffuse);
+    specularProduct = mult(lightSpecular, materialSpecular);
+
+    gl.uniform4fv( ambientProductLoc, flatten(ambientProduct) );
+    gl.uniform4fv( diffuseProductLoc, flatten(diffuseProduct) );
+    gl.uniform4fv( specularProductLoc,flatten(specularProduct) );   
+    gl.uniform1f( shininessLoc ,materialShininess );
+
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
+
+    for( var i=0; i<index; i+=3) 
+        gl.drawArrays( gl.TRIANGLES, i, 3 );    
+}
+
+function render() {
+    
+    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    
+    eye = vec3(radius*Math.sin(theta)*Math.cos(phi), 
+        radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
+
+    drawPeople();
+
+    drawBubble(1, 0.001);
 
     window.requestAnimFrame(render);
 }
