@@ -127,3 +127,108 @@ function createBubble(xvalue, yvalue, zvalue) {
 
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
 }
+
+
+var deg  = 180;
+var degUnit = 15;
+function createPeople(xvalue, yvalue, zvalue){
+    worldViewMatrix();
+    modelViewMatrix = mult(modelViewMatrix, rotate(-30, [1, 0, 0]));
+
+    // materialAmbient = vec4( 1.0, 0.0, 1.0, 1.0 );
+    // materialDiffuse = vec4( 1.0, 0.8, 0.0, 1.0 );
+    // materialSpecular = vec4( 1.0, 0.8, 0.0, 1.0 );
+    // shininess = 100.0;
+
+    // ambientProduct = mult(lightAmbient, materialAmbient);
+    // diffuseProduct = mult(lightDiffuse, materialDiffuse);
+    // specularProduct = mult(lightSpecular, materialSpecular);
+
+    // gl.uniform4fv( UNIFORM_lightPosition,  flatten(lightPosition) );
+    // gl.uniform4fv( UNIFORM_ambientProduct, flatten(ambientProduct) );
+    // gl.uniform4fv( UNIFORM_diffuseProduct, flatten(diffuseProduct) );
+    // gl.uniform4fv( UNIFORM_specularProduct,flatten(specularProduct) );   
+    // gl.uniform1f( UNIFORM_shininess ,shininess );
+
+    // draw head
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
+    ctm = mult(ctm, translate(xvalue, 2 + yvalue, zvalue));
+    ctm = mult(ctm, scale(0.5, 0.5, 0.5));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, myTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex ); 
+
+    // draw body
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);    
+    ctm = mult(ctm, translate(xvalue, yvalue, zvalue));
+    ctm = mult(ctm, scale(0.3, 1.5, 0.3));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
+    
+    // for move the hand and foots
+    deg += degUnit;
+    if(deg == 240)   degUnit = -degUnit;
+    else if(deg == 120) degUnit = -degUnit;
+
+    // draw right hand
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
+    ctm = mult(ctm, translate(xvalue + 0.8, yvalue + 0.7, zvalue));
+    ctm = mult(ctm, rotate( -deg, [1, 0, 0]));
+    ctm = mult(ctm, translate(0, 0.5, 0));
+    ctm = mult(ctm, rotate(-45, [0, 0, 1]));
+    ctm = mult(ctm, scale(0.2, 0.8, 0.2));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
+
+    // draw left hand
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);    
+    ctm = mult(ctm, translate(xvalue - 0.8, yvalue + 0.7, zvalue));
+    ctm = mult(ctm, rotate(deg, [1, 0, 0]));
+    ctm = mult(ctm, translate(0, 0.5, 0));
+    ctm = mult(ctm, rotate(45, [0, 0, 1]));
+    ctm = mult(ctm, scale(0.2, 0.8, 0.2));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
+
+    // draw right foot
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
+    ctm = mult(ctm, translate(xvalue + 0.6, yvalue - 1.5, zvalue));
+    ctm = mult(ctm, rotate(deg, [1, 0, 0]));
+    ctm = mult(ctm, translate(0, 0.5, 0));
+    ctm = mult(ctm, rotate(-45, [0, 0, 1]));
+    ctm = mult(ctm, scale(0.2, 0.8, 0.2));
+
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
+
+    // draw left foot
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
+    ctm = mult(ctm, translate(xvalue - 0.6, yvalue - 1.5, zvalue));
+    ctm = mult(ctm, rotate( -deg, [1, 0, 0]));
+    ctm = mult(ctm, translate(0, 0.5, 0));
+    ctm = mult(ctm, rotate(45, [0, 0, 1]));
+    ctm = mult(ctm, scale(0.2, 0.8, 0.2));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
+
+}

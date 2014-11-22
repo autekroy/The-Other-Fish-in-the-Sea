@@ -83,7 +83,7 @@ var UNIFORM_shininess;
 
 var ifRotate = 0; // control  the rotation of both cubes.
 var textureRotate = 0; // start and stop the rotation of the texture maps on all faces of the first cube
-var textureScroll = 0; // start and stop the continuous scrolling the texture map on the second cube
+var textureScroll = 1; // start and stop the continuous scrolling the texture map on the second cube
 
 var imageSrc = "/resource/sandycheeks.jpg"
 

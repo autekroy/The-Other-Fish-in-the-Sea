@@ -157,7 +157,7 @@ function render()
     // scrolling the cube (beach)
     if(textureScroll == 1){
         for(var i = 0; i < 36; i++){
-            cubeUV[i][1] -= 0.02;
+            cubeUV[i][1] -= 0.04;
             // reset all the texture coordinate incase they are too low to get overflow.
             if(cubeUV[i][1] <= -1000000){
                 for(var j = 0; j < 36; j++)
@@ -224,6 +224,8 @@ function render()
     // gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
 
     //////////////////////////////////////////////////////////////////
+
+    createPeople(0, 3.6, 0);
 
     worldViewMatrix();
 
