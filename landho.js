@@ -208,7 +208,7 @@ var render = function(){
     ctm = mult(ctm, projectionMatrix);
     ctm = mult(ctm, viewMatrix);
 
-    ctm = mult(ctm, rotate(40, [1,0,0] ));
+    ctm = mult(ctm, rotate(89, [1,0,0] ));
     ctm = mult(ctm, scale(2, 2, 2));
     
 
