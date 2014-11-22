@@ -67,6 +67,8 @@ function createSphere(numberDivisions, points, normals, uv)
     {
         normals.push(a, b, c);
         points.push(a, b, c);
+
+        // now the texture corrdinates are wrong and should be fixed it later
         var bound = 1;
         uv.push(vec2(bound, bound));
         uv.push(vec2(bound, 0));
@@ -99,4 +101,29 @@ function createSphere(numberDivisions, points, normals, uv)
     }
 
     tetrahedron(va,vb,vc,vd,numberDivisions);
+}
+
+
+var upDis = 0, bubbleSize = 0.2;
+function createBubble(xvalue, yvalue, zvalue) {
+
+    worldViewMatrix();
+    
+    upDis += 0.03;
+    bubbleSize += 0.001;
+
+    if(upDis >= 4){
+        upDis = 0;
+        bubbleSize = 0.1;
+    }
+
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
+
+    ctm = mult(ctm, translate(xvalue, yvalue + upDis, zvalue));
+    ctm = mult(ctm, scale(bubbleSize, bubbleSize, bubbleSize));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
 }
