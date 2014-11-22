@@ -37,18 +37,12 @@ function Quad( vertices, points, normals, uv, uv2, v1, v2, v3, v4, normal){
 }
 
 
-
-// var va = vec4(0.0, 0.0, -1.0,1);
-// var vb = vec4(0.0, 0.942809, 0.333333, 1);
-// var vc = vec4(-0.816497, -0.471405, 0.333333, 1);
-// var vd = vec4(0.816497, -0.471405, 0.333333,1);
-
-var va = vec4(0.0, 0.0, -1.0);
-var vb = vec4(0.0, 0.942809, 0.333333);
-var vc = vec4(-0.816497, -0.471405, 0.333333);
-var vd = vec4(0.816497, -0.471405, 0.333333);
-
+// sphere
 var index = 0;
+
+
+var bubbleUv = [];
+
 
 function divideTriangle(a, b, c, count) {
     if ( count > 0 ) {
@@ -78,28 +72,25 @@ function tetrahedron(a, b, c, d, n) {
     divideTriangle(a, c, d, n);
 }
 
-var bubbleUv = [];
-
 function triangle(a, b, c) {
 
-    var t1 = subtract(b, a);
-    var t2 = subtract(c, a);
-    var normal = normalize(cross(t1, t2));
-    normal = vec4(normal);
+     var t1 = subtract(b, a);
+     var t2 = subtract(c, a);
+     var normal = normalize(cross(t1, t2));
+     normal = vec4(normal);
 
-    normals.push(normal);
-    normals.push(normal);
-    normals.push(normal);
+     normals.push(normal);
+     normals.push(normal);
+     normals.push(normal);
 
     var bound = 1;
     bubbleUv.push(vec2(bound, bound));
     bubbleUv.push(vec2(bound, 0));
     bubbleUv.push(vec2(0, bound));
-
      
-    points.push(a);
-    points.push(b);      
-    points.push(c);
+     points.push(a);
+     points.push(b);      
+     points.push(c);
 
-    index += 3;
+     index += 3;
 }

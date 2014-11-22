@@ -6,7 +6,7 @@ var timer = new Timer();
 var omega = 360;
 
 
-var numTimesToSubdivide = 7;
+var numTimesToSubdivide = 1;
 
 var points = [];
 var normals = []; 
@@ -58,6 +58,11 @@ var uv = [], uv2 = [];
 var unit = 2;
 var altitude = 0;
 var theta = 1.5;
+
+var va = vec4(0.0, 0.0, -1.0,1);
+var vb = vec4(0.0, 0.942809, 0.333333, 1);
+var vc = vec4(-0.816497, -0.471405, 0.333333, 1);
+var vd = vec4(0.816497, -0.471405, 0.333333,1);
 
 
 window.onload = function init()
@@ -201,11 +206,11 @@ function drawBubble(xvalue, zvalue){
 
     ctm = mat4();
     ctm = mult(ctm, modelViewMatrix);
-    ctm = mult(ctm, translate(0, 0.6, 1));
-    ctm = mult(ctm, scale(0.2, 0.2, 0.2));
+    ctm = mult(ctm, translate(0, 100, -4));
+    ctm = mult(ctm, scale(0.2, 0.2, 5));
 
-    // ctm = mult(ctm, translate(xvalue, upDis, zvalue));
-    // ctm = mult(ctm, scale(bubbleSize, bubbleSize, bubbleSize));
+    ctm = mult(ctm, translate(xvalue, upDis, zvalue));
+    ctm = mult(ctm, scale(bubbleSize, bubbleSize, bubbleSize));
 
     materialAmbient = vec4( 0.7, 0.7, 1.0, 1.0 );
     materialDiffuse = vec4( 0.6, 0.6, 1.0, 1.0 );
@@ -227,31 +232,36 @@ function drawBubble(xvalue, zvalue){
     for( var i = 36; i < index + 36; i+=3) 
         gl.drawArrays( gl.TRIANGLES, i, 3 );    
 }
+var left = -3.0;
+var right = 3.0;
+var ytop =3.0;
+var bottom = -3.0;
 
 function render()
 {
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     eye = vec3(0, 1 * distance, 1.8 * distance);
-    viewMatrix = lookAt(eye, at, up);
-    projectionMatrix = perspective(fovy, 1, 0.001, 1000);
+
+    modelViewMatrix = lookAt(eye, at, up);
+    projectionMatrix = perspective(90, 1, 0.01, 1000);
+    // projectionMatrix = ortho(left, right, bottom, ytop, near, far);
 
     time += timer.getElapsedTime() / 1000;
 
-    myMatrix = viewMatrix;
+    myMatrix = modelViewMatrix;
     myMatrix = mult(myMatrix, scale(10, 0.1, 10));
     
     if(textureScroll == 1){
         for(var i = 0; i < 36; i++){
             uv[i][1] -= 0.02;
-
             // reset all the texture coordinate incase they are too low to get overflow.
             if(uv[i][1] <= -1000000){
                 for(var j = 0; j < 36; j++)
                     uv[j][1] += 10;
             }
         }
-    }  
+    }
 
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(myMatrix));
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
@@ -272,7 +282,6 @@ function render()
     gl.uniform1f(shininessLoc,  shininess);
     gl.uniform1i(UNIFORM_sampler, 0)
 
-
     // bubble
     BubbleuvBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, BubbleuvBuffer );
@@ -284,8 +293,11 @@ function render()
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
 
-    drawBubble(0, 0);
-
+    //drawBubble(0, 0);
+    worldViewMatrix();
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix) );
+    for( var i = 36; i < index + 36; i+=3)  
+        gl.drawArrays( gl.TRIANGLES, i, 3 );   
 
 
     window.requestAnimFrame( render );

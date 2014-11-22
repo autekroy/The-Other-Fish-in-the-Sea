@@ -1,7 +1,7 @@
 var canvas;
 var gl;
 
-var numTimesToSubdivide = 6;
+var numTimesToSubdivide = 0;
  
 var index = 0;  // triangle points number
 
@@ -291,7 +291,7 @@ function drawPeople(){
     ctm = mult(ctm, scale(0.5, 0.5, 0.5));
 
     projectionMatrix = ortho(left, right, bottom, ytop, near, far);
-    
+     
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
 
@@ -439,6 +439,9 @@ function render() {
     eye = vec3(radius*Math.sin(theta)*Math.cos(phi), 
         radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
 
+    projectionMatrix = perspective(90, 1, 1, 1000);
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix) );
+    
     drawPeople();
 
     drawBubble(4, 1.5);
