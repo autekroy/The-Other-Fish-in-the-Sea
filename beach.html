@@ -37,14 +37,18 @@ void main()
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">
-
 precision mediump float;
+
+uniform vec4 ambientProduct;
+uniform vec4 diffuseProduct;
+uniform vec4 specularProduct;
+uniform float shininess;
 
 varying vec3 fL, fE, fH, fN;
 varying vec2 fUV;
 
 uniform sampler2D uSampler;
-uniform float shininess;
+
 void main()
 {
 
@@ -67,6 +71,7 @@ void main()
 <script type="text/javascript" src="../Common/initShaders.js"></script>
 <script type="text/javascript" src="../Common/MV.js"></script>
 <script type="text/javascript" src="beach.js"></script>
+<script type="text/javascript" src="shape.js"></script>
 
 <body>
 <canvas id="gl-canvas" width="1100" height="550">
@@ -94,6 +99,12 @@ window.onkeydown = function(event){
             break;
         case 40: //down arrow
             omega -= 10;
+            break;
+        case 37: //left arrow
+            theta -= unit;
+            break;
+        case 39: //right arrow
+            theta += unit;
             break;
 
         // 't' : start and stop the rotation of the texture maps on all faces of the first cube 

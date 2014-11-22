@@ -66,26 +66,6 @@ var shininessLoc;
 // var imageSrc = "/resource/head.png"
 var uv = [];
 
-
-function triangle(a, b, c) {
-
-     var t1 = subtract(b, a);
-     var t2 = subtract(c, a);
-     var normal = normalize(cross(t1, t2));
-     normal = vec4(normal);
-
-     normals.push(normal);
-     normals.push(normal);
-     normals.push(normal);
-
-     
-     points.push(a);
-     points.push(b);      
-     points.push(c);
-
-     index += 3;
-}
-
 function Cube(vertices, points, normals, uv, uv2){
     // six faces of a cube
     Quad(vertices, points, normals, uv, uv2, 0, 1, 2, 3, vec3(0, 0, 1));
@@ -163,6 +143,25 @@ function tetrahedron(a, b, c, d, n) {
     divideTriangle(d, c, b, n);
     divideTriangle(a, d, b, n);
     divideTriangle(a, c, d, n);
+}
+
+function triangle(a, b, c) {
+
+     var t1 = subtract(b, a);
+     var t2 = subtract(c, a);
+     var normal = normalize(cross(t1, t2));
+     normal = vec4(normal);
+
+     normals.push(normal);
+     normals.push(normal);
+     normals.push(normal);
+
+     
+     points.push(a);
+     points.push(b);      
+     points.push(c);
+
+     index += 3;
 }
 
 window.onload = function init() {

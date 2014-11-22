@@ -5,16 +5,20 @@ var time = 0.0;
 var timer = new Timer();
 var omega = 360;
 
-var UNIFORM_mvpMatrix;
+
+var numTimesToSubdivide = 7;
+
+var points = [];
+var normals = []; 
+
 var UNIFORM_lightPosition;
-var UNIFORM_shininess;
 var ATTRIBUTE_position;
 var ATTRIBUTE_normal;
 
 var positionBuffer; 
 var normalBuffer;
 
-var myTexture;
+var myTexture, BubbleTexture;
 
 var viewMatrix;
 var projectionMatrix;
@@ -22,7 +26,17 @@ var mvpMatrix;
 
 var shininess = 50;
 var lightPosition = vec3(0.0, 20.0, 0.0);
+var lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
+var lightDiffuse = vec4( 1.0, 1.0, 1.0, 1.0 );
+var lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 );
 
+var diffuseProductLoc;
+var specularProductLoc;
+var lightPositionLoc;
+var shininessLoc;
+
+var modelViewMatrix, projectionMatrix;
+var modelViewMatrixLoc, projectionMatrixLoc;
 var eye = vec3(0, 1, 1.8);
 var at = vec3(0, 0, 0);
 var up = vec3(0, 1, 0);
@@ -38,6 +52,13 @@ var theta = 0.01;
 var distance = 1;
 var fovy = 90;
 var uv = [], uv2 = [];
+
+
+// for naviggation system
+var unit = 2;
+var altitude = 0;
+var theta = 1.5;
+
 
 window.onload = function init()
 {
@@ -61,10 +82,10 @@ window.onload = function init()
         vec3( -length,  -length, -length )  //vertex 7   
     ];
 
-    var points = [];
-    var normals = []; 
     
     Cube(vertices, points, normals, uv, uv2); // original cube with full size texture picture
+
+    tetrahedron(va, vb, vc, vd, numTimesToSubdivide);
 
     // first cube with texture
     myTexture = gl.createTexture();
@@ -84,8 +105,28 @@ window.onload = function init()
     	gl.generateMipmap(gl.TEXTURE_2D);
     	gl.bindTexture(gl.TEXTURE_2D, null);
     }
-
     myTexture.image.src = imageSrc;
+
+    BubbleTexture = gl.createTexture();
+    BubbleTexture.image = new Image();    
+
+    BubbleTexture.image.onload = function(){
+        gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, BubbleTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+
+    BubbleTexture.image.src = "/resource/bubble.png";
+
 
     var program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
@@ -121,11 +162,17 @@ window.onload = function init()
     gl.bindBuffer( gl.ARRAY_BUFFER, normalBuffer );
     gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
 
-    UNIFORM_mvMatrix = gl.getUniformLocation(program, "mvMatrix");
-    UNIFORM_pMatrix = gl.getUniformLocation(program, "pMatrix");
+    modelViewMatrixLoc = gl.getUniformLocation(program, "mvMatrix");
+    projectionMatrixLoc = gl.getUniformLocation(program, "pMatrix");
     UNIFORM_lightPosition = gl.getUniformLocation(program, "lightPosition");
-    UNIFORM_shininess = gl.getUniformLocation(program, "shininess");
+    shininessLoc = gl.getUniformLocation(program, "shininess");
     UNIFORM_sampler = gl.getUniformLocation(program, "uSampler");
+
+    ambientProductLoc = gl.getUniformLocation(program, "ambientProduct");
+    diffuseProductLoc = gl.getUniformLocation(program, "diffuseProduct");
+    specularProductLoc = gl.getUniformLocation(program, "specularProduct");
+    lightPositionLoc = gl.getUniformLocation(program, "lightPosition");
+    shininessLoc = gl.getUniformLocation(program, "shininess");
 
     timer.reset();
     gl.enable(gl.DEPTH_TEST);
@@ -133,40 +180,52 @@ window.onload = function init()
     render();
 }
 
-function Cube(vertices, points, normals, uv, uv2){
-    // six faces of a cube
-    Quad(vertices, points, normals, uv, uv2, 0, 1, 2, 3, vec3(0, 0, 1));
-    Quad(vertices, points, normals, uv, uv2, 4, 0, 6, 2, vec3(0, 1, 0));
-    Quad(vertices, points, normals, uv, uv2, 4, 5, 0, 1, vec3(1, 0, 0));
-    Quad(vertices, points, normals, uv, uv2, 2, 3, 6, 7, vec3(1, 0, 1));
-    Quad(vertices, points, normals, uv, uv2, 6, 7, 4, 5, vec3(0, 1, 1));
-    Quad(vertices, points, normals, uv, uv2, 1, 5, 3, 7, vec3(1, 1, 0));
+function worldViewMatrix(){
+    modelViewMatrix = lookAt(eye, at , up);
+    modelViewMatrix = mult(modelViewMatrix, rotate(altitude, [1, 0, 0])); //change the altitude of the whold world
+    modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world    
 }
 
-function Quad( vertices, points, normals, uv, uv2, v1, v2, v3, v4, normal){
+var upDis = -2, bubbleSize = 0.2;
+function drawBubble(xvalue, zvalue){
 
-    normals.push(normal);
-    normals.push(normal);
-    normals.push(normal);
-    normals.push(normal);
-    normals.push(normal);
-    normals.push(normal);
+    worldViewMatrix();
+    
+    upDis += 0.03;
+    bubbleSize += 0.001;
 
-    // for normal texture coordinate
-    uv.push(vec2(0,0));
-    uv.push(vec2(10,0));
-    uv.push(vec2(10,10));
-    uv.push(vec2(0,0));
-    uv.push(vec2(10,10));
-    uv.push(vec2(0,10));
+    if(upDis >= 2.5){
+        upDis = -2.5;
+        bubbleSize = 0.1;
+    }
 
-    // 6 points to form 2 triangels, which can combine to a
-    points.push(vertices[v1]);
-    points.push(vertices[v3]);
-    points.push(vertices[v4]);
-    points.push(vertices[v1]);
-    points.push(vertices[v4]);
-    points.push(vertices[v2]);
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
+    ctm = mult(ctm, translate(0, 0.6, 1));
+    ctm = mult(ctm, scale(0.2, 0.2, 0.2));
+
+    // ctm = mult(ctm, translate(xvalue, upDis, zvalue));
+    // ctm = mult(ctm, scale(bubbleSize, bubbleSize, bubbleSize));
+
+    materialAmbient = vec4( 0.7, 0.7, 1.0, 1.0 );
+    materialDiffuse = vec4( 0.6, 0.6, 1.0, 1.0 );
+    materialSpecular = vec4( 0.8, 0.8, 1.0, 1.0 );
+    materialShininess = 200.0;
+
+    ambientProduct = mult(lightAmbient, materialAmbient);
+    diffuseProduct = mult(lightDiffuse, materialDiffuse);
+    specularProduct = mult(lightSpecular, materialSpecular);
+
+    // gl.uniform4fv( lightPositionLoc,  flatten(lightPosition) );
+    // gl.uniform4fv( ambientProductLoc, flatten(ambientProduct) );
+    // gl.uniform4fv( diffuseProductLoc, flatten(diffuseProduct) );
+    // gl.uniform4fv( specularProductLoc,flatten(specularProduct) );   
+    // gl.uniform1f( shininessLoc ,materialShininess );
+
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
+
+    for( var i = 36; i < index + 36; i+=3) 
+        gl.drawArrays( gl.TRIANGLES, i, 3 );    
 }
 
 function render()
@@ -181,21 +240,21 @@ function render()
 
     myMatrix = viewMatrix;
     myMatrix = mult(myMatrix, scale(10, 0.1, 10));
-
-    gl.uniformMatrix4fv(UNIFORM_mvMatrix, false, flatten(myMatrix));
-    gl.uniformMatrix4fv(UNIFORM_pMatrix, false, flatten(projectionMatrix));
     
     if(textureScroll == 1){
-        for(var i = 0; i < uv.length; i++){
+        for(var i = 0; i < 36; i++){
             uv[i][1] -= 0.02;
 
             // reset all the texture coordinate incase they are too low to get overflow.
             if(uv[i][1] <= -1000000){
-                for(var j = 0; j < uv.length; j++)
+                for(var j = 0; j < 36; j++)
                     uv[j][1] += 10;
             }
         }
     }  
+
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(myMatrix));
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
 
     uvBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer );
@@ -210,8 +269,24 @@ function render()
     gl.drawArrays( gl.TRIANGLES, 0, 36);
 
     gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
-    gl.uniform1f(UNIFORM_shininess,  shininess);
+    gl.uniform1f(shininessLoc,  shininess);
     gl.uniform1i(UNIFORM_sampler, 0)
+
+
+    // bubble
+    BubbleuvBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, BubbleuvBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(bubbleUv), gl.STATIC_DRAW );      //uv data
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, BubbleuvBuffer );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
+
+    drawBubble(0, 0);
+
+
 
     window.requestAnimFrame( render );
 }
