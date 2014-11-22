@@ -1,0 +1,121 @@
+<!-- 
+assignment4.html
+University of California, Los Angeles, CS 174A, 2014 fall
+Author: Yao-Jen Chang (704-405-423), autekwing@ucla.edu
+Date: 11/18, 2014
+
+HTML file for course assignment 4: add texture to 2 cubes
+-->
+<html>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec3 vPosition;
+attribute vec3 vNormal;
+attribute vec2 vUV;
+uniform mat4 mvMatrix;
+uniform mat4 pMatrix;
+uniform vec3 lightPosition;
+
+varying vec3 fL, fE, fH, fN;
+varying vec2 fUV;
+
+void main() 
+{
+    // mvMatix includes rotate matrix
+    vec3 pos = (mvMatrix * vec4(vPosition, 1.0)).xyz;
+    //light position in camera space
+
+    fL = normalize(lightPosition - pos); 
+    fE = normalize(-pos);
+    fH = normalize(fL + fE);
+    fN = normalize(mvMatrix * vec4(vNormal, 0.0)).xyz; 
+
+    fUV = vUV; 
+    gl_Position = pMatrix * vec4(pos, 1.0);
+} 
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+varying vec3 fL, fE, fH, fN;
+varying vec2 fUV;
+
+uniform sampler2D uSampler;
+uniform float shininess;
+void main()
+{
+
+    vec4 texColor = texture2D(uSampler, fUV);  // UNIFORM_sampler is 0 now
+    vec4 ambient = 0.3 * texColor;
+    float kd = abs(dot(fL, fN));
+    vec4 diffuse = kd * 0.6 * texColor;
+
+    float ks = pow(abs(dot(fN, fH)), shininess);
+    vec4 specular = 0.3 * ks * vec4(1.0, 1.0, 1.0, 1.0);
+
+    vec4 fColor = ambient + diffuse + specular;
+    fColor.a  = 1.0;
+
+    gl_FragColor = fColor;
+}
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="beach.js"></script>
+
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+<pre>
+Press <b>'I'</b> and <b>'O'</b> to move the camera nearer or farer away from cubes.
+Press <b>'R'</b> to start/stop the rotation of both cubes.
+Press <b>'T'</b> to start/stop to rotate of the texture maps on all faces of the left cube.
+Press <b>'S'</b> to start/stop to continuous scroll the texture map on the right cube.
+</pre>
+
+<script>
+window.onkeydown = function(event){
+    var key = window.event.keyCode;
+    // alert(key);
+    switch(key){
+        case 82: // 'R' to start and stop the rotation of both cubes.
+            ifRotate = (ifRotate == 0)? 1: 0;
+            omega = 360;
+            break;
+        case 38: //up arrow
+            omega += 10;
+            break;
+        case 40: //down arrow
+            omega -= 10;
+            break;
+
+        // 't' : start and stop the rotation of the texture maps on all faces of the first cube 
+        case 84: 
+            textureRotate = (textureRotate == 0)? 1: 0;
+            break;
+
+        // 's' : start and stop the continuous scrolling the texture map on the second cube
+        case 83: 
+            textureScroll = (textureScroll == 0)? 1: 0;
+            break;
+
+        case 73: // 'i' : in
+
+            distance -= 0.1;
+            break;
+        case 79: // 'o' : out
+            distance += 0.1;
+            break;
+    }
+}
+</script>
+
+</body>
+</html>
