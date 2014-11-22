@@ -25,7 +25,7 @@ var vb = vec4(0.0, 0.942809, 0.333333, 1);
 var vc = vec4(-0.816497, -0.471405, 0.333333, 1);
 var vd = vec4(0.816497, -0.471405, 0.333333,1);
     
-var lightPosition = vec4(2.0, 0, -3.0, 0.0 ); // vec4(1.0, 1.0, 1.0, 0.0 );
+var lightPosition = vec4(0, 40, 0, 0);//vec4(2.0, 0, -3.0, 0.0 ); // vec4(1.0, 1.0, 1.0, 0.0 );
 var lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
 var lightDiffuse = vec4( 1.0, 1.0, 1.0, 1.0 );
 var lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 );
@@ -280,6 +280,7 @@ function drawPeople(){
     diffuseProduct = mult(lightDiffuse, materialDiffuse);
     specularProduct = mult(lightSpecular, materialSpecular);
 
+    gl.uniform4fv( lightPositionLoc,  flatten(lightPosition) );
     gl.uniform4fv( ambientProductLoc, flatten(ambientProduct) );
     gl.uniform4fv( diffuseProductLoc, flatten(diffuseProduct) );
     gl.uniform4fv( specularProductLoc,flatten(specularProduct) );   
@@ -395,7 +396,7 @@ function drawPeople(){
 }
 
 var upDis = -2, bubbleSize = 0.1;
-function drawBubble(up, larger){
+function drawBubble(xvalue, zvalue){
 
     worldViewMatrix();
     
@@ -409,7 +410,7 @@ function drawBubble(up, larger){
 
     ctm = mat4();
     ctm = mult(ctm, modelViewMatrix);
-    ctm = mult(ctm, translate(4, upDis, 1.5));
+    ctm = mult(ctm, translate(xvalue, upDis, zvalue));
     ctm = mult(ctm, scale(bubbleSize, bubbleSize, bubbleSize));
 
     materialAmbient = vec4( 0.7, 0.7, 1.0, 1.0 );
@@ -421,6 +422,7 @@ function drawBubble(up, larger){
     diffuseProduct = mult(lightDiffuse, materialDiffuse);
     specularProduct = mult(lightSpecular, materialSpecular);
 
+    gl.uniform4fv( lightPositionLoc,  flatten(lightPosition) );
     gl.uniform4fv( ambientProductLoc, flatten(ambientProduct) );
     gl.uniform4fv( diffuseProductLoc, flatten(diffuseProduct) );
     gl.uniform4fv( specularProductLoc,flatten(specularProduct) );   
@@ -435,13 +437,14 @@ function drawBubble(up, larger){
 function render() {
     
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    
+        
     eye = vec3(radius*Math.sin(theta)*Math.cos(phi), 
         radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
 
     drawPeople();
 
-    drawBubble(1, 0.001);
+    drawBubble(4, 1.5);
+    drawBubble(5, 3);
 
     window.requestAnimFrame(render);
 }
