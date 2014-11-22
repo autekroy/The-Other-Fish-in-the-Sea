@@ -21,7 +21,7 @@ var projectionMatrix;
 var mvpMatrix;
 
 var shininess = 50;
-var lightPosition = vec3(0.0, 10.0, 0.0);
+var lightPosition = vec3(0.0, 20.0, 0.0);
 
 var eye = vec3(0, 1, 1.8);
 var at = vec3(0, 0, 0);
@@ -46,7 +46,7 @@ window.onload = function init()
     if ( !gl ) { alert( "WebGL isn't available" ); }
 
     gl.viewport( 0, 0, canvas.width, canvas.height );
-    // gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
+    gl.clearColor( 0.4, 0.4, 0.8, 1.0 );
 
     gl.enable(gl.DEPTH_TEST);
 
@@ -154,11 +154,11 @@ function Quad( vertices, points, normals, uv, uv2, v1, v2, v3, v4, normal){
 
     // for normal texture coordinate
     uv.push(vec2(0,0));
-    uv.push(vec2(4,0));
-    uv.push(vec2(4,4));
+    uv.push(vec2(10,0));
+    uv.push(vec2(10,10));
     uv.push(vec2(0,0));
-    uv.push(vec2(4,4));
-    uv.push(vec2(0,4));
+    uv.push(vec2(10,10));
+    uv.push(vec2(0,10));
 
     // 6 points to form 2 triangels, which can combine to a
     points.push(vertices[v1]);
@@ -187,7 +187,7 @@ function render()
     
     if(textureScroll == 1){
         for(var i = 0; i < uv.length; i++){
-            uv[i][1] -= 0.01;
+            uv[i][1] -= 0.02;
 
             // reset all the texture coordinate incase they are too low to get overflow.
             if(uv[i][1] <= -1000000){
