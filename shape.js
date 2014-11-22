@@ -6,7 +6,10 @@ file!
 
 */
 
+////////////////////////////////////////////////
 // Function for creating a cube!
+////////////////////////////////////////////////
+
 function Cube(length, points, normals, uv, uv2) {
 
     vertices = [
@@ -55,7 +58,10 @@ function Cube(length, points, normals, uv, uv2) {
     Quad(vertices, points, normals, uv, uv2, 1, 5, 3, 7, vec3(1, 1, 0));
 }
 
+////////////////////////////////////////////////
 // Function for creating a sphere!
+////////////////////////////////////////////////
+
 function createSphere(numberDivisions, points, normals, uv)
 {
     var va = vec3(0.0, 0.0, -1.0);
@@ -103,6 +109,9 @@ function createSphere(numberDivisions, points, normals, uv)
     tetrahedron(va,vb,vc,vd,numberDivisions);
 }
 
+////////////////////////////////////////////////
+// Function for creating bubbles!
+////////////////////////////////////////////////
 
 var upDis = 0, bubbleSize = 0.2;
 function createBubble(xvalue, yvalue, zvalue) {
@@ -112,7 +121,7 @@ function createBubble(xvalue, yvalue, zvalue) {
     upDis += 0.03;
     bubbleSize += 0.001;
 
-    if(upDis >= 4){
+    if(upDis >= 4) {
         upDis = 0;
         bubbleSize = 0.1;
     }
@@ -128,10 +137,13 @@ function createBubble(xvalue, yvalue, zvalue) {
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
 }
 
+////////////////////////////////////////////////
+// Function for creating the player character!
+////////////////////////////////////////////////
 
 var deg  = 180;
 var degUnit = 15;
-function createPeople(xvalue, yvalue, zvalue){
+function createPeople(xvalue, yvalue, zvalue) {
     worldViewMatrix();
     modelViewMatrix = mult(modelViewMatrix, rotate(-30, [1, 0, 0]));
 
