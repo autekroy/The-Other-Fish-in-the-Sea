@@ -2,6 +2,7 @@
 assignment4.html
 University of California, Los Angeles, CS 174A, 2014 fall
 Author: Yao-Jen Chang (704-405-423), autekwing@ucla.edu
+    - Idk if you're the only author lmao
 Date: 11/18, 2014
 
 HTML file for course assignment 4: add texture to 2 cubes
@@ -9,12 +10,16 @@ HTML file for course assignment 4: add texture to 2 cubes
 <html>
 
 <script id="vertex-shader" type="x-shader/x-vertex">
+precision mediump float;
 
 attribute vec3 vPosition;
 attribute vec3 vNormal;
 attribute vec2 vUV;
-uniform mat4 mvMatrix;
-uniform mat4 pMatrix;
+
+uniform mat4 viewMatrix;
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
 uniform vec3 lightPosition;
 
 varying vec3 fL, fE, fH, fN;
@@ -22,17 +27,17 @@ varying vec2 fUV;
 
 void main() 
 {
-    // mvMatix includes rotate matrix
-    vec3 pos = (mvMatrix * vec4(vPosition, 1.0)).xyz;
-    //light position in camera space
-
-    fL = normalize(lightPosition - pos); 
+    // ViewMatrix transforms the light position into world
+    // coordinates to properly normalize with the position
+    // coordinates
+    vec3 pos = (modelViewMatrix * vec4(vPosition, 1.0)).xyz;
+    fL = normalize((viewMatrix*vec4(lightPosition,1.0)).xyz - pos); 
     fE = normalize(-pos);
     fH = normalize(fL + fE);
-    fN = normalize(mvMatrix * vec4(vNormal, 0.0)).xyz; 
+    fN = normalize(modelViewMatrix * vec4(vNormal, 0.0)).xyz; 
 
     fUV = vUV; 
-    gl_Position = pMatrix * vec4(pos, 1.0);
+    gl_Position = projectionMatrix * vec4(pos, 1.0);
 } 
 </script>
 
@@ -51,13 +56,12 @@ uniform sampler2D uSampler;
 
 void main()
 {
-
     vec4 texColor = texture2D(uSampler, fUV);  // UNIFORM_sampler is 0 now
-    vec4 ambient = 0.3 * texColor;
-    float kd = abs(dot(fL, fN));
-    vec4 diffuse = kd * 0.6 * texColor;
+    vec4 ambient = ambientProduct * texColor;
+    float kd = max(dot(fL, fN), 0.0);
+    vec4 diffuse = kd * diffuseProduct * texColor;
 
-    float ks = pow(abs(dot(fN, fH)), shininess);
+    float ks = pow(max(dot(fN, fH), 0.0), shininess);
     vec4 specular = 0.3 * ks * vec4(1.0, 1.0, 1.0, 1.0);
 
     vec4 fColor = ambient + diffuse + specular;
@@ -70,11 +74,12 @@ void main()
 <script type="text/javascript" src="../Common/webgl-utils.js"></script>
 <script type="text/javascript" src="../Common/initShaders.js"></script>
 <script type="text/javascript" src="../Common/MV.js"></script>
-<script type="text/javascript" src="beach.js"></script>
+<script type="text/javascript" src="globalVars.js"></script>
 <script type="text/javascript" src="shape.js"></script>
+<script type="text/javascript" src="beach.js"></script>
 
 <body>
-<canvas id="gl-canvas" width="1100" height="550">
+<canvas id="gl-canvas" width="1280" height="720">
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
 

@@ -1,69 +1,8 @@
-var canvas;
-var gl;
-var length = 0.5;
-var time = 0.0;
-var timer = new Timer();
-var omega = 360;
+/*
 
+This file contains the init() and render() functions!
 
-var numTimesToSubdivide = 1;
-
-var points = [];
-var normals = []; 
-
-var UNIFORM_lightPosition;
-var ATTRIBUTE_position;
-var ATTRIBUTE_normal;
-
-var positionBuffer; 
-var normalBuffer;
-
-var myTexture, BubbleTexture;
-
-var viewMatrix;
-var projectionMatrix;
-var mvpMatrix;
-
-var shininess = 50;
-var lightPosition = vec3(0.0, 20.0, 0.0);
-var lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
-var lightDiffuse = vec4( 1.0, 1.0, 1.0, 1.0 );
-var lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 );
-
-var diffuseProductLoc;
-var specularProductLoc;
-var lightPositionLoc;
-var shininessLoc;
-
-var modelViewMatrix, projectionMatrix;
-var modelViewMatrixLoc, projectionMatrixLoc;
-var eye = vec3(0, 1, 1.8);
-var at = vec3(0, 0, 0);
-var up = vec3(0, 1, 0);
-
-var ifRotate = 0; // control  the rotation of both cubes.
-var textureRotate = 0; // start and stop the rotation of the texture maps on all faces of the first cube
-var textureScroll = 0; // start and stop the continuous scrolling the texture map on the second cube
-
-var imageSrc = "/resource/sandycheeks.jpg"
-
-var theta = 0.01;
-
-var distance = 1;
-var fovy = 90;
-var uv = [], uv2 = [];
-
-
-// for naviggation system
-var unit = 2;
-var altitude = 0;
-var theta = 1.5;
-
-var va = vec4(0.0, 0.0, -1.0,1);
-var vb = vec4(0.0, 0.942809, 0.333333, 1);
-var vc = vec4(-0.816497, -0.471405, 0.333333, 1);
-var vd = vec4(0.816497, -0.471405, 0.333333,1);
-
+*/
 
 window.onload = function init()
 {
@@ -73,30 +12,31 @@ window.onload = function init()
 
     gl.viewport( 0, 0, canvas.width, canvas.height );
     gl.clearColor( 0.4, 0.4, 0.8, 1.0 );
+    
+    // Camera settings I guess
+    viewMatrix = lookAt(eye, at, up);
+    projectionMatrix = perspective(fieldOfView, aspectRatio, 0.001, 1000);
+    projectionMatrix = mult(projectionMatrix, translate(0,-1,-4));
 
     gl.enable(gl.DEPTH_TEST);
 
-    vertices = [
-        vec3(  length,   length, length ), //vertex 0
-        vec3(  length,  -length, length ), //vertex 1
-        vec3( -length,   length, length ), //vertex 2
-        vec3( -length,  -length, length ),  //vertex 3 
-        vec3(  length,   length, -length ), //vertex 4
-        vec3(  length,  -length, -length ), //vertex 5
-        vec3( -length,   length, -length ), //vertex 6
-        vec3( -length,  -length, -length )  //vertex 7   
-    ];
+    // Create the points, vertices, and UV maps for a cube object!
+    cubePoints = [];
+    cubeNormals = [];
+    cubeUV = [];
+    Cube(length, cubePoints, cubeNormals, cubeUV, uv2);
 
-    
-    Cube(vertices, points, normals, uv, uv2); // original cube with full size texture picture
-
-    tetrahedron(va, vb, vc, vd, numTimesToSubdivide);
+    // Create the points, vertices, and UV maps for a sphere object!
+    spherePoints = [];
+    sphereNormals = [];
+    sphereUV = [];
+    sphereIndex = 0;
+    createSphere(3, spherePoints, sphereNormals, sphereUV)
 
     // first cube with texture
     myTexture = gl.createTexture();
     myTexture.image = new Image();
-
-    myTexture.image.onload = function(){
+    myTexture.image.onload = function() {
     	gl.bindTexture(gl.TEXTURE_2D, myTexture);
     	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, myTexture.image);
 
@@ -112,10 +52,10 @@ window.onload = function init()
     }
     myTexture.image.src = imageSrc;
 
+    // Texture for sphere
     BubbleTexture = gl.createTexture();
     BubbleTexture.image = new Image();    
-
-    BubbleTexture.image.onload = function(){
+    BubbleTexture.image.onload = function() {
         gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, BubbleTexture.image);
 
@@ -129,55 +69,45 @@ window.onload = function init()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-
     BubbleTexture.image.src = "/resource/bubble.png";
 
-
+    // Process Shaders (or something like that)
     var program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
-    positionBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, positionBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW );  //cubes' point position
+    // Create buffers for the cube!
+    cubePositionBuffer = gl.createBuffer();
+    cubeNormalBuffer = gl.createBuffer();
+    cubeUVBuffer = gl.createBuffer();
 
-    normalBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, normalBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(normals), gl.STATIC_DRAW ); //cubes' normal data
+    // Create buffers for the sphere!
+    spherePositionBuffer = gl.createBuffer();
+    sphereNormalBuffer = gl.createBuffer();
+    sphereUVBuffer = gl.createBuffer();
 
-    uvBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(uv), gl.STATIC_DRAW );      //uv data
-
-    uvBuffer2 = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(uv2), gl.STATIC_DRAW );      //uv data
-
+    // Create the variables to pass to the shaders!
     ATTRIBUTE_position = gl.getAttribLocation( program, "vPosition" );
     gl.enableVertexAttribArray( ATTRIBUTE_position );
-
     ATTRIBUTE_normal = gl.getAttribLocation( program, "vNormal" );
     gl.enableVertexAttribArray( ATTRIBUTE_normal );
-
+    // uvBuffer2 = gl.createBuffer();
+    // gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    // gl.bufferData( gl.ARRAY_BUFFER, flatten(uv2), gl.STATIC_DRAW );      //uv data
     ATTRIBUTE_uv = gl.getAttribLocation( program, "vUV" );
     gl.enableVertexAttribArray( ATTRIBUTE_uv);
 
-    gl.bindBuffer( gl.ARRAY_BUFFER, positionBuffer );
-    gl.vertexAttribPointer( ATTRIBUTE_position, 3, gl.FLOAT, false, 0, 0 );
-
-    gl.bindBuffer( gl.ARRAY_BUFFER, normalBuffer );
-    gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
-
-    modelViewMatrixLoc = gl.getUniformLocation(program, "mvMatrix");
-    projectionMatrixLoc = gl.getUniformLocation(program, "pMatrix");
-    UNIFORM_lightPosition = gl.getUniformLocation(program, "lightPosition");
-    shininessLoc = gl.getUniformLocation(program, "shininess");
+    // Matrix things
+    UNIFORM_viewMatrix = gl.getUniformLocation(program, "viewMatrix");
+    UNIFORM_modelViewMatrix = gl.getUniformLocation(program, "modelViewMatrix");
+    UNIFORM_projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
     UNIFORM_sampler = gl.getUniformLocation(program, "uSampler");
 
-    ambientProductLoc = gl.getUniformLocation(program, "ambientProduct");
-    diffuseProductLoc = gl.getUniformLocation(program, "diffuseProduct");
-    specularProductLoc = gl.getUniformLocation(program, "specularProduct");
-    lightPositionLoc = gl.getUniformLocation(program, "lightPosition");
-    shininessLoc = gl.getUniformLocation(program, "shininess");
+    // Lighting things
+    UNIFORM_ambientProduct = gl.getUniformLocation(program, "ambientProduct");
+    UNIFORM_diffuseProduct = gl.getUniformLocation(program, "diffuseProduct");
+    UNIFORM_specularProduct = gl.getUniformLocation(program, "specularProduct");
+    UNIFORM_lightPosition = gl.getUniformLocation(program, "lightPosition");
+    UNIFORM_shininess = gl.getUniformLocation(program, "shininess");
 
     timer.reset();
     gl.enable(gl.DEPTH_TEST);
@@ -192,46 +122,48 @@ function worldViewMatrix(){
 }
 
 var upDis = -2, bubbleSize = 0.2;
-function drawBubble(xvalue, zvalue){
+// Commenting it out because we don't really need this for now lol - Brandon Ly
+// function drawBubble(xvalue, zvalue) {
 
-    worldViewMatrix();
+//     worldViewMatrix();
     
-    upDis += 0.03;
-    bubbleSize += 0.001;
+//     upDis += 0.03;
+//     bubbleSize += 0.001;
 
-    if(upDis >= 2.5){
-        upDis = -2.5;
-        bubbleSize = 0.1;
-    }
+//     if(upDis >= 2.5){
+//         upDis = -2.5;
+//         bubbleSize = 0.1;
+//     }
 
-    ctm = mat4();
-    ctm = mult(ctm, modelViewMatrix);
-    ctm = mult(ctm, translate(0, 100, -4));
-    ctm = mult(ctm, scale(0.2, 0.2, 5));
+//     ctm = mat4();
+//     ctm = mult(ctm, modelViewMatrix);
+//     ctm = mult(ctm, translate(0, 100, -4));
+//     ctm = mult(ctm, scale(0.2, 0.2, 5));
 
-    ctm = mult(ctm, translate(xvalue, upDis, zvalue));
-    ctm = mult(ctm, scale(bubbleSize, bubbleSize, bubbleSize));
+//     ctm = mult(ctm, translate(xvalue, upDis, zvalue));
+//     ctm = mult(ctm, scale(bubbleSize, bubbleSize, bubbleSize));
 
-    materialAmbient = vec4( 0.7, 0.7, 1.0, 1.0 );
-    materialDiffuse = vec4( 0.6, 0.6, 1.0, 1.0 );
-    materialSpecular = vec4( 0.8, 0.8, 1.0, 1.0 );
-    materialShininess = 200.0;
+//     materialAmbient = vec4( 0.7, 0.7, 1.0, 1.0 );
+//     materialDiffuse = vec4( 0.6, 0.6, 1.0, 1.0 );
+//     materialSpecular = vec4( 0.8, 0.8, 1.0, 1.0 );
+//     materialShininess = 200.0;
 
-    ambientProduct = mult(lightAmbient, materialAmbient);
-    diffuseProduct = mult(lightDiffuse, materialDiffuse);
-    specularProduct = mult(lightSpecular, materialSpecular);
+//     ambientProduct = mult(lightAmbient, materialAmbient);
+//     diffuseProduct = mult(lightDiffuse, materialDiffuse);
+//     specularProduct = mult(lightSpecular, materialSpecular);
 
-    // gl.uniform4fv( lightPositionLoc,  flatten(lightPosition) );
-    // gl.uniform4fv( ambientProductLoc, flatten(ambientProduct) );
-    // gl.uniform4fv( diffuseProductLoc, flatten(diffuseProduct) );
-    // gl.uniform4fv( specularProductLoc,flatten(specularProduct) );   
-    // gl.uniform1f( shininessLoc ,materialShininess );
+//     // gl.uniform4fv( lightPositionLoc,  flatten(lightPosition) );
+//     // gl.uniform4fv( ambientProductLoc, flatten(ambientProduct) );
+//     // gl.uniform4fv( diffuseProductLoc, flatten(diffuseProduct) );
+//     // gl.uniform4fv( specularProductLoc,flatten(specularProduct) );   
+//     // gl.uniform1f( shininessLoc ,materialShininess );
 
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
+//     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm) );
 
-    for( var i = 36; i < index + 36; i+=3) 
-        gl.drawArrays( gl.TRIANGLES, i, 3 );    
-}
+//     for( var i = 36; i < index + 36; i+=3) 
+//         gl.drawArrays( gl.TRIANGLES, i, 3 );    
+// }
+
 var left = -3.0;
 var right = 3.0;
 var ytop =3.0;
@@ -244,61 +176,88 @@ function render()
     eye = vec3(0, 1 * distance, 1.8 * distance);
 
     modelViewMatrix = lookAt(eye, at, up);
-    projectionMatrix = perspective(90, 1, 0.01, 1000);
+
+    gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
+    gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(viewMatrix));
+
     // projectionMatrix = ortho(left, right, bottom, ytop, near, far);
 
     time += timer.getElapsedTime() / 1000;
 
-    myMatrix = modelViewMatrix;
-    myMatrix = mult(myMatrix, scale(10, 0.1, 10));
-    
-    if(textureScroll == 1){
-        for(var i = 0; i < 36; i++){
-            uv[i][1] -= 0.02;
-            // reset all the texture coordinate incase they are too low to get overflow.
-            if(uv[i][1] <= -1000000){
-                for(var j = 0; j < 36; j++)
-                    uv[j][1] += 10;
-            }
-        }
-    }
+    ////////////////////////////////
+    // Render the Ocean Floor!
+    ////////
 
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(myMatrix));
-    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
-
-    uvBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(uv), gl.STATIC_DRAW );      //uv data
-
-    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer );
+    // Bind position buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubePoints), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_position, 3, gl.FLOAT, false, 0, 0 );
+    // Bind normal buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeNormalBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeNormals), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
+    // Bind UV buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    var oceanFloor = mat4();
+    oceanFloor = mult(oceanFloor, scale(10, 0.00001, 10));
+    oceanFloor = mult(oceanFloor, translate(0,0,1.5));
+    oceanFloor = mult(oceanFloor, viewMatrix);    
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(oceanFloor));
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, myTexture);
 
+    gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
+    gl.uniform4fv(UNIFORM_diffuseProduct,  flatten(diffuseProduct));
+    gl.uniform4fv(UNIFORM_specularProduct, flatten(specularProduct));
+    gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
+    gl.uniform1f(UNIFORM_shininess,  shininess);
+    gl.uniform1i(UNIFORM_sampler, 0);
+
     gl.drawArrays( gl.TRIANGLES, 0, 36);
 
-    gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
-    gl.uniform1f(shininessLoc,  shininess);
-    gl.uniform1i(UNIFORM_sampler, 0)
+    ////////////////////////////////
+    // Render the sphere!
+    ////////////////
 
-    // bubble
-    BubbleuvBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, BubbleuvBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(bubbleUv), gl.STATIC_DRAW );      //uv data
-
-    gl.bindBuffer( gl.ARRAY_BUFFER, BubbleuvBuffer );
+    // Bind position buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, spherePositionBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(spherePoints), gl.STATIC_DRAW );  //cubes' point position
+    gl.vertexAttribPointer( ATTRIBUTE_position, 3, gl.FLOAT, false, 0, 0 );
+    // Bind normal buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, sphereNormalBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(sphereNormals), gl.STATIC_DRAW ); //cubes' normal data
+    gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );    
+    // Bind UV buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, sphereUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(sphereUV), gl.STATIC_DRAW );      //uv data
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+    
+    var bubble = mat4();
+    bubble = mult(bubble, translate(0, 1, 0));
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(bubble));
+    gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
 
-    //drawBubble(0, 0);
-    worldViewMatrix();
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix) );
-    for( var i = 36; i < index + 36; i+=3)  
-        gl.drawArrays( gl.TRIANGLES, i, 3 );   
+    gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
+    gl.uniform4fv(UNIFORM_diffuseProduct,  flatten(diffuseProduct));
+    gl.uniform4fv(UNIFORM_specularProduct, flatten(specularProduct));
+    gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
+    gl.uniform1f(UNIFORM_shininess,  shininess);
+    gl.uniform1i(UNIFORM_sampler, 0);
 
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
+
+    //////////////////////////////////////////////////////////////////
+
+    worldViewMatrix();
 
     window.requestAnimFrame( render );
 }
+
+
