@@ -113,28 +113,40 @@ function createSphere(numberDivisions, points, normals, uv)
 // Function for creating bubbles!
 ////////////////////////////////////////////////
 
-var upDis = 0, bubbleSize = 0.2;
+var upDis = -1.4, bubbleSize = 0.05, backMove = 0;
 function createBubble(xvalue, yvalue, zvalue) {
 
     worldViewMatrix();
     
     upDis += 0.03;
     bubbleSize += 0.001;
+    backMove += 0.02;
 
-    if(upDis >= 4) {
-        upDis = 0;
-        bubbleSize = 0.1;
+    if(upDis >= 9) {
+        upDis = -1.4;
+        bubbleSize = 0.05;
+        backMove = 0;
     }
 
     ctm = mat4();
     ctm = mult(ctm, modelViewMatrix);
 
-    ctm = mult(ctm, translate(xvalue, yvalue + upDis, zvalue));
+    ctm = mult(ctm, translate(xvalue, yvalue + upDis, zvalue + backMove));
     ctm = mult(ctm, scale(bubbleSize, bubbleSize, bubbleSize));
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
 
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
+
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
+
+    ctm = mult(ctm, translate(xvalue, yvalue + upDis - 1, zvalue + backMove));
+    ctm = mult(ctm, scale(bubbleSize - 0.05, bubbleSize - 0.05, bubbleSize - 0.05));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );       
 }
 
 ////////////////////////////////////////////////

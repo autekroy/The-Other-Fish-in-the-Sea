@@ -218,6 +218,8 @@ function render()
 
     createBubble(1, 1, 0);
     createBubble(-3, 1, -1);
+
+    // // just draw a sphere to debug texture
     // var bubble = mat4();
     // bubble = mult(bubble, translate(0, 1, 0));
     // gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(bubble));

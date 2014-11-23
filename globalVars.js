@@ -52,7 +52,7 @@ var up = vec3(0, 1, 0);
 
 // Variables related to lighting!
 var shininess = 50;
-var lightPosition = vec3(5.0, 5.0, 0.0);
+var lightPosition = vec3(5.0, 20.0, 0.0);
 
 var lightAmbient = vec4(0.4, 0.4, 0.4, 1.0);
 var materialAmbient = vec4(0.9, 0.9, 0.9, 1.0);
