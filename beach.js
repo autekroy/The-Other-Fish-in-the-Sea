@@ -216,9 +216,9 @@ function render()
     gl.uniform1f(UNIFORM_shininess,  shininess);
     gl.uniform1i(UNIFORM_sampler, 0);
 
-    createBubble(1, 1, 0);
-    createBubble(-3, 1, -1);
-
+    createBubble(7, 1, -10);
+    createBubble(-3, 1, -7);
+    createBubble(3, 1, -2);
     // // just draw a sphere to debug texture
     // var bubble = mat4();
     // bubble = mult(bubble, translate(0, 1, 0));

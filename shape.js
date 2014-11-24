@@ -75,10 +75,14 @@ function createSphere(numberDivisions, points, normals, uv)
         points.push(a, b, c);
 
         // now the texture corrdinates are wrong and should be fixed it later
+        // var disA = Math.sqrt(Math.pow((a[0] - va[0]), 2) +  Math.pow((a[1] - va[1]), 2) +  Math.pow((a[2] - va[2]), 2) );
+        // var disB = Math.sqrt(Math.pow((b[0] - vb[0]), 2) +  Math.pow((b[1] - vb[1]), 2) +  Math.pow((b[2] - vb[2]), 2) );
+        // var disC = Math.sqrt(Math.pow((c[0] - vc[0]), 2) +  Math.pow((c[1] - vc[1]), 2) +  Math.pow((c[2] - vc[2]), 2) );
+
         var bound = 1;
-        uv.push(vec2(bound, bound));
-        uv.push(vec2(bound, 0));
-        uv.push(vec2(0, bound));
+        uv.push(vec2(0, 0));
+        uv.push(vec2(0, 0));
+        uv.push(vec2(0, 0));
         sphereIndex += 3;
     }
 
