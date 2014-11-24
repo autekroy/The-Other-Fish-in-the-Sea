@@ -50,7 +50,7 @@ window.onload = function init()
     	gl.generateMipmap(gl.TEXTURE_2D);
     	gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    myTexture.image.src = imageSrc;
+    myTexture.image.src = "/resource/sandycheeks.jpg";
 
     // Texture for sphere
     BubbleTexture = gl.createTexture();
@@ -70,6 +70,26 @@ window.onload = function init()
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
     BubbleTexture.image.src = "/resource/bubble.png";
+
+
+    //texture for world rocks
+    rockTexture = gl.createTexture();
+    rockTexture.image = new Image();
+    rockTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, rockTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, rockTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    rockTexture.image.src = "/resource/newRock.png";
 
     // Process Shaders (or something like that)
     var program = initShaders( gl, "vertex-shader", "fragment-shader" );
@@ -228,6 +248,65 @@ function render()
     //////////////////////////////////////////////////////////////////
 
     createPeople(0, 3.6, 0);
+
+
+
+
+
+    ////////////////////////////////
+    // Render the world rock
+    ////////
+
+    // Bind position buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubePoints), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_position, 3, gl.FLOAT, false, 0, 0 );
+    // Bind normal buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeNormalBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeNormals), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
+
+    // scrolling the cube (rock)
+    if(textureScroll == 1){
+        for(var i = 0; i < 36; i++){
+            cubeUV[i][1] -= 0.04;
+            // reset all the texture coordinate incase they are too low to get overflow.
+            if(cubeUV[i][1] <= -1000000){
+                for(var j = 0; j < 36; j++)
+                    cubeUV[j][1] += 10;
+            }
+        }
+    }
+
+    // Bind UV buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    var rockWall = mat4();
+
+    rockWall = mult(rockWall, translate(-10, 10, -13));
+    rockWall = mult(rockWall, scale(0.01, 10, 10));
+    rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
+    rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
+    
+    rockWall = mult(rockWall, viewMatrix);    
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
+
+    gl.activeTexture(gl.TEXTURE0);
+
+    // should be rockTexture!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    gl.bindTexture(gl.TEXTURE_2D, myTexture);
+
+    gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
+    gl.uniform4fv(UNIFORM_diffuseProduct,  flatten(diffuseProduct));
+    gl.uniform4fv(UNIFORM_specularProduct, flatten(specularProduct));
+    gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
+    gl.uniform1f(UNIFORM_shininess,  shininess);
+    gl.uniform1i(UNIFORM_sampler, 0);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36);
+
 
     worldViewMatrix();
 

@@ -37,6 +37,7 @@ var sphereUVBuffer;
 // Variables related to textures!
 var myTexture;
 var BubbleTexture;
+var rockTexture;
 
 // Variables related to the camera and viewport!
 var viewMatrix;
@@ -85,7 +86,6 @@ var ifRotate = 0; // control  the rotation of both cubes.
 var textureRotate = 0; // start and stop the rotation of the texture maps on all faces of the first cube
 var textureScroll = 1; // start and stop the continuous scrolling the texture map on the second cube
 
-var imageSrc = "/resource/sandycheeks.jpg"
 
 var theta = 0.01;
 
