@@ -213,7 +213,12 @@ function createPeople(xPos, Ypos, Zpos) {
     ctm = modelViewMatrix;
     ctm = mult(ctm, rotate(-30, [1, 0, 0]));
     ctm = mult(ctm, translate(xvalue + 0.8, yvalue + 0.7, zvalue));
-    ctm = mult(ctm, rotate( -deg, [1, 0, 0]));
+    
+    if(hasSword == 1)    
+        ctm = mult(ctm, rotate( -210, [1, 0, 0]));
+    else
+        ctm = mult(ctm, rotate( -deg, [1, 0, 0]));
+
     ctm = mult(ctm, translate(0, 0.5, 0));
     ctm = mult(ctm, rotate(-45, [0, 0, 1]));
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
@@ -262,4 +267,79 @@ function createPeople(xPos, Ypos, Zpos) {
 
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
 
+}
+
+var hasSword = 1;
+function createSword(xPos, Ypos, Zpos, xRotate){
+    worldViewMatrix();
+
+    modelViewMatrix = mult(modelViewMatrix, translate(xPos, Ypos, Zpos));
+    modelViewMatrix = mult(modelViewMatrix, rotate(xRotate, [1, 0, 0]));
+    
+    // Bind position buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubePoints), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_position, 3, gl.FLOAT, false, 0, 0 );
+    // Bind normal buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeNormalBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeNormals), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
+
+    // Bind UV buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    var handle = modelViewMatrix
+    // handle = mult(handle, rotate( -deg, [0, 1, 0]));
+
+    handle = mult(handle, translate(0, 1.5, 0));
+    handle = mult(handle, rotate(45, [0, 1, 0]));
+    handle = mult(handle, scale(0.05, 0.2, 0.05));
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(handle));
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, silverTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36);
+
+    var handle = modelViewMatrix
+    // handle = mult(handle, rotate( -deg, [0, 1, 0]));
+
+    handle = mult(handle, translate(0, 1.7 ,0));
+    handle = mult(handle, rotate(45, [1, 0, 0]));
+    handle = mult(handle, scale(0.4, 0.06, 0.06));
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(handle));
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, silverTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36);
+
+    // for sword
+    // Bind position buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, spherePositionBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(spherePoints), gl.STATIC_DRAW );  //spheres' point position
+    gl.vertexAttribPointer( ATTRIBUTE_position, 3, gl.FLOAT, false, 0, 0 );
+    // Bind normal buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, sphereNormalBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(sphereNormals), gl.STATIC_DRAW ); //spheres' normal data
+    gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );    
+    // Bind UV buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, sphereUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(sphereUV), gl.STATIC_DRAW );      //uv data
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
+
+    ctm = modelViewMatrix;
+    // ctm = mult(ctm, rotate( -deg, [0, 1, 0]));
+
+    ctm = mult(ctm, translate(0, 2.8, 0));
+    ctm = mult(ctm, scale(0.18, 1.2, 0.18));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );  
 }

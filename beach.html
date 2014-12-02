@@ -91,6 +91,8 @@ window.onkeydown = function(event){
     var key = window.event.keyCode;
     // alert(key);
     switch(key){
+
+        // W, A, S, D for move character
         case 87: //'W' arrow
             if(moveForward > -2.5) moveForward -= 0.5;
             break;
@@ -105,13 +107,13 @@ window.onkeydown = function(event){
             if(textureLeft < 3) textureLeft ++;
             if(theta > -9)      theta -= unit;
             break;
-
-        case 82: // 'R' to start and stop the rotation of both cubes.
+            
+        // 'R' for reset the position of character
+        case 82: 
             textureLeft = 0;
             theta = 0;
-            // ifRotate = (ifRotate == 0)? 1: 0;
-            // omega = 360;
             break;
+
         case 38: //up arrow
             omega += 10;
             break;
@@ -125,23 +127,23 @@ window.onkeydown = function(event){
             theta += unit;
             break;
 
-        // 't' : start and stop the rotation of the texture maps on all faces of the first cube 
-        case 84: 
-            textureRotate = (textureRotate == 0)? 1: 0;
-            break;
+        // // 't' : start and stop the rotation of the texture maps on all faces of the first cube 
+        // case 84: 
+        //     textureRotate = (textureRotate == 0)? 1: 0;
+        //     break;
 
-        // 's' : start and stop the continuous scrolling the texture map on the second cube
-        case 83: 
-            textureScroll = (textureScroll == 0)? 1: 0;
-            break;
+        // // 's' : start and stop the continuous scrolling the texture map on the second cube
+        // case 83: 
+        //     textureScroll = (textureScroll == 0)? 1: 0;
+        //     break;
 
-        case 73: // 'i' : in
+        // case 73: // 'i' : in
 
-            distance -= 0.1;
-            break;
-        case 79: // 'o' : out
-            distance += 0.1;
-            break;
+        //     distance -= 0.1;
+        //     break;
+        // case 79: // 'o' : out
+        //     distance += 0.1;
+        //     break;
     }
 }
 

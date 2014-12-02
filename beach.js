@@ -44,13 +44,36 @@ window.onload = function init()
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
     	gl.generateMipmap(gl.TEXTURE_2D);
     	gl.bindTexture(gl.TEXTURE_2D, null);
     }
     myTexture.image.src =  "/resource/sandycheeks.jpg";
+
+
+
+
+    silverTexture = gl.createTexture();
+    silverTexture.image = new Image();
+    silverTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, silverTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, silverTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    silverTexture.image.src =  "/resource/sandycheeks.jpg";
+
+
 
     // Texture for sphere
     BubbleTexture = gl.createTexture();
@@ -63,7 +86,7 @@ window.onload = function init()
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
         gl.generateMipmap(gl.TEXTURE_2D);
@@ -83,7 +106,7 @@ window.onload = function init()
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
         gl.generateMipmap(gl.TEXTURE_2D);
@@ -165,6 +188,7 @@ function render()
     ////////////////////////////////
     // Render the Ocean Floor!
     ////////
+    myTexture.image.src =  "/resource/sandycheeks.jpg";
 
     // Bind position buffer
     gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
@@ -196,7 +220,7 @@ function render()
     var oceanFloor = mat4();
     oceanFloor = mult(oceanFloor, scale(10, 0.00001, 10));
     oceanFloor = mult(oceanFloor, translate(0,0,1.5));
-    oceanFloor = mult(oceanFloor, viewMatrix);    
+    oceanFloor = mult(oceanFloor, modelViewMatrix);    
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(oceanFloor));
 
     gl.activeTexture(gl.TEXTURE0);
@@ -211,6 +235,12 @@ function render()
 
     gl.drawArrays( gl.TRIANGLES, 0, 36);
 
+
+    ////////////////////////////////
+    // Render sword
+    ////////
+    // createSword(4, 1, 2, -90);
+    createSword(1.5, 2, -2, 0);
 
     ////////////////////////////////
     // Render the world rock
