@@ -53,13 +53,11 @@ window.onload = function init()
     myTexture.image.src =  "/resource/sandycheeks.jpg";
 
 
-
-
     silverTexture = gl.createTexture();
     silverTexture.image = new Image();
     silverTexture.image.onload = function() {
         gl.bindTexture(gl.TEXTURE_2D, silverTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, silverTexture.image);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, silverTexture.image);
 
         //for the zoomed texture, use tri-linear filtering
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
@@ -71,9 +69,7 @@ window.onload = function init()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    silverTexture.image.src =  "/resource/sandycheeks.jpg";
-
-
+    silverTexture.image.src =  "/resource/bubble.png";
 
     // Texture for sphere
     BubbleTexture = gl.createTexture();
@@ -161,13 +157,14 @@ window.onload = function init()
 function worldViewMatrix(){
     modelViewMatrix = lookAt(eye, at , up);
     modelViewMatrix = mult(modelViewMatrix, rotate(altitude, [1, 0, 0])); //change the altitude of the whold world
-    modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world    
+     
 }
 
 var left = -3.0;
 var right = 3.0;
 var ytop =3.0;
 var bottom = -3.0;
+var oceanDeg = 0, oceanDegUnit = 0.1;
 
 function render()
 {
@@ -218,6 +215,12 @@ function render()
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
     var oceanFloor = mat4();
+
+    // oceanDeg += oceanDegUnit;
+    // if(oceanDeg >= 8)   oceanDegUnit = -oceanDegUnit;
+    // else if(oceanDeg <= -8) oceanDegUnit = -oceanDegUnit;
+    // oceanFloor = mult(oceanFloor, rotate(oceanDeg, [1, 0, 0]));
+
     oceanFloor = mult(oceanFloor, scale(10, 0.00001, 10));
     oceanFloor = mult(oceanFloor, translate(0,0,1.5));
     oceanFloor = mult(oceanFloor, modelViewMatrix);    
@@ -239,8 +242,8 @@ function render()
     ////////////////////////////////
     // Render sword
     ////////
-    // createSword(4, 1, 2, -90);
-    createSword(1.5, 2, -2, 0);
+    // createSword(4, 1, 2.2, -90);
+    createSword(1.5, 2.2, -2 + moveForward, 0);
 
     ////////////////////////////////
     // Render the world rock
@@ -295,6 +298,10 @@ function render()
     createBubble(7, 1, -10);
     createBubble(-3, 1, -7);
     createBubble(3, 1, -2);
+
+
+    createSwaweed(3, 0, -1);
+
     // // just draw a sphere to debug texture
     // var bubble = mat4();
     // bubble = mult(bubble, translate(0, 1, 0));

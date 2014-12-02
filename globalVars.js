@@ -38,6 +38,7 @@ var sphereUVBuffer;
 var myTexture;
 var BubbleTexture;
 var rockTexture;
+var silverTexture;
 var textureLeft = 0; // for 'A' and 'D' key to control move left or right
 
 

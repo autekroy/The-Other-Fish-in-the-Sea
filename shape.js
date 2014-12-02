@@ -153,6 +153,28 @@ function createBubble(xvalue, yvalue, zvalue) {
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );       
 }
 
+var goBackPos = -9, goBackUnit = 0.1;
+
+function createSwaweed(xvalue, yvalue, zvalue) {
+    worldViewMatrix();
+
+    goBackPos += goBackUnit;
+    if(goBackPos > 12)   goBackPos = -9;
+
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
+    ctm = mult(ctm, rotate(-theta * 3 , [0, 1, 0]));      //wheb rotate the whole world, seaweed would rotate
+    ctm = mult(ctm, translate(xvalue, yvalue + 2, zvalue + goBackPos));
+    
+    ctm = mult(ctm, scale(0.1, 1, 0.1));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
+
+}
+
+
 ////////////////////////////////////////////////
 // Function for creating the player character!
 ////////////////////////////////////////////////
@@ -162,24 +184,11 @@ var degUnit = 15;
 var moveForward = 0;// for character to move forward or backward. 'W' and 'S' key
 function createPeople(xPos, Ypos, Zpos) {
     worldViewMatrix();
+    modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world   
 
     modelViewMatrix = mult(modelViewMatrix, translate(xPos, Ypos, Zpos));
 
     var xvalue = 0, yvalue = 3.6, zvalue = 0;
-    // materialAmbient = vec4( 1.0, 0.0, 1.0, 1.0 );
-    // materialDiffuse = vec4( 1.0, 0.8, 0.0, 1.0 );
-    // materialSpecular = vec4( 1.0, 0.8, 0.0, 1.0 );
-    // shininess = 100.0;
-
-    // ambientProduct = mult(lightAmbient, materialAmbient);
-    // diffuseProduct = mult(lightDiffuse, materialDiffuse);
-    // specularProduct = mult(lightSpecular, materialSpecular);
-
-    // gl.uniform4fv( UNIFORM_lightPosition,  flatten(lightPosition) );
-    // gl.uniform4fv( UNIFORM_ambientProduct, flatten(ambientProduct) );
-    // gl.uniform4fv( UNIFORM_diffuseProduct, flatten(diffuseProduct) );
-    // gl.uniform4fv( UNIFORM_specularProduct,flatten(specularProduct) );   
-    // gl.uniform1f( UNIFORM_shininess ,shininess );
 
     // draw head
     ctm = modelViewMatrix;
@@ -272,6 +281,7 @@ function createPeople(xPos, Ypos, Zpos) {
 var hasSword = 1;
 function createSword(xPos, Ypos, Zpos, xRotate){
     worldViewMatrix();
+    modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world   
 
     modelViewMatrix = mult(modelViewMatrix, translate(xPos, Ypos, Zpos));
     modelViewMatrix = mult(modelViewMatrix, rotate(xRotate, [1, 0, 0]));
@@ -295,7 +305,7 @@ function createSword(xPos, Ypos, Zpos, xRotate){
 
     handle = mult(handle, translate(0, 1.5, 0));
     handle = mult(handle, rotate(45, [0, 1, 0]));
-    handle = mult(handle, scale(0.05, 0.2, 0.05));
+    handle = mult(handle, scale(0.07, 0.2, 0.07));
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(handle));
 
     gl.activeTexture(gl.TEXTURE0);
@@ -337,7 +347,7 @@ function createSword(xPos, Ypos, Zpos, xRotate){
     // ctm = mult(ctm, rotate( -deg, [0, 1, 0]));
 
     ctm = mult(ctm, translate(0, 2.8, 0));
-    ctm = mult(ctm, scale(0.18, 1.2, 0.18));
+    ctm = mult(ctm, scale(0.1, 1.2, 0.1));
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
 
