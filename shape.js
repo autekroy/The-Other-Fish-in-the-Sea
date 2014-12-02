@@ -40,6 +40,15 @@ function Cube(length, points, normals, uv, uv2) {
         uv.push(vec2(bound,bound));
         uv.push(vec2(0,bound));
 
+        var bound2 = 1;
+        // for normal texture coordinate
+        uv2.push(vec2(0,0));
+        uv2.push(vec2(bound2,0));
+        uv2.push(vec2(bound2,bound2));
+        uv2.push(vec2(0,0));
+        uv2.push(vec2(bound2,bound2));
+        uv2.push(vec2(0,bound2));
+
         // 6 points to form 2 triangels, which can combine to a
         points.push(vertices[v1]);
         points.push(vertices[v3]);
@@ -175,6 +184,32 @@ function createSwaweed(xvalue, yvalue, zvalue) {
 }
 
 
+function createMonster(xPos, Ypos, Zpos) {
+    worldViewMatrix();
+    modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world   
+
+    modelViewMatrix = mult(modelViewMatrix, translate(xPos, Ypos, Zpos));
+
+    ctm = modelViewMatrix;
+    ctm = mult(ctm, translate(0, 1.5, 0));
+    ctm = mult(ctm, rotate(45, [0, 1, 0]));
+    ctm = mult(ctm, scale(0.5, 0.5, 0.5));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+    
+    var uvBuffer2 = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, silverTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36); 
+
+}
+
 ////////////////////////////////////////////////
 // Function for creating the player character!
 ////////////////////////////////////////////////
@@ -297,7 +332,7 @@ function createSword(xPos, Ypos, Zpos, xRotate){
 
     // Bind UV buffer
     gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
     var handle = modelViewMatrix

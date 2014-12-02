@@ -24,7 +24,7 @@ window.onload = function init()
     cubePoints = [];
     cubeNormals = [];
     cubeUV = [];
-    Cube(length, cubePoints, cubeNormals, cubeUV, uv2);
+    Cube(length, cubePoints, cubeNormals, cubeUV, stableUV);
 
     // Create the points, vertices, and UV maps for a sphere object!
     spherePoints = [];
@@ -238,12 +238,14 @@ function render()
 
     gl.drawArrays( gl.TRIANGLES, 0, 36);
 
+    // Render monster
+    createMonster(0, 0, 9);
 
     ////////////////////////////////
     // Render sword
     ////////
     // createSword(4, 1, 2.2, -90);
-    createSword(1.5, 2.2, -2 + moveForward, 0);
+    createSword(1.3, 2, -1.3 + moveForward, 0);
 
     ////////////////////////////////
     // Render the world rock
@@ -311,6 +313,8 @@ function render()
     //////////////////////////////////////////////////////////////////
 
     createPeople(0, 0, moveForward);
+
+    
 
     worldViewMatrix();
 
