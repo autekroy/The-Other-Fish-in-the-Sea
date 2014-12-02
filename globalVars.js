@@ -38,6 +38,8 @@ var sphereUVBuffer;
 var myTexture;
 var BubbleTexture;
 var rockTexture;
+var textureLeft = 0; // for 'A' and 'D' key to control move left or right
+
 
 // Variables related to the camera and viewport!
 var viewMatrix;
@@ -87,13 +89,13 @@ var textureRotate = 0; // start and stop the rotation of the texture maps on all
 var textureScroll = 1; // start and stop the continuous scrolling the texture map on the second cube
 
 
-var theta = 0.01;
+var theta = 0.00;
 
 var distance = 1;
 var fovy = 90;
 
 // for naviggation system
-var unit = 2;
+var unit = 3;
 var altitude = 0;
 var theta = 1.5;
 

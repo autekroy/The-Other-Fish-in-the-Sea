@@ -154,6 +154,7 @@ function render()
 
     modelViewMatrix = lookAt(eye, at, up);
 
+
     gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
     gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(viewMatrix));
 
@@ -178,6 +179,7 @@ function render()
     if(textureScroll == 1){
         for(var i = 0; i < 36; i++){
             cubeUV[i][1] -= 0.04;
+            cubeUV[i][0] -= textureLeft/100;
             // reset all the texture coordinate incase they are too low to get overflow.
             if(cubeUV[i][1] <= -1000000){
                 for(var j = 0; j < 36; j++)
@@ -218,7 +220,7 @@ function render()
     // rockWall = mult(rockWall, translate(0, 3, 0));
 
     rockWall = mult(rockWall, translate(-10, 10, -13));
-    rockWall = mult(rockWall, scale(0.01, 10, 10));
+    rockWall = mult(rockWall, scale(1, 10, 10));
     rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
     rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
     

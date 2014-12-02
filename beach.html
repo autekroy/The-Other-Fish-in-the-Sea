@@ -81,10 +81,9 @@ Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
 
 <pre>
-Press <b>'I'</b> and <b>'O'</b> to move the camera nearer or farer away from cubes.
-Press <b>'R'</b> to start/stop the rotation of both cubes.
-Press <b>'T'</b> to start/stop to rotate of the texture maps on all faces of the left cube.
-Press <b>'S'</b> to start/stop to continuous scroll the texture map on the right cube.
+Press <b>'A'</b> and <b>'D'</b> to turn left or right.
+Press <b>'A'</b> and <b>'D'</b> to go forward or backward.
+Press <b>'R'</b> to reset the position/direction of character.
 </pre>
 
 <script>
@@ -92,9 +91,26 @@ window.onkeydown = function(event){
     var key = window.event.keyCode;
     // alert(key);
     switch(key){
+        case 87: //'W' arrow
+            omega += 10;
+            break;
+        case 83: //'S' arrow
+            omega += 10;
+            break;
+        case 65: //'A' arrow
+            if(textureLeft > -3) textureLeft --;
+            if(theta < 9)        theta += unit;
+            break;
+        case 68: //'D' arrow
+            if(textureLeft < 3) textureLeft ++;
+            if(theta > -9)      theta -= unit;
+            break;
+
         case 82: // 'R' to start and stop the rotation of both cubes.
-            ifRotate = (ifRotate == 0)? 1: 0;
-            omega = 360;
+            textureLeft = 0;
+            theta = 0;
+            // ifRotate = (ifRotate == 0)? 1: 0;
+            // omega = 360;
             break;
         case 38: //up arrow
             omega += 10;
@@ -128,6 +144,7 @@ window.onkeydown = function(event){
             break;
     }
 }
+
 </script>
 
 </body>
