@@ -216,30 +216,23 @@ function render()
     // Render the world rock
     ////////
 
-    var rockWall = mat4();
-    // rockWall = mult(rockWall, translate(0, 3, 0));
+    // var rockWall = mat4();
+    // // rockWall = mult(rockWall, translate(0, 3, 0));
 
-    rockWall = mult(rockWall, translate(-10, 10, -13));
-    rockWall = mult(rockWall, scale(1, 10, 10));
-    rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
-    rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
+    // rockWall = mult(rockWall, translate(-10, 10, -13));
+    // rockWall = mult(rockWall, scale(1, 10, 10));
+    // rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
+    // rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
     
-    rockWall = mult(rockWall, viewMatrix);    
-    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
+    // rockWall = mult(rockWall, viewMatrix);    
+    // gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
 
-    gl.activeTexture(gl.TEXTURE0);
+    // gl.activeTexture(gl.TEXTURE0);
 
-    // should be rockTexture!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
+    // // should be rockTexture!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
 
-    // gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
-    // gl.uniform4fv(UNIFORM_diffuseProduct,  flatten(diffuseProduct));
-    // gl.uniform4fv(UNIFORM_specularProduct, flatten(specularProduct));
-    // gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
-    // gl.uniform1f(UNIFORM_shininess,  shininess);
-    // gl.uniform1i(UNIFORM_sampler, 0);
-
-    gl.drawArrays( gl.TRIANGLES, 0, 36);
+    // gl.drawArrays( gl.TRIANGLES, 0, 36);
 
 
     ////////////////////////////////
@@ -280,7 +273,7 @@ function render()
 
     //////////////////////////////////////////////////////////////////
 
-    createPeople(0, 3.6, 0);
+    createPeople(0, 0, moveForward);
 
     worldViewMatrix();
 

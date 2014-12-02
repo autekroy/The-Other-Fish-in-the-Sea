@@ -82,7 +82,7 @@ Oops ... your browser doesn't support the HTML5 canvas element
 
 <pre>
 Press <b>'A'</b> and <b>'D'</b> to turn left or right.
-Press <b>'A'</b> and <b>'D'</b> to go forward or backward.
+Press <b>'W'</b> and <b>'S'</b> to go forward or backward.
 Press <b>'R'</b> to reset the position/direction of character.
 </pre>
 
@@ -92,10 +92,10 @@ window.onkeydown = function(event){
     // alert(key);
     switch(key){
         case 87: //'W' arrow
-            omega += 10;
+            if(moveForward > -2.5) moveForward -= 0.5;
             break;
         case 83: //'S' arrow
-            omega += 10;
+            if(moveForward < 2.5) moveForward += 0.5;
             break;
         case 65: //'A' arrow
             if(textureLeft > -3) textureLeft --;

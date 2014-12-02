@@ -159,9 +159,13 @@ function createBubble(xvalue, yvalue, zvalue) {
 
 var deg  = 180;
 var degUnit = 15;
-function createPeople(xvalue, yvalue, zvalue) {
+var moveForward = 0;// for character to move forward or backward. 'W' and 'S' key
+function createPeople(xPos, Ypos, Zpos) {
     worldViewMatrix();
 
+    modelViewMatrix = mult(modelViewMatrix, translate(xPos, Ypos, Zpos));
+
+    var xvalue = 0, yvalue = 3.6, zvalue = 0;
     // materialAmbient = vec4( 1.0, 0.0, 1.0, 1.0 );
     // materialDiffuse = vec4( 1.0, 0.8, 0.0, 1.0 );
     // materialSpecular = vec4( 1.0, 0.8, 0.0, 1.0 );
