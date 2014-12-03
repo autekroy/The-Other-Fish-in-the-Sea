@@ -228,8 +228,9 @@ if(onTheBeach == 1){
     ////////
     if(walkForward == 1)
         beachMove += beachMoveUnit;
-    else if(walkBackward == 1)
+    else if(walkBackward == 1 && beachMove >= 0.03)
         beachMove -= beachMoveUnit;
+
     if(beachMove > 2.1)  onTheBeach = 0;
 
     modelViewMatrix = mult(modelViewMatrix, translate(0, 0, beachMove));
@@ -274,8 +275,8 @@ if(onTheBeach == 1){
 
     var beachFloor = mat4();
 
-    beachFloor = mult(beachFloor, scale(30, 0.00001, 30));
-    beachFloor = mult(beachFloor, translate(0,0,-0.9));
+    beachFloor = mult(beachFloor, scale(30, 0.01, 30));
+    beachFloor = mult(beachFloor, translate(0,0,-1.0));
     beachFloor = mult(beachFloor, modelViewMatrix);    
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(beachFloor));
 
@@ -310,7 +311,7 @@ if(onTheBeach == 1){
     gl.uniform1f(UNIFORM_shininess,  shininess);
     gl.uniform1i(UNIFORM_sampler, 0);
 
-    createPeople(0, 0, moveForward);
+    createPeople(moveLeft, 0, moveForward, onTheBeach, walking);
 }
 else{
     ////////////////////////////////
@@ -457,7 +458,7 @@ else{
 
     //////////////////////////////////////////////////////////////////
 
-    createPeople(moveLeft, 0, moveForward);
+    createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
 
     worldViewMatrix();
 }

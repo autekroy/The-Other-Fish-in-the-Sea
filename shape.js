@@ -218,7 +218,7 @@ var deg  = 180;
 var degUnit = 15;
 var moveForward = 0;// for character to move forward or backward. 'W' and 'S' key
 var moveLeft = 0;
-function createPeople(xPos, Ypos, Zpos) {
+function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     worldViewMatrix();
     modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world   
 
@@ -259,10 +259,12 @@ function createPeople(xPos, Ypos, Zpos) {
     ctm = mult(ctm, rotate(-30, [1, 0, 0]));
     ctm = mult(ctm, translate(xvalue + 0.8, yvalue + 0.7, zvalue));
     
-    if(hasSword == 1)    
-        ctm = mult(ctm, rotate( -210, [1, 0, 0]));
-    else
-        ctm = mult(ctm, rotate( -deg, [1, 0, 0]));
+    if(checkOnTheBeach ==  1)       hasSword = 0;
+    else                            hasSword = 1;
+
+    if(hasSword == 1)                           ctm = mult(ctm, rotate( -210, [1, 0, 0]));
+    else if(hasSword == 0 && checkWalk == 1)    ctm = mult(ctm, rotate( -deg, [1, 0, 0]));
+    else if(checkWalk == 0)                     ctm = mult(ctm, rotate( -120, [1, 0, 0]));
 
     ctm = mult(ctm, translate(0, 0.5, 0));
     ctm = mult(ctm, rotate(-45, [0, 0, 1]));
@@ -276,7 +278,10 @@ function createPeople(xPos, Ypos, Zpos) {
     ctm = modelViewMatrix;
     ctm = mult(ctm, rotate(-30, [1, 0, 0]));
     ctm = mult(ctm, translate(xvalue - 0.8, yvalue + 0.7, zvalue));
-    ctm = mult(ctm, rotate(deg, [1, 0, 0]));
+
+    if(checkWalk == 1)      ctm = mult(ctm, rotate(deg, [1, 0, 0]));
+    else if(checkWalk == 0) ctm = mult(ctm, rotate(240, [1, 0, 0]));
+    
     ctm = mult(ctm, translate(0, 0.5, 0));
     ctm = mult(ctm, rotate(45, [0, 0, 1]));
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
@@ -289,7 +294,10 @@ function createPeople(xPos, Ypos, Zpos) {
     ctm = modelViewMatrix;
     ctm = mult(ctm, rotate(-30, [1, 0, 0]));
     ctm = mult(ctm, translate(xvalue + 0.6, yvalue - 1.5, zvalue));
-    ctm = mult(ctm, rotate(deg, [1, 0, 0]));
+
+    if(checkWalk == 1)          ctm = mult(ctm, rotate(deg, [1, 0, 0]));
+    else if(checkWalk == 0)     ctm = mult(ctm, rotate(240, [1, 0, 0]));
+
     ctm = mult(ctm, translate(0, 0.5, 0));
     ctm = mult(ctm, rotate(-45, [0, 0, 1]));
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
@@ -303,7 +311,10 @@ function createPeople(xPos, Ypos, Zpos) {
     ctm = modelViewMatrix;
     ctm = mult(ctm, rotate(-30, [1, 0, 0]));
     ctm = mult(ctm, translate(xvalue - 0.6, yvalue - 1.5, zvalue));
-    ctm = mult(ctm, rotate( -deg, [1, 0, 0]));
+    
+    if(checkWalk == 1)          ctm = mult(ctm, rotate(-deg, [1, 0, 0]));
+    else if(checkWalk == 0)     ctm = mult(ctm, rotate(-120, [1, 0, 0]));
+
     ctm = mult(ctm, translate(0, 0.5, 0));
     ctm = mult(ctm, rotate(45, [0, 0, 1]));
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
@@ -314,7 +325,6 @@ function createPeople(xPos, Ypos, Zpos) {
 
 }
 
-var hasSword = 1;
 function createSword(xPos, Ypos, Zpos, xRotate){
     worldViewMatrix();
     modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world   
