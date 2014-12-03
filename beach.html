@@ -10,7 +10,7 @@ Date: 11/22, 2014
 
 <!-- play the background music -->
 <!-- <embed src="http://dddproduktionen.weebly.com/files/theme/DDDmusic.mp3 " auto loop="true" hidden="true"> -->
-
+<title>The Other Fish in the Sea</title>
 </head>
 
 <script id="vertex-shader" type="x-shader/x-vertex">
@@ -102,25 +102,27 @@ window.onkeydown = function(event){
 
         // W, A, S, D for move character
         case 87: //'W' arrow
-            if(moveForward > -2.5) moveForward -= 0.5;
+            if(onTheBeach != 1 && moveForward > -2.5)   moveForward -= 0.5;
             break;
         case 83: //'S' arrow
-            if(moveForward < 2.5) moveForward += 0.5;
+            if(onTheBeach != 1 && moveForward < 2.5) moveForward += 0.5;
             break;
         case 65: //'A' arrow
             if(textureLeft > -3) textureLeft --;
-            if(moveLeft > -2)  moveLeft -= 0.2;
+            if(moveLeft > -1.5)    moveLeft -= 0.2;
             if(theta < 9)        theta += unit;
             break;
         case 68: //'D' arrow
             if(textureLeft < 3) textureLeft ++;
-            if(moveLeft < 2)  moveLeft += 0.2;
+            if(moveLeft < 1.5)  moveLeft += 0.2;
             if(theta > -9)      theta -= unit;
             break;
             
         // 'R' for reset the position of character
         case 82: 
             textureLeft = 0;
+            moveLeft = 0;
+            moveForward = 0;
             theta = 0;
             break;
 
@@ -156,7 +158,34 @@ window.onkeydown = function(event){
         //     break;
     }
 }
+window.onkeypress = function(event){
+    var key = window.event.keyCode;
+    // alert(key);
+    switch(key){
 
+        // W, A, S, D for move character
+        case 119: //'W' arrow
+            if(onTheBeach == 1)     walkForward = 1;
+            break;
+        case 115: //'S' arrow
+            if(onTheBeach == 1)     walkBackward = 1;
+            break;
+    }
+}
+window.onkeyup = function(event){
+    var key = window.event.keyCode;
+    // alert(key);
+    switch(key){
+
+        // W, A, S, D for move character
+        case 87: //'W' arrow
+            if(onTheBeach == 1 && walkForward == 1)     walkForward = 0;
+            break;
+        case 83: //'S' arrow
+            if(onTheBeach == 1 && walkBackward == 1)    walkBackward = 0;
+            break;
+    }
+}
 </script>
 
 </body>

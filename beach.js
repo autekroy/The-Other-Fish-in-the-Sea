@@ -203,7 +203,7 @@ var right = 3.0;
 var ytop =3.0;
 var bottom = -3.0;
 var oceanDeg = 0, oceanDegUnit = 0.1;
-var beachMove = 0, beachMoveUnit = 0.01;
+var beachMove = 0, beachMoveUnit = 0.005;
 
 function render()
 {
@@ -226,7 +226,10 @@ if(onTheBeach == 1){
     ////////////////////////////////
     // Render the Ocean Floor!
     ////////
-    beachMove += beachMoveUnit;
+    if(walkForward == 1)
+        beachMove += beachMoveUnit;
+    else if(walkBackward == 1)
+        beachMove -= beachMoveUnit;
     if(beachMove > 2.1)  onTheBeach = 0;
 
     modelViewMatrix = mult(modelViewMatrix, translate(0, 0, beachMove));
@@ -373,7 +376,7 @@ else{
     var rockWall = mat4();
     // rockWall = mult(rockWall, translate(0, 3, 0));
 
-    rockWall = mult(rockWall, translate(-10, 10, -13));
+    rockWall = mult(rockWall, translate(-10, 11, -13));
     rockWall = mult(rockWall, scale(1, 15, 15));
     rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
     rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
@@ -391,7 +394,7 @@ else{
     rockWall = mat4();
     // rockWall = mult(rockWall, translate(0, 3, 0));
 
-    rockWall = mult(rockWall, translate(10, 10, -13));
+    rockWall = mult(rockWall, translate(10, 11, -13));
     rockWall = mult(rockWall, scale(1, 15, 15));
     rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
     rockWall = mult(rockWall, rotate(270, [1, 0, 0]));

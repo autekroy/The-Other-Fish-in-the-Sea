@@ -106,3 +106,4 @@ var sphereIndex = 0;
 
 // check if on The Beach
 var onTheBeach = 1;
+var walkForward = 0, walkBackward = 0;
