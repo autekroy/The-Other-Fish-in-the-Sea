@@ -240,19 +240,6 @@ if(onTheBeach == 1){
     gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeNormals), gl.STATIC_DRAW );
     gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
 
-    // // scrolling the cube (beach)
-    // if(textureScroll == 1){
-    //     for(var i = 0; i < 36; i++){
-    //         cubeUV[i][1] -= 0.04;
-    //         cubeUV[i][0] -= textureLeft/100;
-    //         // reset all the texture coordinate incase they are too low to get overflow.
-    //         if(cubeUV[i][1] <= -1000000){
-    //             for(var j = 0; j < 36; j++)
-    //                 cubeUV[j][1] += 10;
-    //         }
-    //     }
-    // }
-
     // Bind UV buffer
     gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
@@ -401,7 +388,23 @@ else{
 
     gl.drawArrays( gl.TRIANGLES, 0, 36);
 
+    rockWall = mat4();
+    // rockWall = mult(rockWall, translate(0, 3, 0));
 
+    rockWall = mult(rockWall, translate(10, 10, -13));
+    rockWall = mult(rockWall, scale(1, 15, 15));
+    rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
+    rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
+    
+    rockWall = mult(rockWall, viewMatrix);    
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
+
+    gl.activeTexture(gl.TEXTURE0);
+
+    // should be rockTexture!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    gl.bindTexture(gl.TEXTURE_2D, rockTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36);
 
     // Render monster
     createMonster(0, 0, 9);
@@ -451,7 +454,7 @@ else{
 
     //////////////////////////////////////////////////////////////////
 
-    createPeople(0, 0, moveForward);
+    createPeople(moveLeft, 0, moveForward);
 
     worldViewMatrix();
 }
