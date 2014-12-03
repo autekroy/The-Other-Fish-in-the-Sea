@@ -34,11 +34,11 @@ window.onload = function init()
     createSphere(3, spherePoints, sphereNormals, sphereUV)
 
     // first cube with texture
-    myTexture = gl.createTexture();
-    myTexture.image = new Image();
-    myTexture.image.onload = function() {
-    	gl.bindTexture(gl.TEXTURE_2D, myTexture);
-    	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, myTexture.image);
+    oceanTexture = gl.createTexture();
+    oceanTexture.image = new Image();
+    oceanTexture.image.onload = function() {
+    	gl.bindTexture(gl.TEXTURE_2D, oceanTexture);
+    	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, oceanTexture.image);
 
         //for the zoomed texture, use tri-linear filtering
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
@@ -50,7 +50,25 @@ window.onload = function init()
     	gl.generateMipmap(gl.TEXTURE_2D);
     	gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    myTexture.image.src =  "/resource/sandycheeks.jpg";
+    oceanTexture.image.src =  "/resource/underwater2.jpg";
+
+    beachTexture = gl.createTexture();
+    beachTexture.image = new Image();
+    beachTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, beachTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, beachTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    beachTexture.image.src =  "/resource/sandycheeks.jpg";
 
 
     silverTexture = gl.createTexture();
@@ -69,7 +87,27 @@ window.onload = function init()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    silverTexture.image.src =  "/resource/bubble.png";
+    silverTexture.image.src =  "/resource/white.png";
+
+
+    goldenTexture = gl.createTexture();
+    goldenTexture.image = new Image();
+    goldenTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, goldenTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, goldenTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    goldenTexture.image.src =  "/resource/yellow.png";
+
 
     // Texture for sphere
     BubbleTexture = gl.createTexture();
@@ -182,10 +220,91 @@ function render()
 
     time += timer.getElapsedTime() / 1000;
 
+
+if(onTheBeach == 1){
     ////////////////////////////////
     // Render the Ocean Floor!
     ////////
-    myTexture.image.src =  "/resource/sandycheeks.jpg";
+
+    // Bind position buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubePoints), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_position, 3, gl.FLOAT, false, 0, 0 );
+    // Bind normal buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeNormalBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeNormals), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
+
+    // scrolling the cube (beach)
+    if(textureScroll == 1){
+        for(var i = 0; i < 36; i++){
+            cubeUV[i][1] -= 0.04;
+            cubeUV[i][0] -= textureLeft/100;
+            // reset all the texture coordinate incase they are too low to get overflow.
+            if(cubeUV[i][1] <= -1000000){
+                for(var j = 0; j < 36; j++)
+                    cubeUV[j][1] += 10;
+            }
+        }
+    }
+
+    // Bind UV buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    var beachFloor = mat4();
+
+    beachFloor = mult(beachFloor, scale(10, 0.00001, 10));
+    beachFloor = mult(beachFloor, translate(0,0,1.5));
+    beachFloor = mult(beachFloor, modelViewMatrix);    
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(beachFloor));
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, beachTexture);
+
+    gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
+    gl.uniform4fv(UNIFORM_diffuseProduct,  flatten(diffuseProduct));
+    gl.uniform4fv(UNIFORM_specularProduct, flatten(specularProduct));
+    gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
+    gl.uniform1f(UNIFORM_shininess,  shininess);
+    gl.uniform1i(UNIFORM_sampler, 0);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36);
+
+    ////////////////////////////////
+    // Render the sphere!
+    ////////////////
+
+    // Bind position buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, spherePositionBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(spherePoints), gl.STATIC_DRAW );  //spheres' point position
+    gl.vertexAttribPointer( ATTRIBUTE_position, 3, gl.FLOAT, false, 0, 0 );
+    // Bind normal buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, sphereNormalBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(sphereNormals), gl.STATIC_DRAW ); //spheres' normal data
+    gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );    
+    // Bind UV buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, sphereUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(sphereUV), gl.STATIC_DRAW );      //uv data
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
+
+    gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
+    gl.uniform4fv(UNIFORM_diffuseProduct,  flatten(diffuseProduct));
+    gl.uniform4fv(UNIFORM_specularProduct, flatten(specularProduct));
+    gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
+    gl.uniform1f(UNIFORM_shininess,  shininess);
+    gl.uniform1i(UNIFORM_sampler, 0);
+
+    createPeople(0, 0, moveForward);
+}
+else{
+    ////////////////////////////////
+    // Render the Ocean Floor!
+    ////////
 
     // Bind position buffer
     gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
@@ -227,7 +346,7 @@ function render()
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(oceanFloor));
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, myTexture);
+    gl.bindTexture(gl.TEXTURE_2D, oceanTexture);
 
     gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
     gl.uniform4fv(UNIFORM_diffuseProduct,  flatten(diffuseProduct));
@@ -238,36 +357,40 @@ function render()
 
     gl.drawArrays( gl.TRIANGLES, 0, 36);
 
+
+    ////////////////////////////////
+    // Render the world rock
+    ////////
+
+    var rockWall = mat4();
+    // rockWall = mult(rockWall, translate(0, 3, 0));
+
+    rockWall = mult(rockWall, translate(-10, 10, -13));
+    rockWall = mult(rockWall, scale(1, 15, 15));
+    rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
+    rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
+    
+    rockWall = mult(rockWall, viewMatrix);    
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
+
+    gl.activeTexture(gl.TEXTURE0);
+
+    // should be rockTexture!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    gl.bindTexture(gl.TEXTURE_2D, rockTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36);
+
+
+
     // Render monster
     createMonster(0, 0, 9);
 
     ////////////////////////////////
     // Render sword
     ////////
-    // createSword(4, 1, 2.2, -90);
-    createSword(1.3, 2, -1.3 + moveForward, 0);
+    // createSword(4, 1, 2.1, -90);
+    createSword(1.3, 2.1, -1.3 + moveForward, 0);
 
-    ////////////////////////////////
-    // Render the world rock
-    ////////
-
-    // var rockWall = mat4();
-    // // rockWall = mult(rockWall, translate(0, 3, 0));
-
-    // rockWall = mult(rockWall, translate(-10, 10, -13));
-    // rockWall = mult(rockWall, scale(1, 10, 10));
-    // rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
-    // rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
-    
-    // rockWall = mult(rockWall, viewMatrix);    
-    // gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
-
-    // gl.activeTexture(gl.TEXTURE0);
-
-    // // should be rockTexture!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
-
-    // gl.drawArrays( gl.TRIANGLES, 0, 36);
 
 
     ////////////////////////////////
@@ -301,23 +424,16 @@ function render()
     createBubble(-3, 1, -7);
     createBubble(3, 1, -2);
 
+    // createTreasure(3, 0, -1);
 
-    createSwaweed(3, 0, -1);
-
-    // // just draw a sphere to debug texture
-    // var bubble = mat4();
-    // bubble = mult(bubble, translate(0, 1, 0));
-    // gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(bubble));
-    // gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
+    // createSwaweed(3, 0, -1);
 
     //////////////////////////////////////////////////////////////////
 
     createPeople(0, 0, moveForward);
 
-    
-
     worldViewMatrix();
-
+}
     window.requestAnimFrame( render );
 }
 

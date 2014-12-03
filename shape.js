@@ -31,7 +31,7 @@ function Cube(length, points, normals, uv, uv2) {
         normals.push(normal);
         normals.push(normal);
 
-        var bound = 8;
+        var bound = 7;
         // for normal texture coordinate
         uv.push(vec2(0,0));
         uv.push(vec2(bound,0));
@@ -234,7 +234,7 @@ function createPeople(xPos, Ypos, Zpos) {
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, myTexture);
+    gl.bindTexture(gl.TEXTURE_2D, oceanTexture);
 
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex ); 
 
@@ -376,7 +376,7 @@ function createSword(xPos, Ypos, Zpos, xRotate){
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
+    gl.bindTexture(gl.TEXTURE_2D, goldenTexture);
 
     ctm = modelViewMatrix;
     // ctm = mult(ctm, rotate( -deg, [0, 1, 0]));

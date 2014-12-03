@@ -88,6 +88,7 @@ Oops ... your browser doesn't support the HTML5 canvas element
 Press <b>'A'</b> and <b>'D'</b> to turn left or right.
 Press <b>'W'</b> and <b>'S'</b> to go forward or backward.
 Press <b>'R'</b> to reset the position/direction of character.
+Press <b>'T'</b> to change the world.
 </pre>
 
 <script>
@@ -131,10 +132,10 @@ window.onkeydown = function(event){
             theta += unit;
             break;
 
-        // // 't' : start and stop the rotation of the texture maps on all faces of the first cube 
-        // case 84: 
-        //     textureRotate = (textureRotate == 0)? 1: 0;
-        //     break;
+        // 't' : start and stop the rotation of the texture maps on all faces of the first cube 
+        case 84: 
+            onTheBeach = (onTheBeach == 0)? 1: 0;
+            break;
 
         // // 's' : start and stop the continuous scrolling the texture map on the second cube
         // case 83: 

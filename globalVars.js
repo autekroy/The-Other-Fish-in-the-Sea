@@ -35,7 +35,8 @@ var sphereNormalBuffer;
 var sphereUVBuffer;
 
 // Variables related to textures!
-var myTexture;
+var oceanTexture;
+var beachTexture;
 var BubbleTexture;
 var rockTexture;
 var silverTexture;
@@ -103,4 +104,5 @@ var theta = 1.5;
 // sphere
 var sphereIndex = 0;
 
-
+// check if on The Beach
+var onTheBeach = 1;
