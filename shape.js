@@ -217,6 +217,7 @@ function createMonster(xPos, Ypos, Zpos) {
 var deg  = 180;
 var degUnit = 15;
 var moveForward = 0;// for character to move forward or backward. 'W' and 'S' key
+var moveLeft = 0;
 function createPeople(xPos, Ypos, Zpos) {
     worldViewMatrix();
     modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world   

@@ -109,10 +109,12 @@ window.onkeydown = function(event){
             break;
         case 65: //'A' arrow
             if(textureLeft > -3) textureLeft --;
+            if(moveLeft > -2)  moveLeft -= 0.2;
             if(theta < 9)        theta += unit;
             break;
         case 68: //'D' arrow
             if(textureLeft < 3) textureLeft ++;
+            if(moveLeft < 2)  moveLeft += 0.2;
             if(theta > -9)      theta -= unit;
             break;
             

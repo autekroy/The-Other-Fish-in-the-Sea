@@ -413,7 +413,7 @@ else{
     // Render sword
     ////////
     // createSword(4, 1, 2.1, -90);
-    createSword(1.3, 2.1, -1.3 + moveForward, 0);
+    createSword(1.3 + moveLeft, 2.1, -1.3 + moveForward, 0);
 
 
 
