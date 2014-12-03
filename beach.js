@@ -203,6 +203,7 @@ var right = 3.0;
 var ytop =3.0;
 var bottom = -3.0;
 var oceanDeg = 0, oceanDegUnit = 0.1;
+var beachMove = 0, beachMoveUnit = 0.01;
 
 function render()
 {
@@ -225,6 +226,10 @@ if(onTheBeach == 1){
     ////////////////////////////////
     // Render the Ocean Floor!
     ////////
+    beachMove += beachMoveUnit;
+    if(beachMove > 2.1)  onTheBeach = 0;
+
+    modelViewMatrix = mult(modelViewMatrix, translate(0, 0, beachMove));
 
     // Bind position buffer
     gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
@@ -235,18 +240,18 @@ if(onTheBeach == 1){
     gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeNormals), gl.STATIC_DRAW );
     gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
 
-    // scrolling the cube (beach)
-    if(textureScroll == 1){
-        for(var i = 0; i < 36; i++){
-            cubeUV[i][1] -= 0.04;
-            cubeUV[i][0] -= textureLeft/100;
-            // reset all the texture coordinate incase they are too low to get overflow.
-            if(cubeUV[i][1] <= -1000000){
-                for(var j = 0; j < 36; j++)
-                    cubeUV[j][1] += 10;
-            }
-        }
-    }
+    // // scrolling the cube (beach)
+    // if(textureScroll == 1){
+    //     for(var i = 0; i < 36; i++){
+    //         cubeUV[i][1] -= 0.04;
+    //         cubeUV[i][0] -= textureLeft/100;
+    //         // reset all the texture coordinate incase they are too low to get overflow.
+    //         if(cubeUV[i][1] <= -1000000){
+    //             for(var j = 0; j < 36; j++)
+    //                 cubeUV[j][1] += 10;
+    //         }
+    //     }
+    // }
 
     // Bind UV buffer
     gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
@@ -255,8 +260,8 @@ if(onTheBeach == 1){
 
     var beachFloor = mat4();
 
-    beachFloor = mult(beachFloor, scale(10, 0.00001, 10));
-    beachFloor = mult(beachFloor, translate(0,0,1.5));
+    beachFloor = mult(beachFloor, scale(30, 0.00001, 30));
+    beachFloor = mult(beachFloor, translate(0,0,1));
     beachFloor = mult(beachFloor, modelViewMatrix);    
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(beachFloor));
 
@@ -272,6 +277,22 @@ if(onTheBeach == 1){
 
     gl.drawArrays( gl.TRIANGLES, 0, 36);
 
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    var beachFloor = mat4();
+
+    beachFloor = mult(beachFloor, scale(30, 0.00001, 30));
+    beachFloor = mult(beachFloor, translate(0,0,-0.9));
+    beachFloor = mult(beachFloor, modelViewMatrix);    
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(beachFloor));
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, oceanTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36);
     ////////////////////////////////
     // Render the sphere!
     ////////////////

@@ -8,6 +8,10 @@ Date: 11/22, 2014
 
 <head>
 
+<!-- play the background music -->
+<embed src="http://dddproduktionen.weebly.com/files/theme/DDDmusic.mp3 " auto loop="true"
+hidden="true">
+
 </head>
 
 <script id="vertex-shader" type="x-shader/x-vertex">
@@ -132,7 +136,7 @@ window.onkeydown = function(event){
             theta += unit;
             break;
 
-        // 't' : start and stop the rotation of the texture maps on all faces of the first cube 
+        // 't' : change the world between island and underwater
         case 84: 
             onTheBeach = (onTheBeach == 0)? 1: 0;
             break;
