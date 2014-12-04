@@ -81,6 +81,7 @@ void main()
 <script type="text/javascript" src="globalVars.js"></script>
 <script type="text/javascript" src="shape.js"></script>
 <script type="text/javascript" src="beach.js"></script>
+<script type="text/javascript" src="texture.js"></script>
 
 <body>
 <canvas id="gl-canvas" width="1100" height="620">
@@ -181,7 +182,6 @@ window.onkeyup = function(event){
     var key = window.event.keyCode;
     // alert(key);
     switch(key){
-
         // W, A, S, D for move character
         case 87: //'W' arrow
             if(onTheBeach == 1 && walkForward == 1)     walkForward = 0;

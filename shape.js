@@ -216,7 +216,8 @@ function createMonster(monstweindex) {
 
     ctm = modelViewMatrix;
     ctm = mult(ctm, translate(monsterXpos[ monstweindex ], monsterYpos[ monstweindex ], monsterZpos[ monstweindex ]));
-    ctm = mult(ctm, rotate(45, [0, 1, 0]));
+    // ctm = mult(ctm, rotate(45, [0, 1, 0]));
+    ctm = mult(ctm, rotate(5, [1, 0, 0]));
     ctm = mult(ctm, scale(monsterSize[ monstweindex ], monsterSize[ monstweindex ], monsterSize[ monstweindex ]));
 
 

@@ -112,9 +112,9 @@ var theta = 1.5;
 var sphereIndex = 0;
 
 // check if on The Beach
-var onTheBeach = 0;
+var onTheBeach = 1;
 var walkForward = 0, walkBackward = 0;
 var walking = 0;
 
 // monster variable
-var monsterNumber = 4;
+var monsterNumber = 4; //initial number of monster
