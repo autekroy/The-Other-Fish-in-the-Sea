@@ -243,7 +243,6 @@ function defineTexture()
     }
     beachBackgroundTexture.image.src = "/resource/beachBackground.jpg";
 
-
     //texture for world rocks
     rockTexture = gl.createTexture();
     rockTexture.image = new Image();
@@ -265,6 +264,25 @@ function defineTexture()
     }
     rockTexture.image.src = "/resource/rockwall.jpg";
 
+
+    monsterTexture = gl.createTexture();
+    monsterTexture.image = new Image();
+    monsterTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, monsterTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, monsterTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    monsterTexture.image.src = "/resource/cubeMonster.png";
+
 }
 
 var left = -3.0;
@@ -282,6 +300,8 @@ function render()
 
     modelViewMatrix = lookAt(eye, at, up);
 
+    projectionMatrix = perspective(fieldOfView, aspectRatio, 0.001, 1000);
+    projectionMatrix = mult(projectionMatrix, translate(0,-2,-4));
 
     gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
     gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(viewMatrix));
@@ -328,10 +348,6 @@ if(onTheBeach == 1){
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, beachTexture);
 
-    // projectionMatrix = perspective(fieldOfView, aspectRatio, 0.001, 1000);
-    // projectionMatrix = mult(projectionMatrix, translate(0,-2,-4));
-    // UNIFORM_projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
-
     gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
     gl.uniform4fv(UNIFORM_diffuseProduct,  flatten(diffuseProduct));
     gl.uniform4fv(UNIFORM_specularProduct, flatten(specularProduct));
@@ -360,15 +376,10 @@ if(onTheBeach == 1){
     gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
-    // projectionMatrix = ortho(l, r, t, b, n, f);
-    // UNIFORM_projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
-
     rockWall = mat4();
     rockWall = mult(rockWall, translate(0, 30, -28));
     rockWall = mult(rockWall, scale(50, 16, 20));
     rockWall = mult(rockWall, modelViewMatrix);    
-
-
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
 
@@ -404,6 +415,7 @@ if(onTheBeach == 1){
     gl.uniform1i(UNIFORM_sampler, 0);
 
     createPeople(moveLeft, 0, moveForward, onTheBeach, walking);
+
 }
 else{
     ////////////////////////////////
@@ -522,16 +534,17 @@ else{
     gl.drawArrays( gl.TRIANGLES, 0, 36);
 
 
-
+    ////////////////////////////////
     // Render monster
-    createMonster(0, 0, 9);
+    ///////
+    for(var i = 0; i < 4; i++)
+        createMonster(i);
 
     ////////////////////////////////
     // Render sword
     ////////
     // createSword(4, 1, 2.1, -90);
     createSword(1.3 + moveLeft, 2.1, -1.3 + moveForward, 0);
-
 
 
     ////////////////////////////////
@@ -573,6 +586,41 @@ else{
 
     worldViewMatrix();
 }
+
+
+    // try to make HP bar
+
+    // // Bind position buffer
+    // gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
+    // gl.bufferData( gl.ARRAY_BUFFER, flatten(cubePoints), gl.STATIC_DRAW );
+    // gl.vertexAttribPointer( ATTRIBUTE_position, 3, gl.FLOAT, false, 0, 0 );
+    // // // Bind normal buffer
+    // // gl.bindBuffer( gl.ARRAY_BUFFER, cubeNormalBuffer );
+    // // gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeNormals), gl.STATIC_DRAW );
+    // // gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
+
+    // // // Bind UV buffer
+    // // gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+    // // gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
+    // // gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    // var rockWall = mat4();
+    // rockWall = mult(rockWall, translate(0, 2, 0));
+    // // rockWall = mult(rockWall, scale(5, 5, 5));
+    // // rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
+    // // rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
+    // // rockWall = mult(rockWall, modelViewMatrix);   
+
+    // projectionMatrix = ortho(l, r, t, b, n, f);
+    // // UNIFORM_projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
+    // gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
+    // gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
+
+    // gl.drawArrays( gl.LINES, 0, 36);
+
+
+
+
     window.requestAnimFrame( render );
 }
 

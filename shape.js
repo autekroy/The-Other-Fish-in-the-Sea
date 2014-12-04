@@ -183,28 +183,42 @@ function createSwaweed(xvalue, yvalue, zvalue) {
 
 }
 
+var monsterXpos = [8, -2, 3, -8];
+var monsterYpos = [1.5, 3, 6, 4];
+var monsterZpos = [-12, -12, -12, -12];
+var monsterSpeed = [0.3, 0.2, 0.25, 0.1];
+var monsterSize = [0.5, 0.5, 0.5, 0.5];
 
-function createMonster(xPos, Ypos, Zpos) {
+function createMonster(monstweindex) {
     worldViewMatrix();
-    modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world   
 
-    modelViewMatrix = mult(modelViewMatrix, translate(xPos, Ypos, Zpos));
+    monsterZpos[ monstweindex ] += monsterSpeed[ monstweindex ] ;
+    if(monsterZpos[ monstweindex ] >= 5){
+        monsterXpos[ monstweindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
+        monsterYpos[ monstweindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
+        monsterZpos[ monstweindex ] = -15 - Math.random(); 
+
+        monsterSpeed[ monstweindex ] = 0.2 + Math.random() / 7;
+        monsterSize[ monstweindex ] = Math.random();
+    }
 
     ctm = modelViewMatrix;
-    ctm = mult(ctm, translate(0, 1.5, 0));
+    ctm = mult(ctm, translate(monsterXpos[ monstweindex ], monsterYpos[ monstweindex ], monsterZpos[ monstweindex ]));
     ctm = mult(ctm, rotate(45, [0, 1, 0]));
-    ctm = mult(ctm, scale(0.5, 0.5, 0.5));
+    ctm = mult(ctm, scale(monsterSize[ monstweindex ], monsterSize[ monstweindex ], monsterSize[ monstweindex ]));
+
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
     
     var uvBuffer2 = gl.createBuffer();
+
     gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
     gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, silverTexture);
+    gl.bindTexture(gl.TEXTURE_2D, monsterTexture);
 
     gl.drawArrays( gl.TRIANGLES, 0, 36); 
 
@@ -260,7 +274,7 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     ctm = mult(ctm, translate(xvalue + 0.8, yvalue + 0.7, zvalue));
     
     if(checkOnTheBeach ==  1)       hasSword = 0;
-    else                            hasSword = 1;
+    else                            {hasSword = 1; checkWalk = 1;}
 
     if(hasSword == 1)                           ctm = mult(ctm, rotate( -210, [1, 0, 0]));
     else if(hasSword == 0 && checkWalk == 1)    ctm = mult(ctm, rotate( -deg, [1, 0, 0]));
