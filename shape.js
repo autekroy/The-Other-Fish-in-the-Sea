@@ -31,7 +31,7 @@ function Cube(length, points, normals, uv, uv2) {
         normals.push(normal);
         normals.push(normal);
 
-        var bound = 7;
+        var bound = 8;
         // for normal texture coordinate
         uv.push(vec2(0,0));
         uv.push(vec2(bound,0));

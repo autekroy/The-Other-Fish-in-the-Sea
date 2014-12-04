@@ -57,7 +57,7 @@ var up = vec3(0, 1, 0);
 
 // Variables related to lighting!
 var shininess = 50;
-var lightPosition = vec3(5.0, 20.0, 0.0);
+var lightPosition = vec3(0, 50.0, 40);
 
 var lightAmbient = vec4(0.4, 0.4, 0.4, 1.0);
 var materialAmbient = vec4(0.9, 0.9, 0.9, 1.0);
@@ -90,11 +90,18 @@ var ifRotate = 0; // control  the rotation of both cubes.
 var textureRotate = 0; // start and stop the rotation of the texture maps on all faces of the first cube
 var textureScroll = 1; // start and stop the continuous scrolling the texture map on the second cube
 
-
 var theta = 0.00;
 
 var distance = 1;
 var fovy = 90;
+
+// for orthographics projection
+var l = -1;
+var r = 1;
+var t = 1;
+var b = -1;
+var n = -1;
+var f = 1;
 
 // for naviggation system
 var unit = 3;

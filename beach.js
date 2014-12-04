@@ -4,6 +4,7 @@ This file contains the init() and render() functions!
 
 */
 
+var program;
 window.onload = function init()
 {
     canvas = document.getElementById( "gl-canvas" );
@@ -16,7 +17,7 @@ window.onload = function init()
     // Camera settings I guess
     viewMatrix = lookAt(eye, at, up);
     projectionMatrix = perspective(fieldOfView, aspectRatio, 0.001, 1000);
-    projectionMatrix = mult(projectionMatrix, translate(0,-1,-4));
+    projectionMatrix = mult(projectionMatrix, translate(0,-2,-4));
 
     gl.enable(gl.DEPTH_TEST);
 
@@ -33,123 +34,10 @@ window.onload = function init()
     sphereIndex = 0;
     createSphere(3, spherePoints, sphereNormals, sphereUV)
 
-    // first cube with texture
-    oceanTexture = gl.createTexture();
-    oceanTexture.image = new Image();
-    oceanTexture.image.onload = function() {
-    	gl.bindTexture(gl.TEXTURE_2D, oceanTexture);
-    	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, oceanTexture.image);
-
-        //for the zoomed texture, use tri-linear filtering
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-
-        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-
-    	gl.generateMipmap(gl.TEXTURE_2D);
-    	gl.bindTexture(gl.TEXTURE_2D, null);
-    }
-    oceanTexture.image.src =  "/resource/underwater2.jpg";
-
-    beachTexture = gl.createTexture();
-    beachTexture.image = new Image();
-    beachTexture.image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, beachTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, beachTexture.image);
-
-        //for the zoomed texture, use tri-linear filtering
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-
-        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-
-        gl.generateMipmap(gl.TEXTURE_2D);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-    }
-    beachTexture.image.src =  "/resource/sandycheeks.jpg";
-
-
-    silverTexture = gl.createTexture();
-    silverTexture.image = new Image();
-    silverTexture.image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, silverTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, silverTexture.image);
-
-        //for the zoomed texture, use tri-linear filtering
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-
-        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-
-        gl.generateMipmap(gl.TEXTURE_2D);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-    }
-    silverTexture.image.src =  "/resource/white.png";
-
-
-    goldenTexture = gl.createTexture();
-    goldenTexture.image = new Image();
-    goldenTexture.image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, goldenTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, goldenTexture.image);
-
-        //for the zoomed texture, use tri-linear filtering
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-
-        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-
-        gl.generateMipmap(gl.TEXTURE_2D);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-    }
-    goldenTexture.image.src =  "/resource/yellow.png";
-
-
-    // Texture for sphere
-    BubbleTexture = gl.createTexture();
-    BubbleTexture.image = new Image();    
-    BubbleTexture.image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, BubbleTexture.image);
-
-        //for the zoomed texture, use tri-linear filtering
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-
-        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-
-        gl.generateMipmap(gl.TEXTURE_2D);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-    }
-    BubbleTexture.image.src = "/resource/bubble.png";
-
-
-    //texture for world rocks
-    rockTexture = gl.createTexture();
-    rockTexture.image = new Image();
-    rockTexture.image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, rockTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, rockTexture.image);
-
-        //for the zoomed texture, use tri-linear filtering
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-
-        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-
-        gl.generateMipmap(gl.TEXTURE_2D);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-    }
-    rockTexture.image.src = "/resource/rockwall.jpg";//
+    defineTexture();
 
     // Process Shaders (or something like that)
-    var program = initShaders( gl, "vertex-shader", "fragment-shader" );
+    program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
     // Create buffers for the cube!
@@ -196,6 +84,187 @@ function worldViewMatrix(){
     modelViewMatrix = lookAt(eye, at , up);
     modelViewMatrix = mult(modelViewMatrix, rotate(altitude, [1, 0, 0])); //change the altitude of the whold world
      
+}
+
+function defineTexture() 
+{
+    oceanTexture = gl.createTexture();
+    oceanTexture.image = new Image();
+    oceanTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, oceanTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, oceanTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    oceanTexture.image.src =  "/resource/underwaterBlue.jpg";
+
+    beachOceanTexture = gl.createTexture();
+    beachOceanTexture.image = new Image();
+    beachOceanTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, beachOceanTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, beachOceanTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    beachOceanTexture.image.src =  "/resource/underwater2.jpg";
+
+    beachTexture = gl.createTexture();
+    beachTexture.image = new Image();
+    beachTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, beachTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, beachTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    beachTexture.image.src =  "/resource/sandycheeks.jpg";
+
+
+    silverTexture = gl.createTexture();
+    silverTexture.image = new Image();
+    silverTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, silverTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, silverTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    silverTexture.image.src =  "/resource/white.png";
+
+
+    goldenTexture = gl.createTexture();
+    goldenTexture.image = new Image();
+    goldenTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, goldenTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, goldenTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    goldenTexture.image.src =  "/resource/yellow.png";
+
+
+    // Texture for sphere
+    BubbleTexture = gl.createTexture();
+    BubbleTexture.image = new Image();    
+    BubbleTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, BubbleTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, BubbleTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    BubbleTexture.image.src = "/resource/bubble.png";
+
+
+    //texture for underwater background
+    waterBackgroundTexture = gl.createTexture();
+    waterBackgroundTexture.image = new Image();
+    waterBackgroundTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, waterBackgroundTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, waterBackgroundTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    waterBackgroundTexture.image.src = "/resource/underwaterBackground.jpg";
+
+    //texture for beach background
+    beachBackgroundTexture = gl.createTexture();
+    beachBackgroundTexture.image = new Image();
+    beachBackgroundTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, beachBackgroundTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, beachBackgroundTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    beachBackgroundTexture.image.src = "/resource/beachBackground.jpg";
+
+
+    //texture for world rocks
+    rockTexture = gl.createTexture();
+    rockTexture.image = new Image();
+    rockTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, rockTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, rockTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    rockTexture.image.src = "/resource/rockwall.jpg";
+
 }
 
 var left = -3.0;
@@ -259,6 +328,10 @@ if(onTheBeach == 1){
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, beachTexture);
 
+    // projectionMatrix = perspective(fieldOfView, aspectRatio, 0.001, 1000);
+    // projectionMatrix = mult(projectionMatrix, translate(0,-2,-4));
+    // UNIFORM_projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
+
     gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
     gl.uniform4fv(UNIFORM_diffuseProduct,  flatten(diffuseProduct));
     gl.uniform4fv(UNIFORM_specularProduct, flatten(specularProduct));
@@ -269,10 +342,7 @@ if(onTheBeach == 1){
     gl.drawArrays( gl.TRIANGLES, 0, 36);
 
 
-    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
-    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
-
+    // render the beach background
     var beachFloor = mat4();
 
     beachFloor = mult(beachFloor, scale(30, 0.01, 30));
@@ -281,9 +351,31 @@ if(onTheBeach == 1){
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(beachFloor));
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, oceanTexture);
+    gl.bindTexture(gl.TEXTURE_2D, beachOceanTexture);
 
     gl.drawArrays( gl.TRIANGLES, 0, 36);
+
+    // render beach background
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    // projectionMatrix = ortho(l, r, t, b, n, f);
+    // UNIFORM_projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
+
+    rockWall = mat4();
+    rockWall = mult(rockWall, translate(0, 30, -28));
+    rockWall = mult(rockWall, scale(50, 16, 20));
+    rockWall = mult(rockWall, modelViewMatrix);    
+
+
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, beachBackgroundTexture);
+    gl.drawArrays( gl.TRIANGLES, 0, 36);
+
     ////////////////////////////////
     // Render the sphere!
     ////////////////
@@ -373,42 +465,63 @@ else{
     ////////////////////////////////
     // Render the world rock
     ////////
+    // for left rock wall
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
     var rockWall = mat4();
-    // rockWall = mult(rockWall, translate(0, 3, 0));
-
     rockWall = mult(rockWall, translate(-10, 11, -13));
     rockWall = mult(rockWall, scale(1, 15, 15));
     rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
     rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
-    
-    rockWall = mult(rockWall, viewMatrix);    
+    rockWall = mult(rockWall, modelViewMatrix);   
+
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
 
     gl.activeTexture(gl.TEXTURE0);
-
-    // should be rockTexture!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     gl.bindTexture(gl.TEXTURE_2D, rockTexture);
 
     gl.drawArrays( gl.TRIANGLES, 0, 36);
 
-    rockWall = mat4();
-    // rockWall = mult(rockWall, translate(0, 3, 0));
+    // for right rock wall
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
-    rockWall = mult(rockWall, translate(10, 11, -13));
+    rockWall = mat4();
+    rockWall = mult(rockWall, translate(9, 11, -13));
     rockWall = mult(rockWall, scale(1, 15, 15));
     rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
     rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
-    
-    rockWall = mult(rockWall, viewMatrix);    
+    rockWall = mult(rockWall, modelViewMatrix);    
+
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
 
     gl.activeTexture(gl.TEXTURE0);
-
-    // should be rockTexture!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     gl.bindTexture(gl.TEXTURE_2D, rockTexture);
-
     gl.drawArrays( gl.TRIANGLES, 0, 36);
+
+    /////////////////////////
+    // render ocean background
+    ////////////////////
+    
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    rockWall = mat4();
+    rockWall = mult(rockWall, translate(0, 30, -15));
+    rockWall = mult(rockWall, scale(40, 20, 20));
+    rockWall = mult(rockWall, modelViewMatrix);    
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, waterBackgroundTexture);
+    gl.drawArrays( gl.TRIANGLES, 0, 36);
+
+
 
     // Render monster
     createMonster(0, 0, 9);
@@ -422,7 +535,7 @@ else{
 
 
     ////////////////////////////////
-    // Render the sphere!
+    // Render the sphere! (for Bubble and people)
     ////////////////
 
     // Bind position buffer
@@ -451,12 +564,10 @@ else{
     createBubble(7, 1, -10);
     createBubble(-3, 1, -7);
     createBubble(3, 1, -2);
-
+    createBubble(-5, 1, -3);
     // createTreasure(3, 0, -1);
 
     // createSwaweed(3, 0, -1);
-
-    //////////////////////////////////////////////////////////////////
 
     createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
 
