@@ -537,7 +537,7 @@ else{
     ////////////////////////////////
     // Render monster
     ///////
-    for(var i = 0; i < 4; i++)
+    for(var i = 0; i < monsterNumber; i++)
         createMonster(i);
 
     ////////////////////////////////

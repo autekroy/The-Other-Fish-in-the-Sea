@@ -183,17 +183,29 @@ function createSwaweed(xvalue, yvalue, zvalue) {
 
 }
 
-var monsterXpos = [8, -2, 3, -8];
-var monsterYpos = [1.5, 3, 6, 4];
-var monsterZpos = [-12, -12, -12, -12];
-var monsterSpeed = [0.3, 0.2, 0.25, 0.1];
-var monsterSize = [0.5, 0.5, 0.5, 0.5];
+var monsterXpos = [];
+var monsterYpos = [];
+var monsterZpos = [];
+var monsterSpeed = [];
+var monsterSize = [];
 
 function createMonster(monstweindex) {
     worldViewMatrix();
 
+    if( monstweindex > (monsterXpos.length -1)){
+            monsterXpos.push(0);  monsterYpos.push(0); monsterZpos.push(0);
+            monsterSpeed.push(0); monsterSize.push(0);
+        monsterXpos[ monstweindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
+        monsterYpos[ monstweindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
+        monsterZpos[ monstweindex ] = -15 - Math.random(); 
+
+        monsterSpeed[ monstweindex ] = 0.2 + Math.random() / 7;
+        monsterSize[ monstweindex ] = Math.random();            
+    }
+
     monsterZpos[ monstweindex ] += monsterSpeed[ monstweindex ] ;
     if(monsterZpos[ monstweindex ] >= 5){
+
         monsterXpos[ monstweindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
         monsterYpos[ monstweindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
         monsterZpos[ monstweindex ] = -15 - Math.random(); 
