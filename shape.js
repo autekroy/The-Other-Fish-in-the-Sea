@@ -31,7 +31,7 @@ function Cube(length, points, normals, uv, uv2) {
         normals.push(normal);
         normals.push(normal);
 
-        var bound = 8;
+        var bound = 5;
         // for normal texture coordinate
         uv.push(vec2(0,0));
         uv.push(vec2(bound,0));
@@ -183,9 +183,11 @@ function createSwaweed(xvalue, yvalue, zvalue) {
 
 }
 
-function createTreasure(xvalue, yvalue, zvalue){
-    ctm = modelViewMatrix;
-    ctm = mult(ctm, translate(xvalue, yvalue + 2, zvalue + movePosition));
+function createMeganFox(xvalue, yvalue, zvalue){
+    ctm = mat4();
+    ctm = mult(ctm, translate(xvalue, yvalue + 2, zvalue + movePosition * 20));
+    // ctm = mult(ctm, rotate(10, [0, 1, 0]));
+    ctm = mult(ctm, scale(5, 5, 0.1));
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
     
@@ -197,7 +199,52 @@ function createTreasure(xvalue, yvalue, zvalue){
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, monsterTexture);
+    gl.bindTexture(gl.TEXTURE_2D, meganFoxTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36); 
+
+}
+
+
+function createTextureBox(xvalue, yvalue, zvalue){
+    ctm = mat4();
+    ctm = mult(ctm, translate(xvalue, yvalue + 1, zvalue + movePosition * 20));
+    ctm = mult(ctm, rotate(30, [0, 1, 0]));
+    ctm = mult(ctm, scale(1.5, 1, 1));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+    
+    var uvBuffer2 = gl.createBuffer();
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, goldenTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36); 
+
+}
+
+
+function createFood(xvalue, yvalue, zvalue){
+    ctm = mat4();
+    ctm = mult(ctm, translate(xvalue, yvalue + 2, zvalue + movePosition * 20));
+    ctm = mult(ctm, scale(0.5, 0.5, 0.5));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+    
+    var uvBuffer2 = gl.createBuffer();
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, foodTexture);
 
     gl.drawArrays( gl.TRIANGLES, 0, 36); 
 

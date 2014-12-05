@@ -91,8 +91,27 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    goldenTexture.image.src =  "/resource/yellow.png";
+    goldenTexture.image.src =  "/resource/golden.png";
 
+
+    // megan Fox!
+    meganFoxTexture = gl.createTexture();
+    meganFoxTexture.image = new Image();
+    meganFoxTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, meganFoxTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, meganFoxTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    meganFoxTexture.image.src =  "/resource/megan.png";
 
     // Texture for sphere
     BubbleTexture = gl.createTexture();
@@ -134,6 +153,29 @@ function defineTexture()
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
     waterBackgroundTexture.image.src = "/resource/underwaterBackground.jpg";
+
+
+    //texture for food
+    foodTexture = gl.createTexture();
+    foodTexture.image = new Image();
+    foodTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, foodTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, foodTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    foodTexture.image.src = "/resource/food.png";
+
 
     //texture for beach background
     beachBackgroundTexture = gl.createTexture();

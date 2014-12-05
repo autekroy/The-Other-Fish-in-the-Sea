@@ -123,10 +123,16 @@ if(onTheBeach == 1){
         movePosition -= movePositionUnit;
 
     if(movePosition > 2.0){  
+        if(isFinalisland == 1){
+            movePosition = 2.0;
+        }
+        else{
         onTheBeach = 0; //going to underwater
         movePosition = 0;
         walking = 0;
         waterLevelIndex = 0;
+        }
+
     }
     modelViewMatrix = mult(modelViewMatrix, translate(0, 0, movePosition));
 
@@ -163,7 +169,20 @@ if(onTheBeach == 1){
 
     gl.drawArrays( gl.TRIANGLES, 0, 36);
 
-    createTreasure(3, 1, -2);
+    /////////////////////////
+    // render food
+    ////////////////////////
+    createFood(3, 1, -15);
+
+    //////////////////////////
+    // render final tresure
+    //////////////////////////
+    createMeganFox(0, 0, -25);
+
+    //////////////////////////
+    // render Texture box
+    //////////////////////////
+    // createTextureBox(-1, 0, -12);
 
     ////////////////////////////
     // render the beach floor
@@ -240,7 +259,13 @@ else{
         if(movePosition > 1.4){  // go to beach
             waterLevelIndex += waterLevelNext
             if(waterLevelIndex >= 3 && waterLevelNext == 1)     {waterLevelIndex = 1; waterLevelNext = -1;}
-            else if(waterLevelIndex < 0 && waterLevelNext == -1){onTheBeach = 1; waterLevelIndex = 1; waterLevelNext = 1;}
+            else if(waterLevelIndex < 0 && waterLevelNext == -1){
+                onTheBeach = 1; 
+                waterLevelIndex = 1; 
+                waterLevelNext = 1;
+                isFinalisland = 1;
+            }
+            
             movePosition = 0;
             walking = 0; //not walking
             walkForward = 0;
