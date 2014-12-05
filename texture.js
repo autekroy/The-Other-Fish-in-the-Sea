@@ -106,12 +106,12 @@ function defineTexture()
     goldenTexture.image.src =  "/resource/yellow.png";
 
 
-    // megan Fox!
-    meganFoxTexture = gl.createTexture();
-    meganFoxTexture.image = new Image();
-    meganFoxTexture.image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, meganFoxTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, meganFoxTexture.image);
+    // celebrity
+    celebrityTexture = gl.createTexture();
+    celebrityTexture.image = new Image();
+    celebrityTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, celebrityTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, celebrityTexture.image);
 
         //for the zoomed texture, use tri-linear filtering
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
@@ -123,7 +123,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    meganFoxTexture.image.src =  "/resource/megan.png";
+    celebrityTexture.image.src =  "/resource/EmmaEatson.jpg"; //"/resource/megan.png";
 
     // Texture for sphere
     BubbleTexture = gl.createTexture();
@@ -151,10 +151,13 @@ function defineTexture()
     waterBackgroundTexture.image.onload = function() {
         gl.bindTexture(gl.TEXTURE_2D, waterBackgroundTexture);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, waterBackgroundTexture.image);
+        
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 
         //for the zoomed texture, use tri-linear filtering
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 
         // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
         // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
@@ -221,7 +224,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    lifePointTexture.image.src = "/resource/lifePoint.png";
+    lifePointTexture.image.src = "/resource/heart.jpg";
 
 
     //texture for world rocks

@@ -183,7 +183,7 @@ function createSwaweed(xvalue, yvalue, zvalue) {
 
 }
 
-function createMeganFox(xvalue, yvalue, zvalue){
+function createCelebrity(xvalue, yvalue, zvalue){
     ctm = mat4();
     ctm = mult(ctm, translate(xvalue, yvalue + 2, -5 + zvalue + movePosition * 20));
     // ctm = mult(ctm, rotate(10, [0, 1, 0]));
@@ -192,18 +192,18 @@ function createMeganFox(xvalue, yvalue, zvalue){
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
     
     var uvBuffer2 = gl.createBuffer();
-
     gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
     gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
+    celebrityTexture.image.src =  "/resource/EmmaEatson.jpg"; //"/resource/megan.png";
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, meganFoxTexture);
+    gl.bindTexture(gl.TEXTURE_2D, celebrityTexture);
 
-    gl.drawArrays( gl.TRIANGLES, 0, 36); 
-
+    gl.drawArrays( gl.TRIANGLES, 0, 6); 
 }
+
 
 
 function createTextureBox(xvalue, yvalue, zvalue){
@@ -255,7 +255,6 @@ var monsterYpos = [];
 var monsterZpos = [];
 var monsterSpeed = [];
 var monsterSize = [];
-
 function createMonster(monstweindex) {
     worldViewMatrix();
 
@@ -312,11 +311,20 @@ var deg  = 180;
 var degUnit = 15;
 var moveForward = 0;// for character to move forward or backward. 'W' and 'S' key
 var moveLeft = 0;
+var inWave = 0, inWavePos = 0, waveUnit = 0.05;// indicate if people in a wave (bouncing in x axis)
+
 function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     worldViewMatrix();
     modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world   
 
-    modelViewMatrix = mult(modelViewMatrix, translate(xPos, Ypos, Zpos));
+    if(inWave == 1){
+        inWavePos += waveUnit;
+        if(inWavePos > 0.5 && waveUnit > 0)         waveUnit = -waveUnit;
+        else if(inWavePos < -0.5 && waveUnit < 0)   waveUnit = -waveUnit;
+        // else                                        inWave = 0; 
+    }
+
+    modelViewMatrix = mult(modelViewMatrix, translate(xPos + inWavePos, Ypos, Zpos));
 
     var xvalue = 0, yvalue = 3.6, zvalue = 0;
 
@@ -423,7 +431,7 @@ function createSword(xPos, Ypos, Zpos, xRotate){
     worldViewMatrix();
     modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world   
 
-    modelViewMatrix = mult(modelViewMatrix, translate(xPos, Ypos, Zpos));
+    modelViewMatrix = mult(modelViewMatrix, translate(xPos + inWavePos, Ypos, Zpos));
     modelViewMatrix = mult(modelViewMatrix, rotate(xRotate, [1, 0, 0]));
     
     // Bind position buffer
@@ -527,11 +535,10 @@ function createLifePoints(num){
     for(var i = 0; i < num; i++){
         ctm = mat4();
         ctm = mult(ctm, translate(-3.5 + i * 0.6, 3.8, 0));
-        ctm = mult(ctm, rotate(5, [0, 1, 0]));
         ctm = mult(ctm, scale(0.2, 0.2, 0.2));
 
         gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
 
-        gl.drawArrays( gl.TRIANGLES, 0, 36); 
+        gl.drawArrays( gl.TRIANGLES, 0, 6); 
     }
 }

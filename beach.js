@@ -113,13 +113,16 @@ function render()
     gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
     gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(modelViewMatrix));
 
+    lightPosition = vec3(0, 50.0, 40);
+    gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
+
     // projectionMatrix = ortho(left, right, bottom, ytop, near, far);
 
 if(onTheBeach == 1){
     ////////////////////////////////
     // Render the beach
     ////////
-
+    inWave = 0;
     if(walkForward == 1)
         movePosition += movePositionUnit;
     else if(walkBackward == 1 && movePosition >= 0.03)
@@ -179,7 +182,7 @@ if(onTheBeach == 1){
     // render final tresure
     //////////////////////////
     if(isFinalisland == 1)
-        createMeganFox(0, 0, -25);
+        createCelebrity(0, 0, -25);
 
     //////////////////////////
     // render Texture box
@@ -388,7 +391,7 @@ else{
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
     rockWall = mat4();
-    rockWall = mult(rockWall, translate(0, 30, -15));
+    rockWall = mult(rockWall, translate(0, 30 + waterLevelIndex * 6, -15));
     rockWall = mult(rockWall, scale(40, 30, 20));
     rockWall = mult(rockWall, modelViewMatrix);    
 
@@ -396,7 +399,7 @@ else{
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, waterBackgroundTexture);
-    gl.drawArrays( gl.TRIANGLES, 0, 36);
+    gl.drawArrays( gl.TRIANGLES, 0, 6);
 
 
 
@@ -448,13 +451,17 @@ else{
     createBubble(-5, 1, -3);
 
     // createSwaweed(3, 0, -1);
-
+    if(waterLevelIndex == 2)    inWave = 1;
+    else                        inWave = 0;
+    
     createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
 
     worldViewMatrix();
 }
 
     // make life points
+    lightPosition = vec3(0, 10.0, 40);
+    gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
     createLifePoints(numLifePoints);
 
     window.requestAnimFrame( render );
