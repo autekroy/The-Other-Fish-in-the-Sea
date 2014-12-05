@@ -93,7 +93,7 @@ var bottom = -3.0;
 var oceanDeg = 0, oceanDegUnit = 0.1;
 var movePosition = 0, movePositionUnit = 0.005;
 
-var waterLevelTime = [5, 5, 5];
+var waterLevelTime = [1, 1, 1];
 var waterLevelIndex = 0;
 var waterLevelNext = 1;
 function render()
@@ -162,6 +162,8 @@ if(onTheBeach == 1){
     gl.uniform1i(UNIFORM_sampler, 0);
 
     gl.drawArrays( gl.TRIANGLES, 0, 36);
+
+    createTreasure(3, 1, -2);
 
     ////////////////////////////
     // render the beach floor
@@ -414,7 +416,6 @@ else{
     createBubble(-3, 1, -7);
     createBubble(3, 1, -2);
     createBubble(-5, 1, -3);
-    // createTreasure(3, 0, -1);
 
     // createSwaweed(3, 0, -1);
 

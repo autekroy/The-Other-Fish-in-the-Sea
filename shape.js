@@ -183,6 +183,26 @@ function createSwaweed(xvalue, yvalue, zvalue) {
 
 }
 
+function createTreasure(xvalue, yvalue, zvalue){
+    ctm = modelViewMatrix;
+    ctm = mult(ctm, translate(xvalue, yvalue + 2, zvalue + movePosition));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+    
+    var uvBuffer2 = gl.createBuffer();
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, monsterTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36); 
+
+}
+
 var monsterXpos = [];
 var monsterYpos = [];
 var monsterZpos = [];
