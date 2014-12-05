@@ -91,7 +91,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    goldenTexture.image.src =  "/resource/golden.png";
+    goldenTexture.image.src =  "/resource/yellow.png";
 
 
     // megan Fox!

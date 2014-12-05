@@ -15,7 +15,7 @@ window.onload = function init()
     gl.clearColor( 0.4, 0.4, 0.8, 1.0 );
     
     // Camera settings I guess
-    viewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = lookAt(eye, at, up);
     projectionMatrix = perspective(fieldOfView, aspectRatio, 0.001, 1000);
     projectionMatrix = mult(projectionMatrix, translate(0,-2,-4));
 
@@ -93,6 +93,8 @@ var bottom = -3.0;
 var oceanDeg = 0, oceanDegUnit = 0.1;
 var movePosition = 0, movePositionUnit = 0.005;
 
+var isFinalisland = 0;// as boolean to check if the beach is last island
+
 var waterLevelTime = [1, 1, 1];
 var waterLevelIndex = 0;
 var waterLevelNext = 1;
@@ -108,7 +110,7 @@ function render()
     projectionMatrix = mult(projectionMatrix, translate(0,-2,-4));
 
     gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
-    gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(viewMatrix));
+    gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(modelViewMatrix));
 
     // projectionMatrix = ortho(left, right, bottom, ytop, near, far);
 
@@ -122,18 +124,16 @@ if(onTheBeach == 1){
     else if(walkBackward == 1 && movePosition >= 0.03)
         movePosition -= movePositionUnit;
 
-    if(movePosition > 2.0){  
-        if(isFinalisland == 1){
-            movePosition = 2.0;
-        }
-        else{
+    if(isFinalisland == 1 && movePosition > 1.15){
+        movePosition = 1.15;
+    }
+    else if(movePosition > 2.0){  
         onTheBeach = 0; //going to underwater
         movePosition = 0;
         walking = 0;
         waterLevelIndex = 0;
-        }
-
     }
+
     modelViewMatrix = mult(modelViewMatrix, translate(0, 0, movePosition));
 
     // Bind position buffer
@@ -177,7 +177,8 @@ if(onTheBeach == 1){
     //////////////////////////
     // render final tresure
     //////////////////////////
-    createMeganFox(0, 0, -25);
+    if(isFinalisland == 1)
+        createMeganFox(0, 0, -25);
 
     //////////////////////////
     // render Texture box
@@ -258,14 +259,17 @@ else{
 
         if(movePosition > 1.4){  // go to beach
             waterLevelIndex += waterLevelNext
-            if(waterLevelIndex >= 3 && waterLevelNext == 1)     {waterLevelIndex = 1; waterLevelNext = -1;}
+            if(waterLevelIndex >= 3 && waterLevelNext == 1){
+                waterLevelIndex = 1; 
+                waterLevelNext = -1;
+            }
             else if(waterLevelIndex < 0 && waterLevelNext == -1){
                 onTheBeach = 1; 
                 waterLevelIndex = 1; 
                 waterLevelNext = 1;
                 isFinalisland = 1;
             }
-            
+
             movePosition = 0;
             walking = 0; //not walking
             walkForward = 0;
@@ -286,18 +290,18 @@ else{
     gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
 
 
-        // scrolling the cube (beach)
-        if(textureScroll == 1){
-            for(var i = 0; i < 36; i++){
-                cubeUV[i][1] -= 0.04;
-                cubeUV[i][0] -= textureLeft/100;
-                // reset all the texture coordinate incase they are too low to get overflow.
-                if(cubeUV[i][1] <= -1000000){
-                    for(var j = 0; j < 36; j++)
-                        cubeUV[j][1] += 10;
-                }
+    // scrolling the cube (beach)
+    if(textureScroll == 1){
+        for(var i = 0; i < 36; i++){
+            cubeUV[i][1] -= 0.04;
+            cubeUV[i][0] -= textureLeft/100;
+            // reset all the texture coordinate incase they are too low to get overflow.
+            if(cubeUV[i][1] <= -1000000){
+                for(var j = 0; j < 36; j++)
+                    cubeUV[j][1] += 10;
             }
         }
+    }
 
 
     // Bind UV buffer
@@ -479,9 +483,6 @@ else{
     // gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
 
     // gl.drawArrays( gl.LINES, 0, 36);
-
-
-
 
     window.requestAnimFrame( render );
 }

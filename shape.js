@@ -185,7 +185,7 @@ function createSwaweed(xvalue, yvalue, zvalue) {
 
 function createMeganFox(xvalue, yvalue, zvalue){
     ctm = mat4();
-    ctm = mult(ctm, translate(xvalue, yvalue + 2, zvalue + movePosition * 20));
+    ctm = mult(ctm, translate(xvalue, yvalue + 2, -5 + zvalue + movePosition * 20));
     // ctm = mult(ctm, rotate(10, [0, 1, 0]));
     ctm = mult(ctm, scale(5, 5, 0.1));
 
