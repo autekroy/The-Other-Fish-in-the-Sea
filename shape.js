@@ -493,3 +493,45 @@ function createSword(xPos, Ypos, Zpos, xRotate){
 
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );  
 }
+
+////////////////
+// use orthogonal projection
+////////////////
+var numLifePoints = 3;
+function createLifePoints(num){
+    // Bind position buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubePoints), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_position, 3, gl.FLOAT, false, 0, 0 );
+
+    // Bind normal buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeNormalBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeNormals), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
+
+    // Bind UV buffer
+    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    var uvBuffer2 = gl.createBuffer();
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, lifePointTexture);
+
+    for(var i = 0; i < num; i++){
+        ctm = mat4();
+        ctm = mult(ctm, translate(-3.5 + i * 0.6, 3.8, 0));
+        ctm = mult(ctm, rotate(5, [0, 1, 0]));
+        ctm = mult(ctm, scale(0.2, 0.2, 0.2));
+
+        gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+        gl.drawArrays( gl.TRIANGLES, 0, 36); 
+    }
+}

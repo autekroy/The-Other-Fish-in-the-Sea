@@ -454,36 +454,8 @@ else{
     worldViewMatrix();
 }
 
-
-    // try to make HP bar
-
-    // // Bind position buffer
-    // gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
-    // gl.bufferData( gl.ARRAY_BUFFER, flatten(cubePoints), gl.STATIC_DRAW );
-    // gl.vertexAttribPointer( ATTRIBUTE_position, 3, gl.FLOAT, false, 0, 0 );
-    // // // Bind normal buffer
-    // // gl.bindBuffer( gl.ARRAY_BUFFER, cubeNormalBuffer );
-    // // gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeNormals), gl.STATIC_DRAW );
-    // // gl.vertexAttribPointer( ATTRIBUTE_normal, 3, gl.FLOAT, false, 0, 0 );
-
-    // // // Bind UV buffer
-    // // gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
-    // // gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
-    // // gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
-
-    // var rockWall = mat4();
-    // rockWall = mult(rockWall, translate(0, 2, 0));
-    // // rockWall = mult(rockWall, scale(5, 5, 5));
-    // // rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
-    // // rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
-    // // rockWall = mult(rockWall, modelViewMatrix);   
-
-    // projectionMatrix = ortho(l, r, t, b, n, f);
-    // // UNIFORM_projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
-    // gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
-    // gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
-
-    // gl.drawArrays( gl.LINES, 0, 36);
+    // make life points
+    createLifePoints(numLifePoints);
 
     window.requestAnimFrame( render );
 }

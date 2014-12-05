@@ -34,15 +34,6 @@ var spherePositionBuffer;
 var sphereNormalBuffer;
 var sphereUVBuffer;
 
-// Variables related to textures!
-var oceanTexture;
-var beachTexture;
-var BubbleTexture;
-var rockTexture;
-var silverTexture;
-var textureLeft = 0; // for 'A' and 'D' key to control move left or right
-
-
 // Variables related to the camera and viewport!
 var modelViewMatrix;
 var projectionMatrix;

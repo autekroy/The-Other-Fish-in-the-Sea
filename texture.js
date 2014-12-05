@@ -1,4 +1,17 @@
 
+// Variables related to textures!
+var oceanTexture;
+var beachOceanTexture;
+var beachTexture;
+var silverTexture, goldenTexture;
+var meganFoxTexture, monsterTexture;
+var BubbleTexture, rockTexture;
+
+var waterBackgroundTexture, beachBackgroundTexture;
+var foodTexture, lifePointTexture;
+var textureLeft = 0; // for 'A' and 'D' key to control move left or right
+
+
 function defineTexture() 
 {
     oceanTexture = gl.createTexture();
@@ -73,7 +86,6 @@ function defineTexture()
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
     silverTexture.image.src =  "/resource/white.png";
-
 
     goldenTexture = gl.createTexture();
     goldenTexture.image = new Image();
@@ -154,6 +166,23 @@ function defineTexture()
     }
     waterBackgroundTexture.image.src = "/resource/underwaterBackground.jpg";
 
+    //texture for beach background
+    beachBackgroundTexture = gl.createTexture();
+    beachBackgroundTexture.image = new Image();
+    beachBackgroundTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, beachBackgroundTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, beachBackgroundTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    beachBackgroundTexture.image.src = "/resource/beachBackground.jpg";
 
     //texture for food
     foodTexture = gl.createTexture();
@@ -176,27 +205,24 @@ function defineTexture()
     }
     foodTexture.image.src = "/resource/food.png";
 
-
-    //texture for beach background
-    beachBackgroundTexture = gl.createTexture();
-    beachBackgroundTexture.image = new Image();
-    beachBackgroundTexture.image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, beachBackgroundTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, beachBackgroundTexture.image);
+    //texture for life points
+    lifePointTexture = gl.createTexture();
+    lifePointTexture.image = new Image();
+    lifePointTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, lifePointTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, lifePointTexture.image);
 
         //for the zoomed texture, use tri-linear filtering
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-
-        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
-        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    beachBackgroundTexture.image.src = "/resource/beachBackground.jpg";
+    lifePointTexture.image.src = "/resource/lifePoint.png";
+
 
     //texture for world rocks
     rockTexture = gl.createTexture();
