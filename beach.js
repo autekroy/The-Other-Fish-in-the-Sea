@@ -94,6 +94,7 @@ var oceanDeg = 0, oceanDegUnit = 0.1;
 var movePosition = 0, movePositionUnit = 0.005;
 
 var isFinalisland = 0;// as boolean to check if the beach is last island
+var congraMessage = 0;
 
 var waterLevelTime = [1, 1, 1];
 var waterLevelIndex = 0;
