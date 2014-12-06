@@ -48,7 +48,8 @@ window.onload = function init()
     createSphere(3, spherePoints, sphereNormals, sphereUV)
 
     defineTexture();
-
+    defineBumpMappingTexture();
+    
     // Process Shaders (or something like that)
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );

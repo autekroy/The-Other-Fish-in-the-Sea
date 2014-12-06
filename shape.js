@@ -259,13 +259,14 @@ function createMonster(monstweindex) {
     worldViewMatrix();
 
     if( monstweindex > (monsterXpos.length -1)){
-            monsterXpos.push(0);  monsterYpos.push(0); monsterZpos.push(0);
-            monsterSpeed.push(0); monsterSize.push(0);
+        monsterXpos.push(0);  monsterYpos.push(0); monsterZpos.push(0);
+        monsterSpeed.push(0); monsterSize.push(0);
+        
         monsterXpos[ monstweindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
         monsterYpos[ monstweindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
         monsterZpos[ monstweindex ] = -15 - Math.random(); 
 
-        monsterSpeed[ monstweindex ] = 0.2 + Math.random() / 7;
+        monsterSpeed[ monstweindex ] = 0.15 + Math.random() / 7;
         monsterSize[ monstweindex ] = Math.random();            
     }
 

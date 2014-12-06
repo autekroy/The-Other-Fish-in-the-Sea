@@ -11,9 +11,6 @@ var waterBackgroundTexture, beachBackgroundTexture;
 var foodTexture, lifePointTexture, celebrityTexture;
 var textureLeft = 0; // for 'A' and 'D' key to control move left or right
 
-// for bump mapping
-var wallBumpMap, floorBumpMap, sandBumpMap;
-
 function defineTexture() 
 {
     oceanTexture = gl.createTexture();
@@ -268,9 +265,13 @@ function defineTexture()
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
     monsterTexture.image.src = "/resource/cubeMonster.png";
+}
 
+// for bump mapping
+var wallBumpMap, floorBumpMap, sandBumpMap;
 
-    wallBumpMap = gl.createTexture();
+function defineBumpMappingTexture(){
+        wallBumpMap = gl.createTexture();
     wallBumpMap.image = new Image();
     wallBumpMap.image.onload = function() {
         gl.bindTexture(gl.TEXTURE_2D, wallBumpMap);
@@ -286,7 +287,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    wallBumpMap.image.src = "/wallbump.png";
+    wallBumpMap.image.src = "/Bump Mapping/wallbump.png";
 
 
     floorBumpMap = gl.createTexture();
@@ -305,7 +306,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    floorBumpMap.image.src = "/waterFloorbump3.jpg";
+    floorBumpMap.image.src = "/Bump Mapping/waterFloorbump3.jpg";
 
     oceanFloorBumpMap = gl.createTexture();
     oceanFloorBumpMap.image = new Image();
@@ -324,7 +325,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    oceanFloorBumpMap.image.src = "/waterFloorbump.png";
+    oceanFloorBumpMap.image.src = "/Bump Mapping/waterFloorbump.png";
 
     sandBumpMap = gl.createTexture();
     sandBumpMap.image = new Image();
@@ -342,6 +343,6 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    sandBumpMap.image.src = "/sandbump2.jpg";
+    sandBumpMap.image.src = "/Bump Mapping/sandbump2.jpg";
 
 }
