@@ -201,7 +201,7 @@ var movePosition = 0, movePositionUnit = 0.005;
 var isFinalisland = 0;// as boolean to check if the beach is last island
 var congraMessage = 0;
 
-var waterLevelTime = [1, 5, 1];
+var waterLevelTime = [10, 10, 5];
 var waterLevelIndex = 0;
 var waterLevelNext = 1;
 
@@ -275,7 +275,7 @@ if(onTheBeach == 1){
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, beachTexture);
     gl.activeTexture(gl.TEXTURE1);
-    gl.bindTexture(gl.TEXTURE_2D, floorBumpMap);
+    gl.bindTexture(gl.TEXTURE_2D, wallBumpMap);
 
     gl.uniform1i(UNIFORM_usebumpmap, 0);
     gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
@@ -320,7 +320,7 @@ if(onTheBeach == 1){
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, beachOceanTexture);
     gl.activeTexture(gl.TEXTURE1);
-    gl.bindTexture(gl.TEXTURE_2D, wallBumpMap);
+    gl.bindTexture(gl.TEXTURE_2D, floorBumpMap);
 
     gl.uniform1i(UNIFORM_usebumpmap, 1);
     gl.uniform1i(UNIFORM_sampler, 0);
@@ -451,7 +451,7 @@ else{
     oceanFloor = mult(oceanFloor, translate(0,0,1.5));
     oceanFloor = mult(oceanFloor, modelViewMatrix);    
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(oceanFloor));
-
+    
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, oceanTexture);
 
@@ -502,7 +502,7 @@ else{
     ///////////////////////////////
     modelViewMatrix = lookAt(eye, at, up);
 
-    if(waterLevelIndex == 1){
+    if(waterLevelIndex != 0){
         // for left rock wall
         gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
         gl.bufferData( gl.ARRAY_BUFFER, flatten(moveNormalUV), gl.STATIC_DRAW );

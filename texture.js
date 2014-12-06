@@ -125,7 +125,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    celebrityTexture.image.src =  "/resource/EmmaEatson.jpg"; //"/resource/megan.png";
+    celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; //"/resource/megan.png";
 
     // Texture for sphere
     BubbleTexture = gl.createTexture();
@@ -306,7 +306,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    floorBumpMap.image.src = "/waterFloorbump2.png";
+    floorBumpMap.image.src = "/waterFloorbump3.jpg";
 
     sandBumpMap = gl.createTexture();
     sandBumpMap.image = new Image();
