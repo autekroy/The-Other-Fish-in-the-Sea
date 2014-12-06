@@ -361,7 +361,7 @@ if(onTheBeach == 1){
     // render beach background
     ////////////////////////////
     modelViewMatrix = lookAt(eye, at, up);
-    
+
     gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
@@ -550,7 +550,6 @@ else{
             }
         }
 
-
         // for left rock wall
         gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
         gl.bufferData( gl.ARRAY_BUFFER, flatten(moveNormalUV), gl.STATIC_DRAW );
@@ -609,13 +608,18 @@ else{
     }
 
 
+    ///////////////////////
+    // Render fished
+    ////////////////////////
+    for(var i = 0; i < 2; i++)
+        createFish(i);
+
     ////////////////////////////////
     // Render monster
-    ///////
-    // if(time < waterLevelTime[ waterLevelIndex ]){//transition between, no monsters
-        for(var i = 0; i < monsterNumber; i++)
-            createMonster(i);
-    // }
+    ////////////////////////////////
+    for(var i = 0; i < monsterNumber; i++)
+        createMonster(i);
+
 
     ////////////////////////////////
     // Render sword
