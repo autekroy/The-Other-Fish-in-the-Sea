@@ -244,6 +244,7 @@ if(onTheBeach == 1){
         movePosition = 0;
         walking = 0;
         waterLevelIndex = 0;
+        timer.reset(); // reset timer before going to underwater
     }
 
     modelViewMatrix = mult(modelViewMatrix, translate(0, 0, movePosition));
@@ -381,7 +382,6 @@ else{
     ////////////////////////////////
     // Render the Ocean Floor!
     ////////////////////////////////
-    time += timer.getElapsedTime() / 1000;
 
     if(time >= waterLevelTime[ waterLevelIndex ]){
         movePosition += 0.01;
@@ -411,6 +411,8 @@ else{
         modelViewMatrix = mult(modelViewMatrix, translate(0, 0, movePosition));
     }
 
+    time += timer.getElapsedTime() / 1000;
+
     // Bind position buffer
     gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(cubePoints), gl.STATIC_DRAW );
@@ -424,7 +426,7 @@ else{
     // scrolling the cube (beach)
     if(textureScroll == 1){
         for(var i = 0; i < 36; i++){
-            cubeUV[i][1] -= 0.04;
+            cubeUV[i][1] -= 0.02;
             cubeUV[i][0] -= textureLeft/100;
             // reset all the texture coordinate incase they are too low to get overflow.
             if(cubeUV[i][1] <= -1000000){
@@ -433,7 +435,6 @@ else{
             }
         }
     }
-
 
     // Bind UV buffer
     gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
@@ -454,17 +455,22 @@ else{
     
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, oceanTexture);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, oceanFloorBumpMap);
 
+    gl.uniform1i(UNIFORM_usebumpmap, 1);
+    gl.uniform1i(UNIFORM_sampler, 0);
+    gl.uniform1i(UNIFORM_bsampler, 1);
+    
     gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
     gl.uniform4fv(UNIFORM_diffuseProduct,  flatten(diffuseProduct));
     gl.uniform4fv(UNIFORM_specularProduct, flatten(specularProduct));
     gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
     gl.uniform1f(UNIFORM_shininess,  shininess);
-    gl.uniform1i(UNIFORM_sampler, 0);
 
     if(waterLevelIndex == 0)
         gl.drawArrays( gl.TRIANGLES, 0, 36);
-
+    gl.uniform1i(UNIFORM_usebumpmap, 0);
 
     /////////////////////////
     // render ocean background

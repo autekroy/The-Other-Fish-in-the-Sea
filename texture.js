@@ -32,7 +32,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    oceanTexture.image.src =  "/resource/underwaterBlue.jpg";
+    oceanTexture.image.src =  "/resource/underwater.jpg";//"/resource/underwaterBlue.jpg";
 
     beachOceanTexture = gl.createTexture();
     beachOceanTexture.image = new Image();
@@ -279,8 +279,7 @@ function defineTexture()
         //for the zoomed texture, use tri-linear filtering
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
-        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
@@ -307,6 +306,25 @@ function defineTexture()
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
     floorBumpMap.image.src = "/waterFloorbump3.jpg";
+
+    oceanFloorBumpMap = gl.createTexture();
+    oceanFloorBumpMap.image = new Image();
+    oceanFloorBumpMap.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, oceanFloorBumpMap);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, oceanFloorBumpMap.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    oceanFloorBumpMap.image.src = "/waterFloorbump.png";
 
     sandBumpMap = gl.createTexture();
     sandBumpMap.image = new Image();
