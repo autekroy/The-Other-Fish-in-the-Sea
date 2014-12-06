@@ -5,12 +5,25 @@
 
 */
 
+var UNIFORM_uAlpha;
+
 function initAlphaBlending()
 {
-	gl.enable(gl.BLEND);
+	UNIFORM_uAlpha = gl.getUniformLocation(program, "uAlpha");
+	gl.uniform1f(UNIFORM_uAlpha, 1.0);
 }
 
-function renderAlphaBlending()
+function enableAlphaBlending()
 {
+	gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+	gl.enable(gl.BLEND);
+	gl.disable(gl.DEPTH_TEST);
+	gl.uniform1f(UNIFORM_uAlpha, 0.5);
+}
 
+function disableAlphaBlending()
+{
+	gl.disable(gl.BLEND);
+    gl.enable(gl.DEPTH_TEST);
+	gl.uniform1f(UNIFORM_uAlpha, 1.0);
 }

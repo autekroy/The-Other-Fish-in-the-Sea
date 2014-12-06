@@ -63,6 +63,7 @@ uniform int colorSelector;// color for picking in buffer
 uniform sampler2D uSampler;
 uniform sampler2D bSampler;
 uniform int usebumpmap;
+uniform float uAlpha;
 
 void main()
 {
@@ -85,16 +86,16 @@ void main()
     if(usebumpmap == 0){ 
         fNormal = fN;
     }
-     vec4 ambient = ambientProduct * texColor;
+    vec4 ambient = ambientProduct * texColor;
     //vec4 ambient = ambientProduct;
     float kd = max(dot(fL, fNormal), 0.0);
-   vec4 diffuse = kd * diffuseProduct * texColor;
+    vec4 diffuse = kd * diffuseProduct * texColor;
     //vec4 diffuse = kd * diffuseProduct ;
     float ks = pow(max(dot(fNormal, fH), 0.0), shininess);
     vec4 specular = 0.3 * ks * vec4(1.0, 1.0, 1.0, 1.0);
 
     vec4 fColor = ambient + diffuse + specular;
-    fColor.a  = 1.0;
+    fColor.a  = uAlpha;
 
 //*****************************Michael's*******************************
     vec4 c[9];
@@ -127,8 +128,9 @@ void main()
 <script type="text/javascript" src="../Common/MV.js"></script>
 <script type="text/javascript" src="globalVars.js"></script>
 <script type="text/javascript" src="shape.js"></script>
-<script type="text/javascript" src="beach.js"></script>
 <script type="text/javascript" src="texture.js"></script>
+<script type="text/javascript" src="alphaBlending.js"></script>
+<script type="text/javascript" src="beach.js"></script>
 
 <body align = "center">
 <canvas id="gl-canvas" width="1100" height="620">

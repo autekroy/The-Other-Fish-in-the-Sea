@@ -180,9 +180,12 @@ window.onload = function init()
 
     });
 
+//*****************************Michael's*******************************
+    
+    initAlphaBlending();
+    
     render();
 
-//*****************************Michael's*******************************
 
 }
 
@@ -605,10 +608,12 @@ else{
     gl.uniform1f(UNIFORM_shininess,  shininess);
     gl.uniform1i(UNIFORM_sampler, 0);
 
+    enableAlphaBlending();
     createBubble(7, 1, -10);
     createBubble(-3, 1, -7);
     createBubble(3, 1, -2);
     createBubble(-5, 1, -3);
+    disableAlphaBlending();
 
     // createSwaweed(3, 0, -1);
     if(waterLevelIndex == 2)    inWave = 1;
