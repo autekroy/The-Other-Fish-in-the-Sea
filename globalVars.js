@@ -20,7 +20,7 @@ var numTimesToSubdivide = 1;
 var cubePoints = [];
 var cubeNormals = [];
 var cubeUV = [];
-var stableUV = [];
+var stableUV = [], moveNormalUV = [];
 var spherePoints = [];
 var sphereNormals = [];
 var sphereUV = [];

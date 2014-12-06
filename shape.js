@@ -505,7 +505,7 @@ function createSword(xPos, Ypos, Zpos, xRotate){
 ////////////////
 // use orthogonal projection
 ////////////////
-var numLifePoints = 3;
+var numLifePoints = 0;
 function createLifePoints(num){
     // Bind position buffer
     gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );

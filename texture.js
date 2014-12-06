@@ -8,9 +8,11 @@ var meganFoxTexture, monsterTexture;
 var BubbleTexture, rockTexture;
 
 var waterBackgroundTexture, beachBackgroundTexture;
-var foodTexture, lifePointTexture;
+var foodTexture, lifePointTexture, celebrityTexture;
 var textureLeft = 0; // for 'A' and 'D' key to control move left or right
 
+// for bump mapping
+var wallBumpMap, floorBumpMap, sandBumpMap;
 
 function defineTexture() 
 {
@@ -106,9 +108,9 @@ function defineTexture()
     goldenTexture.image.src =  "/resource/yellow.png";
 
 
-    // celebrity
+    // celebrityTexture
     celebrityTexture = gl.createTexture();
-    celebrityTexture.image = new Image();
+    celebrityTexture.image = new Image();       
     celebrityTexture.image.onload = function() {
         gl.bindTexture(gl.TEXTURE_2D, celebrityTexture);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, celebrityTexture.image);
@@ -266,5 +268,62 @@ function defineTexture()
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
     monsterTexture.image.src = "/resource/cubeMonster.png";
+
+
+    wallBumpMap = gl.createTexture();
+    wallBumpMap.image = new Image();
+    wallBumpMap.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, wallBumpMap);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, wallBumpMap.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP);
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    wallBumpMap.image.src = "/wallbump.png";
+
+
+    floorBumpMap = gl.createTexture();
+    floorBumpMap.image = new Image();
+    floorBumpMap.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, floorBumpMap);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, floorBumpMap.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    floorBumpMap.image.src = "/waterFloorbump2.png";
+
+    sandBumpMap = gl.createTexture();
+    sandBumpMap.image = new Image();
+    sandBumpMap.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, sandBumpMap);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, sandBumpMap.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    sandBumpMap.image.src = "/sandbump2.jpg";
 
 }

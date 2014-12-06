@@ -32,6 +32,14 @@ window.onload = function init()
     cubeUV = [];
     Cube(length, cubePoints, cubeNormals, cubeUV, stableUV);
 
+    // ------------- copy value of stableuv --------------------------------- //
+    // if you just use moveNormalUV = stableUV, it will be pass by reference. (2 variable point to same address)
+    // so I use slice() to only copy the value of array.
+    // Because uv is an array of arrayes so I have to use slice() to every single stableUV[i].
+    // ---------------------------------------------------------------- //
+    for(var i = 0; i < stableUV.length; i++)
+            moveNormalUV.push(stableUV[i].slice());
+
     // Create the points, vertices, and UV maps for a sphere object!
     spherePoints = [];
     sphereNormals = [];
@@ -53,7 +61,7 @@ window.onload = function init()
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
     //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 680, 1100, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 512, 512, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
     gl.generateMipmap(gl.TEXTURE_2D);
 
     var framebuffer = gl.createFramebuffer();
@@ -96,6 +104,7 @@ window.onload = function init()
     UNIFORM_modelViewMatrix = gl.getUniformLocation(program, "modelViewMatrix");
     UNIFORM_projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
     UNIFORM_sampler = gl.getUniformLocation(program, "uSampler");
+    UNIFORM_bsampler = gl.getUniformLocation(program, "bSampler");
 
     // Lighting things
     UNIFORM_ambientProduct = gl.getUniformLocation(program, "ambientProduct");
@@ -103,6 +112,8 @@ window.onload = function init()
     UNIFORM_specularProduct = gl.getUniformLocation(program, "specularProduct");
     UNIFORM_lightPosition = gl.getUniformLocation(program, "lightPosition");
     UNIFORM_shininess = gl.getUniformLocation(program, "shininess");
+
+    UNIFORM_usebumpmap = gl.getUniformLocation(program, "usebumpmap");
 
     timer.reset();
     gl.enable(gl.DEPTH_TEST);
@@ -190,9 +201,12 @@ var movePosition = 0, movePositionUnit = 0.005;
 var isFinalisland = 0;// as boolean to check if the beach is last island
 var congraMessage = 0;
 
-var waterLevelTime = [1, 1, 1];
+var waterLevelTime = [1, 5, 1];
 var waterLevelIndex = 0;
 var waterLevelNext = 1;
+
+var backgroundPos = 0, prebgPos = 0;
+
 function render()
 {
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -247,7 +261,10 @@ if(onTheBeach == 1){
     gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
-
+    
+    ///////////////////
+    // Render sand beach
+    ///////////////////
     var beachFloor = mat4();
 
     beachFloor = mult(beachFloor, scale(20, 0.00001, 20));
@@ -257,15 +274,20 @@ if(onTheBeach == 1){
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, beachTexture);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, floorBumpMap);
 
+    gl.uniform1i(UNIFORM_usebumpmap, 0);
     gl.uniform4fv(UNIFORM_ambientProduct,  flatten(ambientProduct));
     gl.uniform4fv(UNIFORM_diffuseProduct,  flatten(diffuseProduct));
     gl.uniform4fv(UNIFORM_specularProduct, flatten(specularProduct));
     gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
     gl.uniform1f(UNIFORM_shininess,  shininess);
     gl.uniform1i(UNIFORM_sampler, 0);
+    gl.uniform1i(UNIFORM_bsampler, 1);
 
     gl.drawArrays( gl.TRIANGLES, 0, 36);
+    gl.uniform1i(UNIFORM_usebumpmap, 0);
 
     /////////////////////////
     // render food
@@ -286,7 +308,7 @@ if(onTheBeach == 1){
     // createTextureBox(-1, 0, -12);
 
     ////////////////////////////
-    // render the beach floor
+    // render the beach ocean floor
     ////////////////////////////
     var beachFloor = mat4();
 
@@ -297,8 +319,15 @@ if(onTheBeach == 1){
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, beachOceanTexture);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, wallBumpMap);
+
+    gl.uniform1i(UNIFORM_usebumpmap, 1);
+    gl.uniform1i(UNIFORM_sampler, 0);
+    gl.uniform1i(UNIFORM_bsampler, 1);
 
     gl.drawArrays( gl.TRIANGLES, 0, 36);
+    gl.uniform1i(UNIFORM_usebumpmap, 0);
 
     ////////////////////////////
     // render beach background
@@ -351,14 +380,16 @@ if(onTheBeach == 1){
 else{
     ////////////////////////////////
     // Render the Ocean Floor!
-    ////////
+    ////////////////////////////////
     time += timer.getElapsedTime() / 1000;
 
     if(time >= waterLevelTime[ waterLevelIndex ]){
         movePosition += 0.01;
 
         if(movePosition > 1.4){  // go to beach
-            waterLevelIndex += waterLevelNext
+            waterLevelIndex += waterLevelNext;
+            prebgPos = backgroundPos;
+            backgroundPos = 0;
             if(waterLevelIndex >= 3 && waterLevelNext == 1){
                 waterLevelIndex = 1; 
                 waterLevelNext = -1;
@@ -435,49 +466,6 @@ else{
         gl.drawArrays( gl.TRIANGLES, 0, 36);
 
 
-    ////////////////////////////////
-    // Render the world rock
-    ///////////////////////////////
-    modelViewMatrix = lookAt(eye, at, up);
-    // for left rock wall
-    gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
-    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
-
-    if(waterLevelIndex == 1){
-
-        var rockWall = mat4();
-        rockWall = mult(rockWall, translate(-10, 11, -13));
-        rockWall = mult(rockWall, scale(1, 15, 15));
-        rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
-        rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
-        rockWall = mult(rockWall, modelViewMatrix);   
-
-        gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
-
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, rockTexture);
-        gl.drawArrays( gl.TRIANGLES, 0, 36);
-
-        // for right rock wall
-        gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
-        gl.bufferData( gl.ARRAY_BUFFER, flatten(cubeUV), gl.STATIC_DRAW );
-        gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
-
-        rockWall = mat4();
-        rockWall = mult(rockWall, translate(9, 11, -13));
-        rockWall = mult(rockWall, scale(1, 15, 15));
-        rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
-        rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
-        rockWall = mult(rockWall, modelViewMatrix);    
-
-        gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
-
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, rockTexture);
-        gl.drawArrays( gl.TRIANGLES, 0, 36);
-    }
-
     /////////////////////////
     // render ocean background
     ////////////////////
@@ -486,8 +474,19 @@ else{
     gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
+    // to make a background movement transition
+    var level1High = 6;
+    if(waterLevelIndex == 1 && waterLevelNext == 1)
+        backgroundPos = prebgPos + level1High * time/waterLevelTime[ waterLevelIndex ];
+    else if(waterLevelIndex == 2 && waterLevelNext == 1)
+        backgroundPos = prebgPos;// + 2 * time/waterLevelTime[ waterLevelIndex ];
+    else if(waterLevelIndex == 1 && waterLevelNext == -1)
+        backgroundPos = prebgPos - level1High * time/waterLevelTime[ waterLevelIndex ];
+    // else if(waterLevelIndex == 2 && waterLevelNext == -1)
+        // backgroundPos = prebgPos - 2 * time/waterLevelTime[ waterLevelIndex ];
+
     rockWall = mat4();
-    rockWall = mult(rockWall, translate(0, 30 + waterLevelIndex * 4, -15));
+    rockWall = mult(rockWall, translate(0, 30 + backgroundPos, -15));
     rockWall = mult(rockWall, scale(40, 30, 20));
     rockWall = mult(rockWall, modelViewMatrix);    
 
@@ -495,8 +494,66 @@ else{
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, waterBackgroundTexture);
-    gl.drawArrays( gl.TRIANGLES, 0, 6);
+    gl.drawArrays( gl.TRIANGLES, 0, 36);
 
+
+    ////////////////////////////////
+    // Render the world rock
+    ///////////////////////////////
+    modelViewMatrix = lookAt(eye, at, up);
+
+    if(waterLevelIndex == 1){
+        // for left rock wall
+        gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+        gl.bufferData( gl.ARRAY_BUFFER, flatten(moveNormalUV), gl.STATIC_DRAW );
+        gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+        var rockWall = mat4();
+        rockWall = mult(rockWall, translate(-14, 5 + backgroundPos, 5));
+        rockWall = mult(rockWall, scale(1, 5, 10));
+        // rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
+        // rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
+        rockWall = mult(rockWall, modelViewMatrix);   
+
+        gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
+
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, rockTexture);
+
+        // for bump mapping
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, wallBumpMap);
+
+        gl.uniform1i(UNIFORM_usebumpmap, 1);
+        gl.uniform1i(UNIFORM_sampler, 0);
+        gl.uniform1i(UNIFORM_bsampler, 1);
+
+        gl.drawArrays( gl.TRIANGLES, 0, 36);
+        gl.uniform1i(UNIFORM_usebumpmap, 0);        
+
+        // for right rock wall
+        gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+        gl.bufferData( gl.ARRAY_BUFFER, flatten(moveNormalUV), gl.STATIC_DRAW );
+        gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+        rockWall = mat4();
+        rockWall = mult(rockWall, translate(14, 5 + backgroundPos, 5));
+        rockWall = mult(rockWall, scale(1, 5, 10));
+        // rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
+        // rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
+        rockWall = mult(rockWall, modelViewMatrix);    
+
+        gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
+
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, rockTexture);
+        gl.uniform1i(UNIFORM_usebumpmap, 1);
+        gl.uniform1i(UNIFORM_sampler, 0);
+        gl.uniform1i(UNIFORM_bsampler, 1);
+
+        gl.drawArrays( gl.TRIANGLES, 0, 36);
+        gl.uniform1i(UNIFORM_usebumpmap, 0);     
+    }
 
 
     ////////////////////////////////

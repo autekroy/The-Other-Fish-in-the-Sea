@@ -58,19 +58,39 @@ uniform float shininess;
 varying vec3 fL, fE, fH, fN;
 varying vec2 fUV;
 
+uniform int colorSelector;// color for picking in buffer
+
 uniform sampler2D uSampler;
-//*****************************Michael's*******************************
-uniform int colorSelector;
-//*****************************Michael's*******************************
+uniform sampler2D bSampler;
+uniform int usebumpmap;
 
 void main()
 {
-    vec4 texColor = texture2D(uSampler, fUV);  // UNIFORM_sampler is 0 now
-    vec4 ambient = ambientProduct * texColor;
-    float kd = max(dot(fL, fN), 0.0);
-    vec4 diffuse = kd * diffuseProduct * texColor;
+    // vec4 texColor = texture2D(uSampler, fUV);  // UNIFORM_sampler is 0 now
+    // vec4 ambient = ambientProduct * texColor;
+    // float kd = max(dot(fL, fN), 0.0);
+    // vec4 diffuse = kd * diffuseProduct * texColor;
 
-    float ks = pow(max(dot(fN, fH), 0.0), shininess);
+    // float ks = pow(max(dot(fN, fH), 0.0), shininess);
+    // vec4 specular = 0.3 * ks * vec4(1.0, 1.0, 1.0, 1.0);
+
+    // vec4 fColor = ambient + diffuse + specular;
+    // fColor.a  = 1.0;
+
+    vec4 bumpMap = texture2D(bSampler,fUV);
+    vec4 texColor = texture2D(uSampler, fUV);  // UNIFORM_sampler is 0 now
+
+    vec3 fNormal;
+    fNormal = normalize(2.0 * (bumpMap.rgb - 0.5));
+    if(usebumpmap == 0){ 
+        fNormal = fN;
+    }
+     vec4 ambient = ambientProduct * texColor;
+    //vec4 ambient = ambientProduct;
+    float kd = max(dot(fL, fNormal), 0.0);
+   vec4 diffuse = kd * diffuseProduct * texColor;
+    //vec4 diffuse = kd * diffuseProduct ;
+    float ks = pow(max(dot(fNormal, fH), 0.0), shininess);
     vec4 specular = 0.3 * ks * vec4(1.0, 1.0, 1.0, 1.0);
 
     vec4 fColor = ambient + diffuse + specular;
