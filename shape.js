@@ -4,6 +4,7 @@ This file contains all the functions that allow for the creation of various
 shapes! Note that some of the variables it affects are in the "globalVars.js"
 file!
 
+Main Author: Yao-Jen
 */
 
 ////////////////////////////////////////////////
@@ -506,7 +507,7 @@ function createSword(xPos, Ypos, Zpos, xRotate){
 ////////////////
 // use orthogonal projection
 ////////////////
-var numLifePoints = 2;
+var numLifePoints = 1;
 function createLifePoints(num){
     // Bind position buffer
     gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );
@@ -535,7 +536,7 @@ function createLifePoints(num){
 
     for(var i = 0; i < num; i++){
         ctm = mat4();
-        ctm = mult(ctm, translate(-3.5 + i * 0.6, 3.8, 0));
+        ctm = mult(ctm, translate(-3.5 + i * 0.5, 3.8, 0));
         ctm = mult(ctm, scale(0.2, 0.2, 0.2));
 
         gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );

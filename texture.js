@@ -1,3 +1,8 @@
+/*
+    Functions and variabes for textures
+
+    Main Author: Yao-Jen Chang, Katie (bump mapping)
+*/
 
 // Variables related to textures!
 var oceanTexture;

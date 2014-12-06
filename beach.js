@@ -2,12 +2,14 @@
 
 This file contains the init() and render() functions!
 
-
+Main Autohr: Yao-Jen Chang
+Bump Mapping: Katie
+Picking: Michael
 */
 
 var program;
 //*****************************Michael's*******************************
-var notPickUp = 1;//To decide whether to draw the fruit box or not
+var notPickUp = [1, 1, 1]; // To decide whether to draw the fruit box or not
 //*****************************Michael's*******************************
 
 window.onload = function init()
@@ -125,7 +127,7 @@ window.onload = function init()
 //Bind FBO instead of the canvas
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 1);//To set up i = 1 -> corresponding to fragment shader
+    
 //Draw the fruit box in the FBO
     eye = vec3(0, 1 * distance, 1.8 * distance);
 
@@ -138,9 +140,19 @@ window.onload = function init()
     gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(modelViewMatrix));
     modelViewMatrix = mult(modelViewMatrix, translate(0, 0, movePosition));
 
-    if (notPickUp == 1) {
-        createFood(-1.5, 0, 0);
+    gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 1);//To set up i = 1 -> corresponding to fragment shader
+    if (notPickUp[0] == 1) {
+        createFood(-2.5, -1.5, 0);
     }
+
+    gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 2);
+    if (notPickUp[1] == 1) {
+        createFood(-2.4, -1, -1);
+    }
+    // gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 3);
+    // if (notPickUp[2] == 1) {
+    //     createFood(-1.5, 0, 0);        
+    // }
 //To get the mouse postion
     var x = event.clientX;
     var y = canvas.height - event.clientY;
@@ -155,9 +167,9 @@ window.onload = function init()
     var colorNames = [
     "background",
     "Treasure Box Full of Life!",
-    "Red Cube",
+    "Second Treasure Box Full of Fruit!",
     "Green Cube",
-    "Yellow Cube",
+    "Third Treasure Box Full of Sushi!",
     "magenta",
     "Blue Cube",
     "White Cube"
@@ -168,10 +180,20 @@ window.onload = function init()
     if (color[1] == 255) nameIndex += 2;
     if (color[2] == 255) nameIndex += 4;
     if (nameIndex == 1) {
-        alert("You just picked up a " + colorNames[nameIndex]);
-        notPickUp = 0;
+        // alert("You just picked up a " + colorNames[nameIndex]);
+        notPickUp[0] = 0;
         numLifePoints++;
     }
+    if (nameIndex == 2) {
+        // alert("You just picked up a " + colorNames[nameIndex]);
+        notPickUp[1] = 0;
+        numLifePoints++;
+    }
+    // if (nameIndex == 4) {
+    //     alert("You just picked up a " + colorNames[nameIndex]);
+    //     notPickUp[2] = 0;
+    //     numLifePoints++;
+    // }
 
     //Bind everything back to the canvas
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -205,7 +227,7 @@ var movePosition = 0, movePositionUnit = 0.005;
 var isFinalisland = 0;// as boolean to check if the beach is last island
 var congraMessage = 0;
 
-var waterLevelTime = [10, 10, 5];
+var waterLevelTime = [1, 10, 5];
 var waterLevelIndex = 0;
 var waterLevelNext = 1;
 
@@ -225,7 +247,7 @@ function render()
     gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
     gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(modelViewMatrix));
 
-    lightPosition = vec3(0, 50.0, 40);
+    lightPosition = vec3(0, 70.0, 20);
     gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
 
     // projectionMatrix = ortho(left, right, bottom, ytop, near, far);
@@ -297,9 +319,9 @@ if(onTheBeach == 1){
     /////////////////////////
     // render food
     ////////////////////////
-    if (notPickUp == 1) {
-        createFood(-1.5, 0, 0);
-    }
+    if (isFinalisland != 1 && notPickUp[0] == 1)  createFood(-2.5, -1.5, 0);
+    if (isFinalisland != 1 && notPickUp[1] == 1)  createFood(-2.4, -1, -1);
+    // if (isFinalisland != 1 && notPickUp[2] == 1)  createFood(-1.5, 0, 0);
 
     //////////////////////////
     // render final tresure
@@ -513,6 +535,20 @@ else{
     modelViewMatrix = lookAt(eye, at, up);
 
     if(waterLevelIndex != 0){
+        // scrolling the cube (beach)
+        if(textureScroll == 1){
+            for(var i = 0; i < 36; i++){
+                moveNormalUV[i][0] -= 0.001;
+                // moveNormalUV[i][0] -= textureLeft/100;
+                // reset all the texture coordinate incase they are too low to get overflow.
+                if(moveNormalUV[i][1] <= -1000000){
+                    for(var j = 0; j < 36; j++)
+                        moveNormalUV[j][1] += 10;
+                }
+            }
+        }
+
+
         // for left rock wall
         gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
         gl.bufferData( gl.ARRAY_BUFFER, flatten(moveNormalUV), gl.STATIC_DRAW );
@@ -529,6 +565,10 @@ else{
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, rockTexture);
+
+        gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
+        gl.bufferData( gl.ARRAY_BUFFER, flatten(moveNormalUV), gl.STATIC_DRAW );
+        gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
         // for bump mapping
         gl.activeTexture(gl.TEXTURE1);
@@ -547,10 +587,11 @@ else{
         gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
         rockWall = mat4();
-        rockWall = mult(rockWall, translate(14, 5 + backgroundPos, 5));
-        rockWall = mult(rockWall, scale(1, 5, 10));
+        rockWall = mult(rockWall, translate(14, backgroundPos - 5, 5));
+        
         // rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
-        // rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
+        rockWall = mult(rockWall, rotate(180, [0, 0, 1]));
+        rockWall = mult(rockWall, scale(1, 5, 10)); 
         rockWall = mult(rockWall, modelViewMatrix);    
 
         gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
@@ -608,6 +649,7 @@ else{
     gl.uniform1f(UNIFORM_shininess,  shininess);
     gl.uniform1i(UNIFORM_sampler, 0);
 
+    // set alpha to make bubble more real
     enableAlphaBlending();
     createBubble(7, 1, -10);
     createBubble(-3, 1, -7);

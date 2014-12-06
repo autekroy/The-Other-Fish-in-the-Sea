@@ -2,7 +2,6 @@
 	Functions and variabes etc for Alpha Blending!
 
 	Main Author: Brandon Ly
-
 */
 
 var UNIFORM_uAlpha;
@@ -18,7 +17,7 @@ function enableAlphaBlending()
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
 	gl.enable(gl.BLEND);
 	gl.disable(gl.DEPTH_TEST);
-	gl.uniform1f(UNIFORM_uAlpha, 0.5);
+	gl.uniform1f(UNIFORM_uAlpha, 0.8);
 }
 
 function disableAlphaBlending()
