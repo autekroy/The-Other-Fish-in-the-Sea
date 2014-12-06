@@ -2,6 +2,7 @@
 
 This file contains the init() and render() functions!
 
+version: beta 1.1
 */
 
 var program;
