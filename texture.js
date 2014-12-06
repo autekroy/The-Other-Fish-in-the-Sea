@@ -16,6 +16,8 @@ var waterBackgroundTexture, beachBackgroundTexture;
 var foodTexture, lifePointTexture, celebrityTexture;
 var textureLeft = 0; // for 'A' and 'D' key to control move left or right
 
+var alphabetTextureList = [], alphabetTexture;
+
 function defineTexture() 
 {
     oceanTexture = gl.createTexture();
@@ -270,26 +272,6 @@ function defineTexture()
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
     monsterTexture.image.src = "/resource/cubeMonster.png";
-
-    alphabetTexture = gl.createTexture();
-    alphabetTexture.image = new Image();
-    alphabetTexture.image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, alphabetTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, alphabetTexture.image);
-
-        //for the zoomed texture, use tri-linear filtering
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-        gl.generateMipmap(gl.TEXTURE_2D);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-    }
-    alphabetTexture.image.src = "/Alphabet/A.png";
-
-
 }
 
 // for bump mapping
@@ -369,5 +351,52 @@ function defineBumpMappingTexture(){
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
     sandBumpMap.image.src = "/Bump Mapping/sandbump2.jpg";
+
+}
+
+
+function defineAlphabetTexture(){
+
+for(var i = 0; i < 6; i++){
+    alphabetTexture = gl.createTexture();
+    alphabetTexture.image = new Image();
+
+    alphabetTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, alphabetTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, alphabetTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    alphabetTexture.image.src = "/Alphabet/" + String.fromCharCode(65 + i) + ".png";
+
+
+    // alphabetTextureList[i] = gl.createTexture();
+    // alphabetTextureList[i].image = new Image();
+    // alphabetTextureList[i].image.src = "/Alphabet/" + String.fromCharCode(65 + i) + ".png";
+    // alphabetTextureList[i].image.onload = function() {
+    //     gl.bindTexture(gl.TEXTURE_2D, alphabetTextureList[i]);
+    //     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, alphabetTextureList[i].image);
+
+    //     //for the zoomed texture, use tri-linear filtering
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+    //     gl.generateMipmap(gl.TEXTURE_2D);
+    //     gl.bindTexture(gl.TEXTURE_2D, null);
+    // }
+    
+    // alphabetTextureList.push(alphabetTexture);
+}
 
 }

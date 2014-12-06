@@ -26,21 +26,21 @@ function printStr(str){
 
     var middle = (len - 1) * 0.2;
     for(var i = 0; i < len; i++){
-    	// if(str[i] == " ") 	alphabetTexture.image.src = "/Alphabet/space.png";
-    	// else				alphabetTexture.image.src = "/Alphabet/" + str[i] + ".png";
+    	var alphIndex = str.charCodeAt(i) - 65;// 65 is unicode of 'A'
 
 	    gl.activeTexture(gl.TEXTURE0);
-	    alphabetTexture.image.src = "/Alphabet/" + str[i] + ".png";
-	    gl.bindTexture(gl.TEXTURE_2D, alphabetTexture);
+	    // gl.bindTexture(gl.TEXTURE_2D, alphabetTexture);
+	    gl.bindTexture(gl.TEXTURE_2D, alphabetTextureList[0]);
 
         ctm = mat4();
         ctm = mult(ctm, translate(i * 0.4 - middle, 3.9, 0));
+        ctm = mult(ctm, rotate(180, [0, 0, 1]));
         // ctm = mult(ctm, rotate(270, [1, 0, 0]));
         ctm = mult(ctm, scale(0.2, 0.2, 0.2));
 
         gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
 
-        gl.drawArrays( gl.TRIANGLES, 30, 6); 
+        gl.drawArrays( gl.TRIANGLES, 0, 6); 
     }	
 
 }

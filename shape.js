@@ -251,6 +251,60 @@ function createFood(xvalue, yvalue, zvalue){
 
 }
 
+var fishXpos = [];
+var fishYpos = [];
+var fishZpos = [];
+var fishSpeed = [];
+var fishSize = [];
+function createMonster(monstweindex) {
+    worldViewMatrix();
+
+    if( monstweindex > (fishXpos.length -1)){
+        fishXpos.push(0);  fishYpos.push(0); fishZpos.push(0);
+        fishSpeed.push(0); fishSize.push(0);
+        
+        fishXpos[ monstweindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
+        fishYpos[ monstweindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
+        fishZpos[ monstweindex ] = -15 - Math.random(); 
+
+        fishSpeed[ monstweindex ] = 0.15 + Math.random() / 7;
+        fishSize[ monstweindex ] = Math.random();            
+    }
+
+    fishZpos[ monstweindex ] += fishSpeed[ monstweindex ] ;
+    if(fishZpos[ monstweindex ] >= 5){
+
+        fishXpos[ monstweindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
+        fishYpos[ monstweindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
+        fishZpos[ monstweindex ] = -15 - Math.random(); 
+
+        fishSpeed[ monstweindex ] = 0.2 + Math.random() / 7;
+        fishSize[ monstweindex ] = Math.random();
+    }
+
+    ctm = modelViewMatrix;
+    ctm = mult(ctm, translate(fishXpos[ monstweindex ], fishYpos[ monstweindex ], fishZpos[ monstweindex ]));
+    // ctm = mult(ctm, rotate(45, [0, 1, 0]));
+    ctm = mult(ctm, rotate(5, [1, 0, 0]));
+    ctm = mult(ctm, scale(fishSize[ monstweindex ], fishSize[ monstweindex ], fishSize[ monstweindex ]));
+
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+    
+    var uvBuffer2 = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, fishTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36); 
+
+}
+
+
 var monsterXpos = [];
 var monsterYpos = [];
 var monsterZpos = [];

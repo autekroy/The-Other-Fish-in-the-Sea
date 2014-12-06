@@ -51,6 +51,7 @@ window.onload = function init()
 
     defineTexture();
     defineBumpMappingTexture();
+    defineAlphabetTexture();
 
     // Process Shaders (or something like that)
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
@@ -179,12 +180,12 @@ window.onload = function init()
     if (color[0] == 255) nameIndex += 1;
     if (color[1] == 255) nameIndex += 2;
     if (color[2] == 255) nameIndex += 4;
-    if (nameIndex == 1) {
+    if (nameIndex == 1 && onTheBeach == 1) {
         // alert("You just picked up a " + colorNames[nameIndex]);
         notPickUp[0] = 0;
         numLifePoints++;
     }
-    if (nameIndex == 2) {
+    if (nameIndex == 2 && onTheBeach == 1) {
         // alert("You just picked up a " + colorNames[nameIndex]);
         notPickUp[1] = 0;
         numLifePoints++;
@@ -360,6 +361,7 @@ if(onTheBeach == 1){
     // render beach background
     ////////////////////////////
     modelViewMatrix = lookAt(eye, at, up);
+    
     gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
@@ -666,9 +668,9 @@ else{
     worldViewMatrix();
 }
     // print instruction on the top
-    lightPosition = vec3(60, 0, -40);
-    gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
-    printStr("ABABB");
+    // lightPosition = vec3(10, 40, 80);
+    // gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
+    // printStr("ABC");
 
     // make life points
     lightPosition = vec3(0, 10.0, 40);
