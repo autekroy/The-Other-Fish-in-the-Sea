@@ -265,13 +265,33 @@ function defineTexture()
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
     monsterTexture.image.src = "/resource/cubeMonster.png";
+
+    alphabetTexture = gl.createTexture();
+    alphabetTexture.image = new Image();
+    alphabetTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, alphabetTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, alphabetTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    alphabetTexture.image.src = "/Alphabet/A.png";
+
+
 }
 
 // for bump mapping
 var wallBumpMap, floorBumpMap, sandBumpMap;
 
 function defineBumpMappingTexture(){
-        wallBumpMap = gl.createTexture();
+    wallBumpMap = gl.createTexture();
     wallBumpMap.image = new Image();
     wallBumpMap.image.onload = function() {
         gl.bindTexture(gl.TEXTURE_2D, wallBumpMap);

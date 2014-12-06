@@ -49,7 +49,7 @@ window.onload = function init()
 
     defineTexture();
     defineBumpMappingTexture();
-    
+
     // Process Shaders (or something like that)
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
@@ -618,6 +618,10 @@ else{
 
     worldViewMatrix();
 }
+    // print instruction on the top
+    lightPosition = vec3(60, 0, -40);
+    gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
+    printStr("ABABB");
 
     // make life points
     lightPosition = vec3(0, 10.0, 40);
