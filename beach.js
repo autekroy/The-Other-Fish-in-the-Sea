@@ -2,10 +2,14 @@
 
 This file contains the init() and render() functions!
 
-version: beta 1.1
+
 */
 
 var program;
+//*****************************Michael's*******************************
+var notPickUp = 1;//To decide whether to draw the fruit box or not
+//*****************************Michael's*******************************
+
 window.onload = function init()
 {
     canvas = document.getElementById( "gl-canvas" );
@@ -40,6 +44,31 @@ window.onload = function init()
     // Process Shaders (or something like that)
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
+
+//*****************************Michael's*******************************
+// Setup a FBO to put in the off-screen object in which will not be printed out on the canvas
+    gl.enable(gl.CULL_FACE);
+    gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
+
+    var texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 680, 1100, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.generateMipmap(gl.TEXTURE_2D);
+
+    var framebuffer = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+
+    var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+    if(status != gl.FRAMEBUFFER_COMPLETE) {
+        alert('Framebuffer Not Complete');
+    }
+//*****************************Michael's*******************************
+
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
     // Create buffers for the cube!
     cubePositionBuffer = gl.createBuffer();
@@ -78,7 +107,71 @@ window.onload = function init()
     timer.reset();
     gl.enable(gl.DEPTH_TEST);
 
+//*****************************Michael's*******************************
+//Detect mouse down
+    canvas.addEventListener("mousedown", function() {
+//Bind FBO instead of the canvas
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 1);//To set up i = 1 -> corresponding to fragment shader
+//Draw the fruit box in the FBO
+    eye = vec3(0, 1 * distance, 1.8 * distance);
+
+    modelViewMatrix = lookAt(eye, at, up);
+
+    projectionMatrix = perspective(fieldOfView, aspectRatio, 0.001, 1000);
+    projectionMatrix = mult(projectionMatrix, translate(0,-2,-4));
+
+    gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
+    gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(modelViewMatrix));
+    modelViewMatrix = mult(modelViewMatrix, translate(0, 0, movePosition));
+
+    if (notPickUp == 1) {
+        createFood(-1.5, 0, 0);
+    }
+//To get the mouse postion
+    var x = event.clientX;
+    var y = canvas.height - event.clientY;
+
+
+    gl.disable(gl.DITHER);
+//To get the pixel on that position
+    var color = new Uint8Array(4);
+    gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
+    //alert("R:" + color[0] + " G:" + color[1] + " B:" + color[2] + "; x: " + x + " y: " + y);
+
+    var colorNames = [
+    "background",
+    "Treasure Box Full of Life!",
+    "Red Cube",
+    "Green Cube",
+    "Yellow Cube",
+    "magenta",
+    "Blue Cube",
+    "White Cube"
+    ];
+//To know what is picked
+    var nameIndex = 0;
+    if (color[0] == 255) nameIndex += 1;
+    if (color[1] == 255) nameIndex += 2;
+    if (color[2] == 255) nameIndex += 4;
+    if (nameIndex == 1) {
+        alert("You just picked up a " + colorNames[nameIndex]);
+        notPickUp = 0;
+        numLifePoints++;
+    }
+
+    //Bind everything back to the canvas
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 0);//Set colorSelector back to 0 (fColor)
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    });
+
     render();
+
+//*****************************Michael's*******************************
+
 }
 
 function worldViewMatrix(){
@@ -177,7 +270,9 @@ if(onTheBeach == 1){
     /////////////////////////
     // render food
     ////////////////////////
-    createFood(3, 1, -15);
+    if (notPickUp == 1) {
+        createFood(-1.5, 0, 0);
+    }
 
     //////////////////////////
     // render final tresure
@@ -392,7 +487,7 @@ else{
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
     rockWall = mat4();
-    rockWall = mult(rockWall, translate(0, 30 + waterLevelIndex * 6, -15));
+    rockWall = mult(rockWall, translate(0, 30 + waterLevelIndex * 4, -15));
     rockWall = mult(rockWall, scale(40, 30, 20));
     rockWall = mult(rockWall, modelViewMatrix);    
 

@@ -3,6 +3,8 @@ University of California, Los Angeles, CS 174A, 2014 fall
 Term project: The Other Fish in the Sea
 Author: 
 Date: 11/22, 2014
+
+
 -->
 <html>
 
@@ -57,6 +59,9 @@ varying vec3 fL, fE, fH, fN;
 varying vec2 fUV;
 
 uniform sampler2D uSampler;
+//*****************************Michael's*******************************
+uniform int colorSelector;
+//*****************************Michael's*******************************
 
 void main()
 {
@@ -71,7 +76,29 @@ void main()
     vec4 fColor = ambient + diffuse + specular;
     fColor.a  = 1.0;
 
-    gl_FragColor = fColor;
+//*****************************Michael's*******************************
+    vec4 c[9];
+    c[0] = fColor;
+    c[1] = vec4(1.0, 0.0, 0.0, 1.0);
+    c[2] = vec4(0.0, 1.0, 0.0, 1.0);
+    c[3] = vec4(0.0, 0.0, 1.0, 1.0);
+    c[4] = vec4(1.0, 1.0, 0.0, 1.0);
+    c[5] = vec4(0.0, 1.0, 1.0, 1.0);
+    c[6] = vec4(1.0, 0.0, 1.0, 1.0);
+    c[7] = vec4(1.0, 1.0, 1.0, 1.0);
+    c[8] = vec4(0.0, 0.0, 0.0, 1.0);
+
+    if ( colorSelector== 0) {gl_FragColor = c[0];}
+    else if (colorSelector == 1) {gl_FragColor = c[1];}
+    else if (colorSelector == 2) {gl_FragColor = c[2];}
+    else if (colorSelector == 3) {gl_FragColor = c[3];}
+    else if (colorSelector == 4) {gl_FragColor = c[4];}
+    else if (colorSelector == 5) {gl_FragColor = c[5];}
+    else if (colorSelector == 6) {gl_FragColor = c[6];}
+    else if (colorSelector == 7) {gl_FragColor = c[7];}
+    else if (colorSelector == 8) {gl_FragColor = c[8];}
+//*****************************Michael's*******************************
+
 }
 </script>
 
