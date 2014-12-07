@@ -109,7 +109,7 @@ var walkForward = 0, walkBackward = 0;
 var walking = 0;
 
 // monster variable
-var monsterNumber = 4; //initial number of monster
+var monsterNumber = 3; //initial number of monster
 
 
 // collision detection

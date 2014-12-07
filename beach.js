@@ -3,16 +3,15 @@
 This file contains the init() and render() functions!
 
 Main Autohr: Yao-Jen Chang
-Bump Mapping: Katie
+Collision detection: Sergio
 Picking: Michael
+Bump Mapping: Katie
 Blending: Brandon
 
 */
 
 var program;
-//*****************************Michael's*******************************
 var notPickUp = [1, 1, 1]; // To decide whether to draw the fruit box or not
-//*****************************Michael's*******************************
 
 window.onload = function init()
 {
@@ -59,8 +58,7 @@ window.onload = function init()
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
-//*****************************Michael's*******************************
-// Setup a FBO to put in the off-screen object in which will not be printed out on the canvas
+    // Setup a FBO to put in the off-screen object in which will not be printed out on the canvas
     gl.enable(gl.CULL_FACE);
     gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
 
@@ -79,8 +77,6 @@ window.onload = function init()
     if(status != gl.FRAMEBUFFER_COMPLETE) {
         alert('Framebuffer Not Complete');
     }
-//*****************************Michael's*******************************
-
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
@@ -124,94 +120,89 @@ window.onload = function init()
     timer.reset();
     gl.enable(gl.DEPTH_TEST);
 
-//*****************************Michael's*******************************
-//Detect mouse down
+    //Detect mouse down
     canvas.addEventListener("mousedown", function() {
-//Bind FBO instead of the canvas
-    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    
-//Draw the fruit box in the FBO
-    eye = vec3(0, 1 * distance, 1.8 * distance);
+        //Bind FBO instead of the canvas
+        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        
+        //Draw the fruit box in the FBO
+        eye = vec3(0, 1 * distance, 1.8 * distance);
 
-    modelViewMatrix = lookAt(eye, at, up);
+        modelViewMatrix = lookAt(eye, at, up);
 
-    projectionMatrix = perspective(fieldOfView, aspectRatio, 0.001, 1000);
-    projectionMatrix = mult(projectionMatrix, translate(0,-2,-4));
+        projectionMatrix = perspective(fieldOfView, aspectRatio, 0.001, 1000);
+        projectionMatrix = mult(projectionMatrix, translate(0,-2,-4));
 
-    gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
-    gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(modelViewMatrix));
-    modelViewMatrix = mult(modelViewMatrix, translate(0, 0, movePosition));
+        gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
+        gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(modelViewMatrix));
+        modelViewMatrix = mult(modelViewMatrix, translate(0, 0, movePosition));
 
-    gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 1);//To set up i = 1 -> corresponding to fragment shader
-    if (notPickUp[0] == 1) {
-        createFood(-2.5, -1.5, 0);
-    }
+        gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 1);//To set up i = 1 -> corresponding to fragment shader
+        if (notPickUp[0] == 1) {
+            createFood(-2.5, -1.5, 0);
+        }
 
-    gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 2);
-    if (notPickUp[1] == 1) {
-        createFood(-2.4, -1, -1);
-    }
-    // gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 3);
-    // if (notPickUp[2] == 1) {
-    //     createFood(-1.5, 0, 0);        
-    // }
-//To get the mouse postion
-    var x = event.clientX;
-    var y = canvas.height - event.clientY;
+        gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 2);
+        if (notPickUp[1] == 1) {
+            createFood(-2.4, -1, -1);
+        }
+        // gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 3);
+        // if (notPickUp[2] == 1) {
+        //     createFood(-1.5, 0, 0);        
+        // }
+         //To get the mouse postion
+        var x = event.clientX;
+        var y = canvas.height - event.clientY;
 
 
-    gl.disable(gl.DITHER);
-//To get the pixel on that position
-    var color = new Uint8Array(4);
-    gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
-    //alert("R:" + color[0] + " G:" + color[1] + " B:" + color[2] + "; x: " + x + " y: " + y);
+        gl.disable(gl.DITHER);
+        //To get the pixel on that position
+        var color = new Uint8Array(4);
+        gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
+        //alert("R:" + color[0] + " G:" + color[1] + " B:" + color[2] + "; x: " + x + " y: " + y);
 
-    var colorNames = [
-    "background",
-    "Treasure Box Full of Life!",
-    "Second Treasure Box Full of Fruit!",
-    "Green Cube",
-    "Third Treasure Box Full of Sushi!",
-    "magenta",
-    "Blue Cube",
-    "White Cube"
-    ];
-//To know what is picked
-    var nameIndex = 0;
-    if (color[0] == 255) nameIndex += 1;
-    if (color[1] == 255) nameIndex += 2;
-    if (color[2] == 255) nameIndex += 4;
-    if (nameIndex == 1 && onTheBeach == 1) {
-        // alert("You just picked up a " + colorNames[nameIndex]);
-        notPickUp[0] = 0;
-        numLifePoints++;
-    }
-    if (nameIndex == 2 && onTheBeach == 1) {
-        // alert("You just picked up a " + colorNames[nameIndex]);
-        notPickUp[1] = 0;
-        numLifePoints++;
-    }
-    // if (nameIndex == 4) {
-    //     alert("You just picked up a " + colorNames[nameIndex]);
-    //     notPickUp[2] = 0;
-    //     numLifePoints++;
-    // }
+        var colorNames = [
+            "background",
+            "Treasure Box Full of Life!",
+            "Second Treasure Box Full of Fruit!",
+            "Green Cube",
+            "Third Treasure Box Full of Sushi!",
+            "magenta",
+            "Blue Cube",
+            "White Cube"
+        ];
+        //To know what is picked
+        var nameIndex = 0;
+        if (color[0] == 255) nameIndex += 1;
+        if (color[1] == 255) nameIndex += 2;
+        if (color[2] == 255) nameIndex += 4;
+        if (nameIndex == 1 && onTheBeach == 1) {
+            // alert("You just picked up a " + colorNames[nameIndex]);
+            notPickUp[0] = 0;
+            numLifePoints++;
+        }
+        if (nameIndex == 2 && onTheBeach == 1) {
+            // alert("You just picked up a " + colorNames[nameIndex]);
+            notPickUp[1] = 0;
+            numLifePoints++;
+        }
+        // if (nameIndex == 4) {
+        //     alert("You just picked up a " + colorNames[nameIndex]);
+        //     notPickUp[2] = 0;
+        //     numLifePoints++;
+        // }
 
-    //Bind everything back to the canvas
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 0);//Set colorSelector back to 0 (fColor)
-    gl.clear(gl.COLOR_BUFFER_BIT);
+        //Bind everything back to the canvas
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 0);//Set colorSelector back to 0 (fColor)
+        gl.clear(gl.COLOR_BUFFER_BIT);
 
     });
-
-//*****************************Michael's*******************************
     
     initAlphaBlending();
     
     render();
-
-
 }
 
 function worldViewMatrix(){
@@ -227,7 +218,8 @@ var bottom = -3.0;
 var oceanDeg = 0, oceanDegUnit = 0.1;
 var movePosition = 0, movePositionUnit = 0.005;
 
-var isFinalisland = 0;// as boolean to check if the beach is last island
+var islandIndex = 0; // the island index
+var finalLisland = 2; // the last island
 var congraMessage = 0;
 
 var waterLevelTime = [10, 10, 8];
@@ -266,8 +258,9 @@ function render()
         else if(walkBackward == 1 && movePosition >= 0.03)
             movePosition -= movePositionUnit;
 
-        if(isFinalisland == 1 && movePosition > 1.15){
-            movePosition = 1.15;
+        if(islandIndex == finalLisland && movePosition > 1){
+            movePosition = 1;
+            alert("You're in the last!");
         }
         else if(movePosition > 2.0){  
             onTheBeach = 0; //going to underwater
@@ -323,15 +316,14 @@ function render()
         /////////////////////////
         // render food
         ////////////////////////
-        if (isFinalisland != 1 && notPickUp[0] == 1)  createFood(-2.5, -1.5, 0);
-        if (isFinalisland != 1 && notPickUp[1] == 1)  createFood(-2.4, -1, -1);
-        // if (isFinalisland != 1 && notPickUp[2] == 1)  createFood(-1.5, 0, 0);
+        if (islandIndex != finalLisland && notPickUp[0] == 1)  createFood(-2.5, -1.5, 0);
+        if (islandIndex != finalLisland && notPickUp[1] == 1)  createFood(-2.4, -1, -1);
 
         //////////////////////////
         // render final tresure
         //////////////////////////
-        if(isFinalisland == 1)
-            createCelebrity(0, 0, -25);
+        if(islandIndex > 0)
+            createCelebrity(0, 0, -25, islandIndex);
 
         //////////////////////////
         // render Texture box
@@ -429,7 +421,7 @@ function render()
                     onTheBeach = 1; 
                     waterLevelIndex = 1; 
                     waterLevelNext = 1;
-                    isFinalisland = 1;
+                    islandIndex++;
                 }
 
                 movePosition = 0;
@@ -473,11 +465,6 @@ function render()
         gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
         var oceanFloor = mat4();
-
-        // oceanDeg += oceanDegUnit;
-        // if(oceanDeg >= 8)   oceanDegUnit = -oceanDegUnit;
-        // else if(oceanDeg <= -8) oceanDegUnit = -oceanDegUnit;
-        // oceanFloor = mult(oceanFloor, rotate(oceanDeg, [1, 0, 0]));
 
         oceanFloor = mult(oceanFloor, scale(10, 0.00001, 10));
         oceanFloor = mult(oceanFloor, translate(0,0,1.5));
@@ -626,7 +613,7 @@ function render()
         ////////////////////////////////
         // Render monster
         ////////////////////////////////
-        for(var i = 0; i < monsterNumber; i++)
+        for(var i = 0; i < monsterNumber + islandIndex; i++)// islandIndex is from 0 to 1
             createMonster(i);
 
         ///////////////////////
@@ -737,18 +724,19 @@ function render()
 
     // check if game over
     if(numLifePoints < 0){
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
+        numLifePoints = 3;
+    //     gl.activeTexture(gl.TEXTURE0);
+    //     gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
 
-        ctm = mat4();
-        ctm = mult(ctm, translate(0, 2, 0));
-        ctm = mult(ctm, scale(1.3, 1.3, 1.3));
-        gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+    //     ctm = mat4();
+    //     ctm = mult(ctm, translate(0, 2, 0));
+    //     ctm = mult(ctm, scale(1.3, 1.3, 1.3));
+    //     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
 
-        gl.drawArrays( gl.TRIANGLES, 0, 6);      
+    //     gl.drawArrays( gl.TRIANGLES, 0, 6);      
 
-        // alert("GAME OVER!");
-        return;
+    //     // alert("GAME OVER!");
+    //     return;
     }
 
     window.requestAnimFrame( render );

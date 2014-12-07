@@ -273,7 +273,7 @@ function createMushroom() {
 
 
 
-function createCelebrity(xvalue, yvalue, zvalue){
+function createCelebrity(xvalue, yvalue, zvalue, celebrityIndex){
     ctm = mat4();
     ctm = mult(ctm, translate(xvalue, yvalue + 2, -5 + zvalue + movePosition * 20));
     // ctm = mult(ctm, rotate(10, [0, 1, 0]));
@@ -287,7 +287,9 @@ function createCelebrity(xvalue, yvalue, zvalue){
     gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
-    celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; //"/resource/megan.png";
+    if(celebrityIndex == 1) celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; 
+    else                    celebrityTexture.image.src =  "/resource/megan.png";
+    
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, celebrityTexture);
 
