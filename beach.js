@@ -224,7 +224,7 @@ var islandIndex = 0; // the island index
 var finalLisland = 2; // the last island
 var congraMessage = 0;
 
-var waterLevelTime = [1, 5, 5];
+var waterLevelTime = [10, 10, 10];
 var waterLevelIndex = 0;
 var waterLevelNext = 1;
 
@@ -615,7 +615,7 @@ function render()
 
             if(transparentStatus == 1){
                 mushroomTime += mushroomTimer.getElapsedTime() / 1000;
-                if(mushroomTime >= 2)   transparentStatus = 0;
+                if(mushroomTime >= 5)   transparentStatus = 0;
             }
 
 
@@ -632,17 +632,23 @@ function render()
             for(var i = 0; i < 2; i++)
                 createFish(i);
 
+            //////////////////////
+            // Render sword cube
+            ///////////////////////
+            createSwordCube();
+
             ////////////////////////////////
             // Render sword
-            ////////
-            if(transparentStatus == 1){
-                enableAlphaBlending();
-                createSword(1.3 + moveLeft, 2.1, -1.3 + moveForward, 0);
-                disableAlphaBlending();
+            //////////////////////
+            if(hasSword){
+                if(transparentStatus == 1){
+                    enableAlphaBlending();
+                    createSword(1.3 + moveLeft, 2.1, -1.3 + moveForward, 0);
+                    disableAlphaBlending();
+                }
+                else
+                    createSword(1.3 + moveLeft, 2.1, -1.3 + moveForward, 0);
             }
-            else
-                createSword(1.3 + moveLeft, 2.1, -1.3 + moveForward, 0);
-
             ////////////////////////////////
             // Render the sphere! (for Bubble and people)
             ////////////////
@@ -680,6 +686,7 @@ function render()
 
             // // createSwaweed(3, 0, -1);
 
+            // check the water level, if it's level 2, there will be wave effect.
             if(waterLevelIndex == 2)    inWave = 1;
             else                        inWave = 0;
 
@@ -696,18 +703,15 @@ function render()
             var hasCollisionHappened;
             if(transparentStatus != 1){
                 hasCollisionHappened = false;
-                // var checkForCollision = true;
                 for(var i = 0; i < 4; i++){   
-                    // if(checkForCollision){
-                        hasCollisionHappened =  bodyBox.haveCollided(monsterBoxes[i]);
-                        if(hasCollisionHappened){
-                            numLifePoints --;
-                            hasCollisionHappened = false;
-                            // checkForCollision = false;
-                            monsterZpos[i] = 6;
-                            break;
-                        }
-                    // }
+                    hasCollisionHappened =  bodyBox.haveCollided(monsterBoxes[i]);
+                    if(hasCollisionHappened){
+                        if(hasSword == 1)   hasSword = 0;
+                        else                numLifePoints --;
+                        hasCollisionHappened = false;
+                        monsterZpos[i] = 6;
+                        break;                        
+                    }
                 }
             }
 
@@ -719,6 +723,15 @@ function render()
                 transparentStatus = 1;
                 mushroomZpos = 6;
             }
+
+            // check collision betwen person and sword cube
+            var hasMushroomCollisionHappened = false;
+            hasMushroomCollisionHappened =  bodyBox.haveCollided(swordCubeBox);
+            if(hasMushroomCollisionHappened){
+                hasSword = 1;
+                swordCubeZpos = 6;
+            }
+
 
             worldViewMatrix();
         }// end of checking if on the beach
@@ -738,18 +751,18 @@ function render()
     // check if game over
     if(numLifePoints < 0){
         numLifePoints = 3;
-    //     gl.activeTexture(gl.TEXTURE0);
-    //     gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
 
-    //     ctm = mat4();
-    //     ctm = mult(ctm, translate(0, 2, 0));
-    //     ctm = mult(ctm, scale(1.3, 1.3, 1.3));
-    //     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+        ctm = mat4();
+        ctm = mult(ctm, translate(0, 2, 0));
+        ctm = mult(ctm, scale(1.3, 1.3, 1.3));
+        gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
 
-    //     gl.drawArrays( gl.TRIANGLES, 0, 6);      
+        gl.drawArrays( gl.TRIANGLES, 0, 6);      
 
-    //     // alert("GAME OVER!");
-    //     return;
+        // alert("GAME OVER!");
+        // return;
     }
 
     window.requestAnimFrame( render );

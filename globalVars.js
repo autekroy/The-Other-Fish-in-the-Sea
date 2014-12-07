@@ -120,3 +120,4 @@ monsterBoxes.push(new boundingBox());
 monsterBoxes.push(new boundingBox());
 monsterBoxes.push(new boundingBox());
 var mushroomBox = new boundingBox();
+var swordCubeBox = new boundingBox();

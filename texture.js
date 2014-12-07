@@ -291,6 +291,26 @@ function defineTexture()
     }
     fishTexture.image.src = "/resource/fish.jpg";
 
+
+    swordCubeTexture = gl.createTexture();
+    swordCubeTexture.image = new Image();
+    swordCubeTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, swordCubeTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, swordCubeTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    swordCubeTexture.image.src = "/resource/Master_Sword.png";
+
+
     gameOverTexture = gl.createTexture();
     gameOverTexture.image = new Image();
     gameOverTexture.image.onload = function() {
@@ -307,7 +327,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    gameOverTexture.image.src = "/resource/shark    .png";
+    gameOverTexture.image.src = "/resource/shark.png";
 
 
 }

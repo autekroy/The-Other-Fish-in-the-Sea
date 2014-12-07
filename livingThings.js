@@ -23,8 +23,8 @@ function createFish(fishindex) {
         fishYpos[ fishindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
         fishZpos[ fishindex ] = -15 - Math.random(); 
 
-        fishSpeed[ fishindex ] = 0.3 + Math.random() / 7;
-        fishSize[ fishindex ] = Math.random() / 5 + 0.1;            
+        fishSpeed[ fishindex ] = 0.1 + Math.random() / 7;
+        fishSize[ fishindex ] = Math.random() / 3 + 0.4;            
     }
 
     fishZpos[ fishindex ] += fishSpeed[ fishindex ] ;
@@ -34,8 +34,8 @@ function createFish(fishindex) {
         fishYpos[ fishindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
         fishZpos[ fishindex ] = -15 - Math.random(); 
 
-        fishSpeed[ fishindex ] = 0.3 + Math.random() / 7;
-        fishSize[ fishindex ] = Math.random() / 5 + 0.1;    
+        fishSpeed[ fishindex ] = 0.1 + Math.random() / 7;
+        fishSize[ fishindex ] = Math.random() / 3 + 0.4;    
     }
 
     ctm = modelViewMatrix;
@@ -77,8 +77,8 @@ function createMonster(monsterindex) {
         monsterYpos[ monsterindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
         monsterZpos[ monsterindex ] = -15 - Math.random(); 
 
-        monsterSpeed[ monsterindex ] = 0.15 + Math.random() / 3;
-        monsterSize[ monsterindex ] = 0.3 + Math.random()/1.5 ;            
+        monsterSpeed[ monsterindex ] = 0.15 + Math.random() / 5;
+        monsterSize[ monsterindex ] = 0.3 + Math.random()/ 3 ;            
     }
 
     monsterZpos[ monsterindex ] += monsterSpeed[ monsterindex ] ;
@@ -88,13 +88,13 @@ function createMonster(monsterindex) {
         monsterYpos[ monsterindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
         monsterZpos[ monsterindex ] = -15 - Math.random(); 
 
-        monsterSpeed[ monsterindex ] = 0.15 + Math.random() / 3;
-        monsterSize[ monsterindex ] = 0.3 + Math.random()/1.5;    
+        monsterSpeed[ monsterindex ] = 0.15 + Math.random() / 5;
+        monsterSize[ monsterindex ] = 0.3 + Math.random()/ 3;    
     }
 
     ctm = modelViewMatrix;
     ctm = mult(ctm, translate(monsterXpos[ monsterindex ], monsterYpos[ monsterindex ], monsterZpos[ monsterindex ]));
-    ctm = mult(ctm, rotate(5, [1, 0, 0]));
+    ctm = mult(ctm, rotate(-10, [1, 0, 0]));
     ctm = mult(ctm, scale(monsterSize[ monsterindex ], monsterSize[ monsterindex ], monsterSize[ monsterindex ]));
 
 
@@ -129,6 +129,7 @@ var degUnit = 15;
 var moveForward = 0;// for character to move forward or backward. 'W' and 'S' key
 var moveLeft = 0;
 var inWave = 0, inWavePos = 0, waveUnit = 0.05;// indicate if people in a wave (bouncing in x axis)
+var hasSword = 0;
 
 function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     worldViewMatrix();
@@ -176,7 +177,7 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     ctm = mult(ctm, translate(xvalue + 0.8, yvalue + 0.7, zvalue));
     
     if(checkOnTheBeach ==  1)       hasSword = 0;
-    else                            {hasSword = 1; checkWalk = 1;}
+    else                            {checkWalk = 1;}
 
     if(hasSword == 1)                           ctm = mult(ctm, rotate( -210, [1, 0, 0]));
     else if(hasSword == 0 && checkWalk == 1)    ctm = mult(ctm, rotate( -deg, [1, 0, 0]));
@@ -240,7 +241,7 @@ var mushroomXpos = -0.6;
 var mushroomYpos = 3;
 var mushroomZpos = -15;
 var mushroomSpeed = 0.05;
-var mushroomSize = 0.4;
+var mushroomSize = 0.5;
 var mushroomPass = false;
 
 function createMushroom() {
@@ -252,7 +253,7 @@ function createMushroom() {
 
     ctm = modelViewMatrix;
     ctm = mult(ctm, translate(mushroomXpos, mushroomYpos, mushroomZpos));
-    ctm = mult(ctm, rotate(15, [1, 0, 0]));
+    ctm = mult(ctm, rotate(-10, [1, 0, 0]));
     ctm = mult(ctm, scale(mushroomSize, mushroomSize, mushroomSize));
 
 
@@ -271,6 +272,51 @@ function createMushroom() {
 
     // for collision
     putExtremesInBoundaryObject(cubePoints, ctm, mushroomBox);
+}
+
+
+
+
+var swordCubeXpos = -0.6;
+var swordCubeYpos = 3;
+var swordCubeZpos = -15;
+var swordCubeSpeed = 0.08;
+var swordCubeSize = 0.3;
+
+function createSwordCube() {
+    worldViewMatrix(); 
+
+    swordCubeZpos += swordCubeSpeed;
+
+    if(swordCubeZpos >= 5){
+        swordCubeXpos = Math.random() * 12 - 6; // -6 ~ 6
+        swordCubeYpos = Math.random() * 3;
+        swordCubeZpos = -15;
+        swordCubeSpeed = 0.08 +  Math.random() / 20;
+        swordCubeSize = 0.3 +  Math.random() / 10;
+    }
+
+    ctm = modelViewMatrix;
+    ctm = mult(ctm, translate(swordCubeXpos, swordCubeYpos, swordCubeZpos));
+    ctm = mult(ctm, rotate( -10, [1, 0, 0]));
+    ctm = mult(ctm, scale(swordCubeSize, swordCubeSize, swordCubeSize));
+
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+    
+    var uvBuffer2 = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, swordCubeTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36); 
+
+    // for collision
+    putExtremesInBoundaryObject(cubePoints, ctm, swordCubeBox);
 }
 
 
