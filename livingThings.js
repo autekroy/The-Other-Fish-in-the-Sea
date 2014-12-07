@@ -24,7 +24,7 @@ function createFish(monstweindex) {
         fishZpos[ monstweindex ] = -15 - Math.random(); 
 
         fishSpeed[ monstweindex ] = 0.15 + Math.random() / 7;
-        fishSize[ monstweindex ] = Math.random() * 0.3;            
+        fishSize[ monstweindex ] = Math.random() * 0.1 + 0.1;            
     }
 
     fishZpos[ monstweindex ] += fishSpeed[ monstweindex ] ;

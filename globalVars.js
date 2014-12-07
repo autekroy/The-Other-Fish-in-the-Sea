@@ -12,6 +12,8 @@ var gl;
 var length = 1;
 var time = 0.0;
 var timer = new Timer();
+var mushroomTime = 0.0;
+var mushroomTimer = new Timer();
 var omega = 360;
 
 var numTimesToSubdivide = 1;

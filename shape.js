@@ -2,7 +2,7 @@
 
 This file contains all the functions that allow for the creation of various
 shapes which are not living.
-Some of the variables it affects are in the "globalVars.js" file.
+Some of the variables it affects are in the "globalVars.js" file
 
 Main Author: Yao-Jen Chang
 */
@@ -64,10 +64,6 @@ function Cube(length, points, normals, uv, uv2) {
     Quad(vertices, points, normals, uv, uv2, 1, 5, 3, 7, vec3(1, 1, 0));
 }
 
-////////////////////////////////////////////////
-// Function for creating a sphere!
-////////////////////////////////////////////////
-
 function createSphere(numberDivisions, points, normals, uv)
 {
     var va = vec3(0.0, 0.0, -1.0);
@@ -118,10 +114,6 @@ function createSphere(numberDivisions, points, normals, uv)
 
     tetrahedron(va,vb,vc,vd,numberDivisions);
 }
-
-////////////////////////////////////////////////
-// Function for creating bubbles!
-////////////////////////////////////////////////
 
 var upDis = -1.4, bubbleSize = 0.05, backMove = 0;
 function createBubble(xvalue, yvalue, zvalue) {
@@ -300,6 +292,49 @@ function createSword(xPos, Ypos, Zpos, xRotate){
 
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );  
 }
+
+var mushroomXpos = -0.6;
+var mushroomYpos = 3;
+var mushroomZpos = -15;
+var mushroomSpeed = 0.3;
+var mushroomSize = 0.3;
+// var mushroomStartTime, mushroomEndTime;
+
+function createMushroom() {
+    if(mushroomZpos >= 6){
+        return;// on chance to eat mushroom
+    }
+    else if(mushroomZpos == -15){
+        mushroomTimer.reset();
+        transparentStatus = 1;
+    }
+
+    worldViewMatrix(); 
+
+    mushroomZpos += mushroomSpeed;
+
+    ctm = modelViewMatrix;
+    ctm = mult(ctm, translate(mushroomXpos, mushroomYpos, mushroomZpos));
+    // ctm = mult(ctm, rotate(45, [0, 1, 0]));
+    ctm = mult(ctm, rotate(5, [1, 0, 0]));
+    ctm = mult(ctm, scale(mushroomSize, mushroomSize, mushroomSize));
+
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+    
+    var uvBuffer2 = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, mushroomTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36); 
+
+}
+
 
 ////////////////
 // use orthogonal projection

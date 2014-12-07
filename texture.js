@@ -254,6 +254,25 @@ function defineTexture()
     }
     rockTexture.image.src = "/resource/rockwall.jpg";
 
+
+    mushroomTexture = gl.createTexture();
+    mushroomTexture.image = new Image();
+    mushroomTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, mushroomTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, mushroomTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    mushroomTexture.image.src = "/resource/Mushroom.jpg";
+
     fishTexture = gl.createTexture();
     fishTexture.image = new Image();
     fishTexture.image.onload = function() {

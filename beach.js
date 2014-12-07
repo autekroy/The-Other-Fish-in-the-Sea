@@ -5,6 +5,8 @@ This file contains the init() and render() functions!
 Main Autohr: Yao-Jen Chang
 Bump Mapping: Katie
 Picking: Michael
+Blending: Brandon
+
 */
 
 var program;
@@ -228,11 +230,12 @@ var movePosition = 0, movePositionUnit = 0.005;
 var isFinalisland = 0;// as boolean to check if the beach is last island
 var congraMessage = 0;
 
-var waterLevelTime = [1, 10, 5];
+var waterLevelTime = [5, 5, 5];
 var waterLevelIndex = 0;
 var waterLevelNext = 1;
 
 var backgroundPos = 0, prebgPos = 0;
+var transparentStatus = 0;
 
 function render()
 {
@@ -607,7 +610,15 @@ else{
         gl.uniform1i(UNIFORM_usebumpmap, 0);     
     }
 
-
+    /////////////////////
+    // Mushroom for undefeated status
+    /////////////////////
+    if(waterLevelIndex == 2){
+        createMushroom();
+        mushroomTime += mushroomTimer.getElapsedTime() / 1000;
+        if(mushroomTime >= 5 && transparentStatus == 1)
+            transparentStatus = 0;
+    }
     ///////////////////////
     // Render fished
     ////////////////////////
@@ -624,9 +635,13 @@ else{
     ////////////////////////////////
     // Render sword
     ////////
-    // createSword(4, 1, 2.1, -90);
-    createSword(1.3 + moveLeft, 2.1, -1.3 + moveForward, 0);
-
+    if(transparentStatus == 1){
+        enableAlphaBlending();
+        createSword(1.3 + moveLeft, 2.1, -1.3 + moveForward, 0);
+        disableAlphaBlending();
+    }
+    else
+        createSword(1.3 + moveLeft, 2.1, -1.3 + moveForward, 0);
 
     ////////////////////////////////
     // Render the sphere! (for Bubble and people)
@@ -666,9 +681,15 @@ else{
     // createSwaweed(3, 0, -1);
     if(waterLevelIndex == 2)    inWave = 1;
     else                        inWave = 0;
-    
-    createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
 
+    if(transparentStatus == 1){
+        enableAlphaBlending();    
+        createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
+        disableAlphaBlending();
+    }
+    else
+        createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
+    
     worldViewMatrix();
 }
     // print instruction on the top
