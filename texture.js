@@ -291,7 +291,28 @@ function defineTexture()
     }
     fishTexture.image.src = "/resource/fish.jpg";
 
+    gameOverTexture = gl.createTexture();
+    gameOverTexture.image = new Image();
+    gameOverTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, gameOverTexture.image);
 
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    gameOverTexture.image.src = "/resource/shark    .png";
+
+
+}
+
+function defineMonsterTexture(){
     monsterTexture = gl.createTexture();
     monsterTexture.image = new Image();
     monsterTexture.image.onload = function() {
@@ -310,11 +331,11 @@ function defineTexture()
     }
     monsterTexture.image.src = "/resource/cubeMonster.png";
 
-    gameOverTexture = gl.createTexture();
-    gameOverTexture.image = new Image();
-    gameOverTexture.image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, gameOverTexture.image);
+    monsterTexture2 = gl.createTexture();
+    monsterTexture2.image = new Image();
+    monsterTexture2.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, monsterTexture2);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, monsterTexture2.image);
 
         //for the zoomed texture, use tri-linear filtering
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
@@ -326,9 +347,43 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    gameOverTexture.image.src = "/resource/shark.png";
+    monsterTexture2.image.src = "/resource/cubeMonster2.png";    
 
+    monsterTexture3 = gl.createTexture();
+    monsterTexture3.image = new Image();
+    monsterTexture3.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, monsterTexture3);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, monsterTexture3.image);
 
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    monsterTexture3.image.src = "/resource/cubeMonster3.png";    
+
+    monsterTexture4 = gl.createTexture();
+    monsterTexture4.image = new Image();
+    monsterTexture4.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, monsterTexture4);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, monsterTexture4.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    monsterTexture4.image.src = "/resource/cubeMonster4.png";    
 }
 
 // for bump mapping

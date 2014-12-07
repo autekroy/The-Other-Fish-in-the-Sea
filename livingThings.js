@@ -23,8 +23,8 @@ function createFish(fishindex) {
         fishYpos[ fishindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
         fishZpos[ fishindex ] = -15 - Math.random(); 
 
-        fishSpeed[ fishindex ] = 0.15 + Math.random() / 7;
-        fishSize[ fishindex ] = Math.random() * 0.1 + 0.1;            
+        fishSpeed[ fishindex ] = 0.3 + Math.random() / 7;
+        fishSize[ fishindex ] = Math.random() / 5 + 0.1;            
     }
 
     fishZpos[ fishindex ] += fishSpeed[ fishindex ] ;
@@ -34,8 +34,8 @@ function createFish(fishindex) {
         fishYpos[ fishindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
         fishZpos[ fishindex ] = -15 - Math.random(); 
 
-        fishSpeed[ fishindex ] = 0.2 + Math.random() / 7;
-        fishSize[ fishindex ] = Math.random();
+        fishSpeed[ fishindex ] = 0.3 + Math.random() / 7;
+        fishSize[ fishindex ] = Math.random() / 5 + 0.1;    
     }
 
     ctm = modelViewMatrix;
@@ -77,8 +77,8 @@ function createMonster(monsterindex) {
         monsterYpos[ monsterindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
         monsterZpos[ monsterindex ] = -15 - Math.random(); 
 
-        monsterSpeed[ monsterindex ] = 0.15 + Math.random() / 7;
-        monsterSize[ monsterindex ] = Math.random();            
+        monsterSpeed[ monsterindex ] = 0.15 + Math.random() / 3;
+        monsterSize[ monsterindex ] = 0.3 + Math.random()/1.5 ;            
     }
 
     monsterZpos[ monsterindex ] += monsterSpeed[ monsterindex ] ;
@@ -88,8 +88,8 @@ function createMonster(monsterindex) {
         monsterYpos[ monsterindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
         monsterZpos[ monsterindex ] = -15 - Math.random(); 
 
-        monsterSpeed[ monsterindex ] = 0.2 + Math.random() / 7;
-        monsterSize[ monsterindex ] = Math.random();
+        monsterSpeed[ monsterindex ] = 0.15 + Math.random() / 3;
+        monsterSize[ monsterindex ] = 0.3 + Math.random()/1.5;    
     }
 
     ctm = modelViewMatrix;
@@ -108,7 +108,10 @@ function createMonster(monsterindex) {
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, monsterTexture);
+    if(monsterindex == 0)       gl.bindTexture(gl.TEXTURE_2D, monsterTexture);
+    else if(monsterindex == 1)  gl.bindTexture(gl.TEXTURE_2D, monsterTexture2);
+    else if(monsterindex == 2)  gl.bindTexture(gl.TEXTURE_2D, monsterTexture3);
+    else                        gl.bindTexture(gl.TEXTURE_2D, monsterTexture4);
 
     gl.drawArrays( gl.TRIANGLES, 0, 36); 
 
@@ -237,7 +240,7 @@ var mushroomXpos = -0.6;
 var mushroomYpos = 3;
 var mushroomZpos = -15;
 var mushroomSpeed = 0.05;
-var mushroomSize = 0.3;
+var mushroomSize = 0.4;
 var mushroomPass = false;
 
 function createMushroom() {

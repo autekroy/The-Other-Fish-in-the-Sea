@@ -50,9 +50,11 @@ window.onload = function init()
     sphereIndex = 0;
     createSphere(3, spherePoints, sphereNormals, sphereUV)
 
+    // define different texture. (texture.js)
     defineTexture();
     defineBumpMappingTexture();
     defineAlphabetTexture();
+    defineMonsterTexture();
 
     // Process Shaders (or something like that)
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
@@ -258,7 +260,7 @@ function render()
         else if(walkBackward == 1 && movePosition >= 0.03)
             movePosition -= movePositionUnit;
 
-        if(islandIndex == finalLisland && movePosition > 1){
+        if(islandIndex == finalLisland && movePosition >= 1){
             movePosition = 1;
             // alert("You're in the last!");
         }
