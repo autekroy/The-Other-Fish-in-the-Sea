@@ -161,13 +161,13 @@ window.onkeydown = function(event){
             if(onTheBeach != 1 && moveForward < 2.5)    moveForward += 0.5;
             break;
         case 65: //'A' arrow
-            if(textureLeft > -3.7) textureLeft --;
-            if(moveLeft > -2.5)  moveLeft -= 0.3;
+            if(textureLeft > -3) textureLeft --;
+            if(moveLeft > -3.4)  moveLeft -= 0.3;
             if(theta < 9)        theta += unit;
             break;
         case 68: //'D' arrow
-            if(textureLeft < 3.7) textureLeft ++;
-            if(moveLeft < 2.5)  moveLeft += 0.3;
+            if(textureLeft < 3) textureLeft ++;
+            if(moveLeft < 3.4)  moveLeft += 0.3;
             if(theta > -9)      theta -= unit;
             break;
             

@@ -29,8 +29,8 @@ function printStr(str){
     	var alphIndex = str.charCodeAt(i) - 65;// 65 is unicode of 'A'
 
 	    gl.activeTexture(gl.TEXTURE0);
-	    // gl.bindTexture(gl.TEXTURE_2D, alphabetTexture);
-	    gl.bindTexture(gl.TEXTURE_2D, alphabetTextureList[0]);
+	    gl.bindTexture(gl.TEXTURE_2D, alphabetTexture);
+	    // gl.bindTexture(gl.TEXTURE_2D, alphabetTextureList[0]);
 
         ctm = mat4();
         ctm = mult(ctm, translate(i * 0.4 - middle, 3.9, 0));

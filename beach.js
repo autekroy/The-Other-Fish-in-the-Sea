@@ -298,7 +298,7 @@ function render()
         ///////////////////
         var beachFloor = mat4();
 
-        beachFloor = mult(beachFloor, scale(20, 0.00001, 20));
+        beachFloor = mult(beachFloor, scale(20, 0.00001, 15));
         beachFloor = mult(beachFloor, translate(0,0,1));
         beachFloor = mult(beachFloor, modelViewMatrix);    
         gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(beachFloor));
@@ -343,7 +343,7 @@ function render()
         ////////////////////////////
         var beachFloor = mat4();
 
-        beachFloor = mult(beachFloor, scale(20, 0.01, 20));
+        beachFloor = mult(beachFloor, scale(20, 0.01, 15));
         beachFloor = mult(beachFloor, translate(0,0,-1.0));
         beachFloor = mult(beachFloor, modelViewMatrix);    
         gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(beachFloor));
@@ -692,25 +692,25 @@ function render()
         else
             createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
         
-    if(transparentStatus != 1){
-        var hasCollisionHappened = false;
-        var checkForCollision = true;
-        for(var i = 0; i < 4; i++)
-        {   
-            if(checkForCollision)
-            {
-                hasCollisionHappened =  bodyBox.haveCollided(monsterBoxes[i]);
-                if(hasCollisionHappened)
-                {
-                    numLifePoints --;
-                    hasCollisionHappened = false;
-                    checkForCollision = false;
-                    monsterZpos[i] = 6;
+        // check collision between person and monsters
+        if(transparentStatus != 1){
+            var hasCollisionHappened = false;
+            var checkForCollision = true;
+            for(var i = 0; i < 4; i++){   
+                if(checkForCollision){
+                    hasCollisionHappened =  bodyBox.haveCollided(monsterBoxes[i]);
+                    if(hasCollisionHappened){
+                        numLifePoints --;
+                        hasCollisionHappened = false;
+                        checkForCollision = false;
+                        monsterZpos[i] = 6;
+                        break;
+                    }
                 }
             }
         }
-    }
 
+        // check collision betwen person and mashroom
         // hasCollisionHappened =  bodyBox.haveCollided(mashroomBox);
         // if(hasCollisionHappened)
         // {
@@ -722,12 +722,28 @@ function render()
     // print instruction on the top
     // lightPosition = vec3(10, 40, 80);
     // gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
-    // printStr("ABC");
+    // printStr("B");
 
     // make life points
     lightPosition = vec3(0, 10.0, 40);
     gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
     createLifePoints(numLifePoints);
+
+    // check if game over
+    if(numLifePoints < 0){
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
+
+        ctm = mat4();
+        ctm = mult(ctm, translate(0, 2, 0));
+        ctm = mult(ctm, scale(1.3, 1.3, 1.3));
+        gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+        gl.drawArrays( gl.TRIANGLES, 0, 6);      
+
+        // alert("GAME OVER!");
+        return;
+    }
 
     window.requestAnimFrame( render );
 }

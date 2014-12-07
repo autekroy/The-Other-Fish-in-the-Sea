@@ -46,6 +46,8 @@ function Cube(length, points, normals, uv, uv2) {
         uv2.push(vec2(bound2,bound2));
         uv2.push(vec2(0,bound2));
 
+
+
         // 6 points to form 2 triangels, which can combine to a
         points.push(vertices[v1]);
         points.push(vertices[v3]);
@@ -296,7 +298,7 @@ function createSword(xPos, Ypos, Zpos, xRotate){
 ////////////////
 // use orthogonal projection
 ////////////////
-var numLifePoints = 3;
+var numLifePoints = 1;
 function createLifePoints(num){
     // Bind position buffer
     gl.bindBuffer( gl.ARRAY_BUFFER, cubePositionBuffer );

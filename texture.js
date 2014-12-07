@@ -309,6 +309,26 @@ function defineTexture()
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
     monsterTexture.image.src = "/resource/cubeMonster.png";
+
+    gameOverTexture = gl.createTexture();
+    gameOverTexture.image = new Image();
+    gameOverTexture.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, gameOverTexture.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    gameOverTexture.image.src = "/resource/shark.png";
+
+
 }
 
 // for bump mapping
@@ -394,46 +414,47 @@ function defineBumpMappingTexture(){
 
 function defineAlphabetTexture(){
 
-for(var i = 0; i < 6; i++){
-    alphabetTexture = gl.createTexture();
-    alphabetTexture.image = new Image();
+    // for(var i = 0; i < 6; i++){
+        alphabetTexture = gl.createTexture();
+        alphabetTexture.image = new Image();
 
-    alphabetTexture.image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, alphabetTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, alphabetTexture.image);
+        alphabetTexture.image.onload = function() {
+            gl.bindTexture(gl.TEXTURE_2D, alphabetTexture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, alphabetTexture.image);
 
-        //for the zoomed texture, use tri-linear filtering
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+            //for the zoomed texture, use tri-linear filtering
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-        gl.generateMipmap(gl.TEXTURE_2D);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-    }
-    alphabetTexture.image.src = "/Alphabet/" + String.fromCharCode(65 + i) + ".png";
+            gl.generateMipmap(gl.TEXTURE_2D);
+            gl.bindTexture(gl.TEXTURE_2D, null);
+        }
+        alphabetTexture.image.src = "/Alphabet/B.png";
+        // alphabetTexture.image.src = "/Alphabet/" + String.fromCharCode(65 + 1) + ".png";
 
 
-    // alphabetTextureList[i] = gl.createTexture();
-    // alphabetTextureList[i].image = new Image();
-    // alphabetTextureList[i].image.src = "/Alphabet/" + String.fromCharCode(65 + i) + ".png";
-    // alphabetTextureList[i].image.onload = function() {
-    //     gl.bindTexture(gl.TEXTURE_2D, alphabetTextureList[i]);
-    //     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, alphabetTextureList[i].image);
+        // alphabetTextureList[i] = gl.createTexture();
+        // alphabetTextureList[i].image = new Image();
+        // alphabetTextureList[i].image.src = "/Alphabet/" + String.fromCharCode(65 + i) + ".png";
+        // alphabetTextureList[i].image.onload = function() {
+        //     gl.bindTexture(gl.TEXTURE_2D, alphabetTextureList[i]);
+        //     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, alphabetTextureList[i].image);
 
-    //     //for the zoomed texture, use tri-linear filtering
-    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        //     //for the zoomed texture, use tri-linear filtering
+        //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 
-    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-    //     gl.generateMipmap(gl.TEXTURE_2D);
-    //     gl.bindTexture(gl.TEXTURE_2D, null);
+        //     gl.generateMipmap(gl.TEXTURE_2D);
+        //     gl.bindTexture(gl.TEXTURE_2D, null);
+        // }
+        
+        // alphabetTextureList.push(alphabetTexture);
     // }
-    
-    // alphabetTextureList.push(alphabetTexture);
-}
 
 }
