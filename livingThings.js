@@ -112,6 +112,9 @@ function createMonster(monstweindex) {
 
     gl.drawArrays( gl.TRIANGLES, 0, 36); 
 
+
+    putExtremesInBoundaryObject(cubePoints, ctm, monsterBoxes[ monstweindex ]);
+
 }
 
 ////////////////////////////////////////////////
@@ -157,6 +160,8 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
     
+    putExtremesInBoundaryObject(spherePoints, ctm, bodyBox);//for collision
+
     // for move the hands and foots
     deg += degUnit;
     if(deg == 240)   degUnit = -degUnit;
@@ -267,6 +272,8 @@ function createMushroom() {
 
     gl.drawArrays( gl.TRIANGLES, 0, 36); 
 
+    // for collision
+    putExtremesInBoundaryObject(cubePoints, ctm, mushroomBox);
 }
 
 

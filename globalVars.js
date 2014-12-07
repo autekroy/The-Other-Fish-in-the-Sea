@@ -23,7 +23,7 @@ var cubePoints = []; //position of cube information
 var cubeNormals = [];
 var cubeUV = [];
 var stableUV = [], moveNormalUV = [];
-var spherePoints = [];
+var spherePoints = []; // position of sphere
 var sphereNormals = [];
 var sphereUV = [];
 

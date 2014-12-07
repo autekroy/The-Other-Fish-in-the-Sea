@@ -683,6 +683,7 @@ function render()
         if(waterLevelIndex == 2)    inWave = 1;
         else                        inWave = 0;
 
+        // Render person
         if(transparentStatus == 1){
             enableAlphaBlending();    
             createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
@@ -691,6 +692,33 @@ function render()
         else
             createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
         
+    if(transparentStatus != 1){
+        var hasCollisionHappened = false;
+        var checkForCollision = true;
+        for(var i = 0; i < 4; i++)
+        {   
+            if(checkForCollision)
+            {
+                hasCollisionHappened =  bodyBox.haveCollided(monsterBoxes[i]);
+                if(hasCollisionHappened)
+                {
+                    numLifePoints --;
+                    hasCollisionHappened = false;
+                    checkForCollision = false;
+                    // transparentStatus = 1;
+                    break;
+                    //setTimeout(function(){checkForCollision = true;},5000);
+                }
+            }
+        }
+    }
+
+        // hasCollisionHappened =  bodyBox.haveCollided(mashroomBox);
+        // if(hasCollisionHappened)
+        // {
+            
+        // }
+
         worldViewMatrix();
     }
     // print instruction on the top

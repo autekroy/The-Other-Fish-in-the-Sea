@@ -15,6 +15,18 @@ function boundingBox()
     this.isMaxZSet = false;
 };
 
+boundingBox.prototype.isReady = function()
+{
+    if(this.isMinXSet == false || this.isMinYSet == false || this.isMinZSet == false || this.isMaxXSet == false || this.isMaxYSet == false || this.isMaxZSet == false)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
 boundingBox.prototype.setminX = function(x)
 {
     this.minX.transformed_point = x.transformed_point;
@@ -127,29 +139,36 @@ boundingBox.prototype.getmaxZ = function()
 
 boundingBox.prototype.haveCollided = function(B)
 {
-    //if A's maximum X is less than B's minimum x, or B's maximum X is less than A's minimum x, or A's minimum Y is less than B's maximum, or B's minimum y is less than A's greatest y, or A's min z is less than B's max z, or B's min z is less than A's max z
-    //AX<Bx||BX<Ax||AY<By||BY<Ay
-    var AxB = false;
-    var BxA = false;
-    var AyB = false;
-    var ByA = false;
-    var AzB = false;
-    var BzA = false;
-
-    AxB = this.maxX.transformed_point < B.getminX().transformed_point;//A's maximum X is less than B's minimum x
-    BxA = B.getmaxX().transformed_point < this.minX.transformed_point;//B's maximum X is less than A's minimum x
-    AyB = B.getmaxY().transformed_point < this.minY.transformed_point;//A's minimum Y is less than B's maximum y
-    ByA = this.maxY.transformed_point < B.getminY().transformed_point;//B's minimum y is less than A's greatest y
-    AzB = B.getmaxZ().transformed_point < this.minZ.transformed_point;//A's min z is less than B's max z
-    BzA = this.maxZ.transformed_point < B.getminZ().transformed_point;//B's min z is less than A's max z
-
-    if(AxB || BxA || AyB || ByA || AzB || BzA)
+    if(this.isReady() && B.isReady())
     {
-        return false;
+        //if A's maximum X is less than B's minimum x, or B's maximum X is less than A's minimum x, or A's minimum Y is less than B's maximum, or B's minimum y is less than A's greatest y, or A's min z is less than B's max z, or B's min z is less than A's max z
+        //AX<Bx||BX<Ax||AY<By||BY<Ay
+        var AxB = false;
+        var BxA = false;
+        var AyB = false;
+        var ByA = false;
+        var AzB = false;
+        var BzA = false;
+
+        AxB = this.maxX.transformed_point < B.getminX().transformed_point;//A's maximum X is less than B's minimum x
+        BxA = B.getmaxX().transformed_point < this.minX.transformed_point;//B's maximum X is less than A's minimum x
+        AyB = B.getmaxY().transformed_point < this.minY.transformed_point;//A's minimum Y is less than B's maximum y
+        ByA = this.maxY.transformed_point < B.getminY().transformed_point;//B's minimum y is less than A's greatest y
+        AzB = B.getmaxZ().transformed_point < this.minZ.transformed_point;//A's min z is less than B's max z
+        BzA = this.maxZ.transformed_point < B.getminZ().transformed_point;//B's min z is less than A's max z
+
+        if(AxB || BxA || AyB || ByA || AzB || BzA)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
     else
     {
-        return true;
+        return false;
     }
 }
 
