@@ -12,37 +12,37 @@ var fishYpos = [];
 var fishZpos = [];
 var fishSpeed = [];
 var fishSize = [];
-function createFish(monstweindex) {
+function createFish(fishindex) {
     worldViewMatrix();
 
-    if( monstweindex > (fishXpos.length -1)){
+    if( fishindex > (fishXpos.length -1)){
         fishXpos.push(0);  fishYpos.push(0); fishZpos.push(0);
         fishSpeed.push(0); fishSize.push(0);
         
-        fishXpos[ monstweindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
-        fishYpos[ monstweindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
-        fishZpos[ monstweindex ] = -15 - Math.random(); 
+        fishXpos[ fishindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
+        fishYpos[ fishindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
+        fishZpos[ fishindex ] = -15 - Math.random(); 
 
-        fishSpeed[ monstweindex ] = 0.15 + Math.random() / 7;
-        fishSize[ monstweindex ] = Math.random() * 0.1 + 0.1;            
+        fishSpeed[ fishindex ] = 0.15 + Math.random() / 7;
+        fishSize[ fishindex ] = Math.random() * 0.1 + 0.1;            
     }
 
-    fishZpos[ monstweindex ] += fishSpeed[ monstweindex ] ;
-    if(fishZpos[ monstweindex ] >= 5){
+    fishZpos[ fishindex ] += fishSpeed[ fishindex ] ;
+    if(fishZpos[ fishindex ] >= 5){
 
-        fishXpos[ monstweindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
-        fishYpos[ monstweindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
-        fishZpos[ monstweindex ] = -15 - Math.random(); 
+        fishXpos[ fishindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
+        fishYpos[ fishindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
+        fishZpos[ fishindex ] = -15 - Math.random(); 
 
-        fishSpeed[ monstweindex ] = 0.2 + Math.random() / 7;
-        fishSize[ monstweindex ] = Math.random();
+        fishSpeed[ fishindex ] = 0.2 + Math.random() / 7;
+        fishSize[ fishindex ] = Math.random();
     }
 
     ctm = modelViewMatrix;
-    ctm = mult(ctm, translate(fishXpos[ monstweindex ], fishYpos[ monstweindex ], fishZpos[ monstweindex ]));
+    ctm = mult(ctm, translate(fishXpos[ fishindex ], fishYpos[ fishindex ], fishZpos[ fishindex ]));
     // ctm = mult(ctm, rotate(45, [0, 1, 0]));
     ctm = mult(ctm, rotate(5, [1, 0, 0]));
-    ctm = mult(ctm, scale(fishSize[ monstweindex ], fishSize[ monstweindex ], 1.5 * fishSize[ monstweindex ]));
+    ctm = mult(ctm, scale(fishSize[ fishindex ], fishSize[ fishindex ], 1.5 * fishSize[ fishindex ]));
 
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
@@ -66,36 +66,36 @@ var monsterYpos = [];
 var monsterZpos = [];
 var monsterSpeed = [];
 var monsterSize = [];
-function createMonster(monstweindex) {
+function createMonster(monsterindex) {
     worldViewMatrix();
 
-    if( monstweindex > (monsterXpos.length -1)){
+    if( monsterindex > (monsterXpos.length -1)){
         monsterXpos.push(0);  monsterYpos.push(0); monsterZpos.push(0);
         monsterSpeed.push(0); monsterSize.push(0);
         
-        monsterXpos[ monstweindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
-        monsterYpos[ monstweindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
-        monsterZpos[ monstweindex ] = -15 - Math.random(); 
+        monsterXpos[ monsterindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
+        monsterYpos[ monsterindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
+        monsterZpos[ monsterindex ] = -15 - Math.random(); 
 
-        monsterSpeed[ monstweindex ] = 0.15 + Math.random() / 7;
-        monsterSize[ monstweindex ] = Math.random();            
+        monsterSpeed[ monsterindex ] = 0.15 + Math.random() / 7;
+        monsterSize[ monsterindex ] = Math.random();            
     }
 
-    monsterZpos[ monstweindex ] += monsterSpeed[ monstweindex ] ;
-    if(monsterZpos[ monstweindex ] >= 5){
+    monsterZpos[ monsterindex ] += monsterSpeed[ monsterindex ] ;
+    if(monsterZpos[ monsterindex ] >= 5){
 
-        monsterXpos[ monstweindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
-        monsterYpos[ monstweindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
-        monsterZpos[ monstweindex ] = -15 - Math.random(); 
+        monsterXpos[ monsterindex ] = Math.random() * 16 - 8;// range from -8 ~ 8
+        monsterYpos[ monsterindex ] = Math.random() * 4 + 1.5;// range from 1.5 ~ 5.5
+        monsterZpos[ monsterindex ] = -15 - Math.random(); 
 
-        monsterSpeed[ monstweindex ] = 0.2 + Math.random() / 7;
-        monsterSize[ monstweindex ] = Math.random();
+        monsterSpeed[ monsterindex ] = 0.2 + Math.random() / 7;
+        monsterSize[ monsterindex ] = Math.random();
     }
 
     ctm = modelViewMatrix;
-    ctm = mult(ctm, translate(monsterXpos[ monstweindex ], monsterYpos[ monstweindex ], monsterZpos[ monstweindex ]));
+    ctm = mult(ctm, translate(monsterXpos[ monsterindex ], monsterYpos[ monsterindex ], monsterZpos[ monsterindex ]));
     ctm = mult(ctm, rotate(5, [1, 0, 0]));
-    ctm = mult(ctm, scale(monsterSize[ monstweindex ], monsterSize[ monstweindex ], monsterSize[ monstweindex ]));
+    ctm = mult(ctm, scale(monsterSize[ monsterindex ], monsterSize[ monsterindex ], monsterSize[ monsterindex ]));
 
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
@@ -113,7 +113,7 @@ function createMonster(monstweindex) {
     gl.drawArrays( gl.TRIANGLES, 0, 36); 
 
 
-    putExtremesInBoundaryObject(cubePoints, ctm, monsterBoxes[ monstweindex ]);
+    putExtremesInBoundaryObject(cubePoints, ctm, monsterBoxes[ monsterindex ]);
 
 }
 
@@ -236,18 +236,13 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
 var mushroomXpos = -0.6;
 var mushroomYpos = 3;
 var mushroomZpos = -15;
-var mushroomSpeed = 0.3;
+var mushroomSpeed = 0.05;
 var mushroomSize = 0.3;
-// var mushroomStartTime, mushroomEndTime;
+var mushroomPass = false;
 
 function createMushroom() {
-    if(mushroomZpos >= 6){
-        return;// on chance to eat mushroom
-    }
-    else if(mushroomZpos == -15){
-        mushroomTimer.reset();
-        transparentStatus = 1;
-    }
+    if(mushroomPass)        return;// one chance to eat mushroom
+    if(mushroomZpos >= 6)   mushroomPass = true;        
 
     worldViewMatrix(); 
 

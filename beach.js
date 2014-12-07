@@ -230,7 +230,7 @@ var movePosition = 0, movePositionUnit = 0.005;
 var isFinalisland = 0;// as boolean to check if the beach is last island
 var congraMessage = 0;
 
-var waterLevelTime = [1, 10, 5];
+var waterLevelTime = [10, 10, 8];
 var waterLevelIndex = 0;
 var waterLevelNext = 1;
 
@@ -615,23 +615,25 @@ function render()
         /////////////////////
         if(waterLevelIndex == 2){
             createMushroom();
-            mushroomTime += mushroomTimer.getElapsedTime() / 1000;
-            if(mushroomTime >= 5 && transparentStatus == 1)
-                transparentStatus = 0;
+            if(transparentStatus == 1){
+                mushroomTime += mushroomTimer.getElapsedTime() / 1000;
+                if(mushroomTime >= 5)   transparentStatus = 0;
+            }
         }
+
+
+
+        ////////////////////////////////
+        // Render monster
+        ////////////////////////////////
+        for(var i = 0; i < monsterNumber; i++)
+            createMonster(i);
+
         ///////////////////////
         // Render fished
         ////////////////////////
         for(var i = 0; i < 2; i++)
             createFish(i);
-
-        ////////////////////////////////
-        // Render monster
-        ////////////////////////////////
-        
-        for(var i = 0; i < monsterNumber; i++)
-            createMonster(i);
-
 
         ////////////////////////////////
         // Render sword
@@ -679,7 +681,8 @@ function render()
         createBubble(-5, 1, -3);
         disableAlphaBlending();
 
-        // createSwaweed(3, 0, -1);
+        // // createSwaweed(3, 0, -1);
+
         if(waterLevelIndex == 2)    inWave = 1;
         else                        inWave = 0;
 
@@ -693,29 +696,32 @@ function render()
             createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
         
         // check collision between person and monsters
+        var hasCollisionHappened;
         if(transparentStatus != 1){
-            var hasCollisionHappened = false;
-            var checkForCollision = true;
+            hasCollisionHappened = false;
+            // var checkForCollision = true;
             for(var i = 0; i < 4; i++){   
-                if(checkForCollision){
+                // if(checkForCollision){
                     hasCollisionHappened =  bodyBox.haveCollided(monsterBoxes[i]);
                     if(hasCollisionHappened){
                         numLifePoints --;
                         hasCollisionHappened = false;
-                        checkForCollision = false;
+                        // checkForCollision = false;
                         monsterZpos[i] = 6;
                         break;
                     }
-                }
+                // }
             }
         }
 
         // check collision betwen person and mashroom
-        // hasCollisionHappened =  bodyBox.haveCollided(mashroomBox);
-        // if(hasCollisionHappened)
-        // {
-            
-        // }
+        var hasMushroomCollisionHappened = false;
+        hasMushroomCollisionHappened =  bodyBox.haveCollided(mushroomBox);
+        if(hasMushroomCollisionHappened){
+            mushroomTimer.reset();
+            transparentStatus = 1;
+            mushroomZpos = 6;
+        }
 
         worldViewMatrix();
     }
@@ -730,20 +736,20 @@ function render()
     createLifePoints(numLifePoints);
 
     // check if game over
-    if(numLifePoints < 0){
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
+    // if(numLifePoints < 0){
+    //     gl.activeTexture(gl.TEXTURE0);
+    //     gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
 
-        ctm = mat4();
-        ctm = mult(ctm, translate(0, 2, 0));
-        ctm = mult(ctm, scale(1.3, 1.3, 1.3));
-        gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+    //     ctm = mat4();
+    //     ctm = mult(ctm, translate(0, 2, 0));
+    //     ctm = mult(ctm, scale(1.3, 1.3, 1.3));
+    //     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
 
-        gl.drawArrays( gl.TRIANGLES, 0, 6);      
+    //     gl.drawArrays( gl.TRIANGLES, 0, 6);      
 
-        // alert("GAME OVER!");
-        return;
-    }
+    //     // alert("GAME OVER!");
+    //     // return;
+    // }
 
     window.requestAnimFrame( render );
 }
