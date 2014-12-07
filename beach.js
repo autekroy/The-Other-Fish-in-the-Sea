@@ -705,9 +705,7 @@ function render()
                     numLifePoints --;
                     hasCollisionHappened = false;
                     checkForCollision = false;
-                    // transparentStatus = 1;
-                    break;
-                    //setTimeout(function(){checkForCollision = true;},5000);
+                    monsterZpos[i] = 6;
                 }
             }
         }
