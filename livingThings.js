@@ -94,7 +94,6 @@ function createMonster(monstweindex) {
 
     ctm = modelViewMatrix;
     ctm = mult(ctm, translate(monsterXpos[ monstweindex ], monsterYpos[ monstweindex ], monsterZpos[ monstweindex ]));
-    // ctm = mult(ctm, rotate(45, [0, 1, 0]));
     ctm = mult(ctm, rotate(5, [1, 0, 0]));
     ctm = mult(ctm, scale(monsterSize[ monstweindex ], monsterSize[ monstweindex ], monsterSize[ monstweindex ]));
 
@@ -133,7 +132,6 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
         inWavePos += waveUnit;
         if(inWavePos > 0.5 && waveUnit > 0)         waveUnit = -waveUnit;
         else if(inWavePos < -0.5 && waveUnit < 0)   waveUnit = -waveUnit;
-        // else                                        inWave = 0; 
     }
 
     modelViewMatrix = mult(modelViewMatrix, translate(xPos + inWavePos, Ypos, Zpos));
@@ -147,10 +145,8 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     ctm = mult(ctm, scale(0.5, 0.5, 0.5));
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
-
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, oceanTexture);
-
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex ); 
 
     // draw body
@@ -158,12 +154,10 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     ctm = mult(ctm, rotate(-30, [1, 0, 0]));
     ctm = mult(ctm, translate(xvalue, yvalue, zvalue));
     ctm = mult(ctm, scale(0.3, 1.5, 0.3));
-
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
-
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
     
-    // for move the hand and foots
+    // for move the hands and foots
     deg += degUnit;
     if(deg == 240)   degUnit = -degUnit;
     else if(deg == 120) degUnit = -degUnit;
@@ -185,7 +179,6 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
-
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
 
     // draw left hand
@@ -201,7 +194,6 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
-
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
 
     // draw right foot
@@ -216,9 +208,7 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     ctm = mult(ctm, rotate(-45, [0, 0, 1]));
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
 
-
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
-
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
 
     // draw left foot
@@ -234,10 +224,52 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
     ctm = mult(ctm, scale(0.2, 0.8, 0.2));
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
-
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
+}
+
+
+var mushroomXpos = -0.6;
+var mushroomYpos = 3;
+var mushroomZpos = -15;
+var mushroomSpeed = 0.3;
+var mushroomSize = 0.3;
+// var mushroomStartTime, mushroomEndTime;
+
+function createMushroom() {
+    if(mushroomZpos >= 6){
+        return;// on chance to eat mushroom
+    }
+    else if(mushroomZpos == -15){
+        mushroomTimer.reset();
+        transparentStatus = 1;
+    }
+
+    worldViewMatrix(); 
+
+    mushroomZpos += mushroomSpeed;
+
+    ctm = modelViewMatrix;
+    ctm = mult(ctm, translate(mushroomXpos, mushroomYpos, mushroomZpos));
+    ctm = mult(ctm, rotate(15, [1, 0, 0]));
+    ctm = mult(ctm, scale(mushroomSize, mushroomSize, mushroomSize));
+
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+    
+    var uvBuffer2 = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
+    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
+    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, mushroomTexture);
+
+    gl.drawArrays( gl.TRIANGLES, 0, 36); 
 
 }
+
+
 
 function createCelebrity(xvalue, yvalue, zvalue){
     ctm = mat4();

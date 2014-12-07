@@ -19,7 +19,7 @@ var omega = 360;
 var numTimesToSubdivide = 1;
 
 // Points and Normals for shapes!
-var cubePoints = [];
+var cubePoints = []; //position of cube information
 var cubeNormals = [];
 var cubeUV = [];
 var stableUV = [], moveNormalUV = [];
@@ -110,3 +110,13 @@ var walking = 0;
 
 // monster variable
 var monsterNumber = 4; //initial number of monster
+
+
+// collision detection
+var bodyBox = new boundingBox();
+var monsterBoxes = new Array();
+monsterBoxes.push(new boundingBox());
+monsterBoxes.push(new boundingBox());
+monsterBoxes.push(new boundingBox());
+monsterBoxes.push(new boundingBox());
+var mushroomBox = new boundingBox();
