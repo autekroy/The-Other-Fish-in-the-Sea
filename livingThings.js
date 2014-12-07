@@ -241,7 +241,6 @@ var mushroomSize = 0.3;
 var mushroomPass = false;
 
 function createMushroom() {
-    if(mushroomPass)        return;// one chance to eat mushroom
     if(mushroomZpos >= 6)   mushroomPass = true;        
 
     worldViewMatrix(); 
@@ -287,9 +286,10 @@ function createCelebrity(xvalue, yvalue, zvalue, celebrityIndex){
     gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
+    // celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; 
     if(celebrityIndex == 1) celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; 
     else                    celebrityTexture.image.src =  "/resource/megan.png";
-    
+
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, celebrityTexture);
 
