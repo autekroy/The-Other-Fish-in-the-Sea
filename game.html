@@ -131,6 +131,9 @@ Date: 11/22, 2014
         }
     </script>
     <body align = "center" data-ng-controller="gameController">
+        <!--for playing sound effect-->
+        <div id="sounds"></div>
+
         <div class="navbar navbar-inverse navbar-fixed-top" style="background-color:#0722EB;" role="navigation">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -163,7 +166,14 @@ Date: 11/22, 2014
             </div>
             <div class="col-md-1"></div>
         </div>
-        <script>
+
+        <script type="text/javascript">
+            var music=new Array("Sound/lion.wav", "Sound/sword.mp3", "Sound/laser.wav", "Sound/bell.wav");
+
+            function playSound(i){
+                document.getElementById("sounds").innerHTML = "<embed width=0 height=0 src="+music[i]+" autostart='true'></embed>";
+            }
+
             window.onkeydown = function(event){
                 var key = window.event.keyCode;
                 // alert(key);
@@ -261,7 +271,8 @@ Date: 11/22, 2014
                         if(onTheBeach == 1)    walking = 0;
                         break;            
                 }
-            }
+            }        
         </script>
+
     </body>
 </html>

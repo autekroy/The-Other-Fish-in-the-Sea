@@ -698,8 +698,8 @@ function render()
                 for(var i = 0; i < 4; i++){   
                     hasCollisionHappened =  bodyBox.haveCollided(monsterBoxes[i]);
                     if(hasCollisionHappened){
-                        if(hasSword == 1)   hasSword = 0;
-                        else                numLifePoints --;
+                        if(hasSword == 1)   {hasSword = 0;      playSound(2);}
+                        else                {numLifePoints --;  playSound(0);}
                         hasCollisionHappened = false;
                         monsterZpos[i] = 6;
                         break;                        
@@ -714,6 +714,7 @@ function render()
                 mushroomTimer.reset();
                 transparentStatus = 1;
                 mushroomZpos = 6;
+                playSound(3);
             }
 
             // check collision betwen person and sword cube
@@ -722,6 +723,7 @@ function render()
             if(hasMushroomCollisionHappened){
                 hasSword = 1;
                 swordCubeZpos = 6;
+                playSound(1);
             }
 
 
