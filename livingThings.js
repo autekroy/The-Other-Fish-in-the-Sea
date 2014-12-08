@@ -310,7 +310,7 @@ function createSwordCube() {
         swordCubeYpos = Math.random() * 3;
         swordCubeZpos = -15;
         swordCubeSpeed = 0.08 +  Math.random() / 20;
-        swordCubeSize = 0.3 +  Math.random() / 10;
+        swordCubeSize = 0.4 +  Math.random() / 10;
     }
 
     ctm = modelViewMatrix;
