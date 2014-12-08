@@ -736,8 +736,8 @@ function render()
     createLifePoints(numLifePoints);
 
     // check if game over
-    if(numLifePoints == 0){
-        // numLifePoints = 3;
+    if(numLifePoints <= 0){
+        numLifePoints = 0;
         // gl.activeTexture(gl.TEXTURE0);
         // gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
 

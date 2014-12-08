@@ -107,7 +107,7 @@ Date: 11/22, 2014
             vec4 fColor = ambient + diffuse + specular;
             fColor.a  = uAlpha;
 
-            //*****************************Michael's*******************************
+            /** for picking **/
             vec4 c[9];
             c[0] = fColor;
             c[1] = vec4(1.0, 0.0, 0.0, 1.0);
@@ -128,8 +128,6 @@ Date: 11/22, 2014
             else if (colorSelector == 6) {gl_FragColor = c[6];}
             else if (colorSelector == 7) {gl_FragColor = c[7];}
             else if (colorSelector == 8) {gl_FragColor = c[8];}
-            //*****************************Michael's*******************************
-
         }
     </script>
     <body align = "center" data-ng-controller="gameController">
@@ -197,11 +195,11 @@ Date: 11/22, 2014
                         swimUP = 0;
                         break;
 
-                    case 38: //up arrow for swimming up
+                    case 73: //'i' for swimming up
                         if(waterLevelIndex != 0 && swimUP < 2.1)    
                             swimUP += 0.3;
                         break;
-                    case 40: //down arrow for swimming up
+                    case 75: //'k' for swimming up
                         if(waterLevelIndex != 0 && swimUP > -2.1)   
                             swimUP -= 0.3;
                         break;
@@ -211,11 +209,11 @@ Date: 11/22, 2014
                         onTheBeach = (onTheBeach == 0)? 1: 0;
                         break;
 
-                    case 73: // 'i'  add monster
+                    case 79: // 'o'  add monster
                         monsterNumber ++;
                         if(monsterNumber > 4)  monsterNumber = 4;
                         break;
-                    case 79: // 'o' minus monster
+                    case 80: // 'p' minus monster
                         monsterNumber --;
                         if(monsterNumber < 1)  monsterNumber = 1;
                         break;

@@ -81,7 +81,7 @@ function createMonster(monsterindex) {
         monsterZpos[ monsterindex ] = -15 - Math.random(); 
 
         monsterSpeed[ monsterindex ] = 0.15 + Math.random() / 5;
-        monsterSize[ monsterindex ] = 0.3 + Math.random()/ 3 ;            
+        monsterSize[ monsterindex ] = 0.4 + Math.random()/ 20 ;            
     }
 
     monsterZpos[ monsterindex ] += monsterSpeed[ monsterindex ] ;
@@ -92,7 +92,7 @@ function createMonster(monsterindex) {
         monsterZpos[ monsterindex ] = -15 - Math.random(); 
 
         monsterSpeed[ monsterindex ] = 0.15 + Math.random() / 5;
-        monsterSize[ monsterindex ] = 0.3 + Math.random()/ 3;    
+        monsterSize[ monsterindex ] = 0.4 + Math.random()/ 20;    
     }
 
     ctm = modelViewMatrix;
@@ -359,7 +359,7 @@ function createCelebrity(xvalue, yvalue, zvalue, celebrityIndex, genderWant){
     else if(celebrityIndex == 2 && genderWant == 0)    celebrityTexture.image.src =  "/TextureImage/megan.png";
     else if(celebrityIndex == 1 && genderWant == 1)    celebrityTexture.image.src =  "/TextureImage/GeorgeClooney.png"; 
     else if(celebrityIndex == 2 && genderWant == 1)    celebrityTexture.image.src =  "/TextureImage/thor.png";   
-    else                            celebrityTexture.image.src =  "/TextureImage/catfish.png";
+    else                                               celebrityTexture.image.src =  "/TextureImage/catfish.png";
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, celebrityTexture);
