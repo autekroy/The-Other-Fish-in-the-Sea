@@ -11,26 +11,44 @@ The Other Fish in the Sea
 * Date: 12/08, 2014
 
 ----------------------------------------------------
-#### Enviornment and tools:
+### Enviornment and tools:
 1. OS: Mac OS X 10.9.5
 2. Browser: Chrome 37 or Safari 8.0
 3. Webgl
 
 ----------------------------------------------------
-#### How to run (Mac OS):
+### How to run (Mac OS):
 Due to security, some browser like Chrome may stop html file to load files automatically.
 * Mac OS (recommend): Use SimpleHTTPserver to solve it.
 * Windows: create a simple server to run it.
 
-Mac OS SimpleHTTPserver Stpes:
+#### Mac OS SimpleHTTPserver Stpes:
 
-1. open terminal and go to the "assignment 4"  folder.
+1. open terminal and go to the "CG-project"  folder.
 2. type: "python -m SimpleHTTPServer" to create your won simple http server. (The default port is 8000)
 3. Then open your browser and use link: http://127.0.0.1:8000/ (cuz the port is 8000)
-4. click "demo.html" to open "assignment4.html" file.
+4. click to open "game.html" file.
 
 ----------------------------------------------------
-#### Indroduction:
+### Game Indroduction:
+
+#### Background Story:
+
+
+----------------------------------------------------
+### How to play:
+
+#### Mouse control:
+1. on the beach, use mouse to pick up food by clicking it.
+
+#### Normal Key control:
+1. Use 'W' and 'S' to move character forward or backward.
+2. Use 'A' and 'D' to move character left or right.
+3. Use 'I' and 'K' to swim up or down when character is underwater.
+
+#### Cheat Key control:
+1. Use 'O' and 'L' to increase or decrease the number of monsters.
+2. Use 'U' and 'J' to increase or decrease the number of life points.
 
 ----------------------------------------------------
 #### Files:
@@ -50,13 +68,6 @@ Mac OS SimpleHTTPserver Stpes:
 4. Bump Mapping images
 5. Sound: 
 6. Collision Detection test: basic test for collision detection, not use for main game
-
-----------------------------------------------------
-#### Key control:
-1. 'I' and 'O' move the camera nearer or farer away from cubes.
-
-#### Mouse control:
-1. on the beach, use mouse to pick up food by clicking it.
 
 ----------------------------------------------------
 #### Completed Basic topics:
