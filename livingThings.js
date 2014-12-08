@@ -1,8 +1,6 @@
 /*
-
 This file contains all the functions that allow for the creation of various
-shapes which are living.
-Some of the variables it affects are in the "globalVars.js" file.
+shapes which are moving (living underwater!).
 
 Main Author: Yao-Jen Chang
 */

@@ -7,7 +7,6 @@ Collision detection: Sergio
 Picking: Michael
 Bump Mapping: Katie
 Blending: Brandon
-
 */
 
 var program;
@@ -736,8 +735,6 @@ function render()
         }// end of checking if on the beach
 
     }// end of underwater
-
-
 
     // make life points
     lightPosition = vec3(0, 10.0, 40);
