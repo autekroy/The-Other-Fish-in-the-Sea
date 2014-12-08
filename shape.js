@@ -293,7 +293,7 @@ function createLifePoints(num){
 
     for(var i = 0; i < num; i++){
         ctm = mat4();
-        ctm = mult(ctm, translate(-3.5 + i * 0.45, 3.8, 0));
+        ctm = mult(ctm, translate(-3.5 + i * 0.45, 3.85, 0));
         ctm = mult(ctm, scale(0.2, 0.2, 0.2));
 
         gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );

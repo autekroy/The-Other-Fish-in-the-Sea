@@ -137,7 +137,6 @@ window.onload = function init()
 
         gl.uniformMatrix4fv(UNIFORM_projectionMatrix, false, flatten(projectionMatrix));
         gl.uniformMatrix4fv(UNIFORM_viewMatrix, false, flatten(modelViewMatrix));
-        modelViewMatrix = mult(modelViewMatrix, translate(0, 0, movePosition));
 
         gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 1);//To set up i = 1 -> corresponding to fragment shader
         if (notPickUp[0] == 1) {
@@ -148,20 +147,16 @@ window.onload = function init()
         if (notPickUp[1] == 1) {
             createFood(-2.4, -1, -1);
         }
-        // gl.uniform1i(gl.getUniformLocation(program, "colorSelector"), 3);
-        // if (notPickUp[2] == 1) {
-        //     createFood(-1.5, 0, 0);        
-        // }
+
          //To get the mouse postion
         var x = event.clientX;
         var y = canvas.height - event.clientY;
-
 
         gl.disable(gl.DITHER);
         //To get the pixel on that position
         var color = new Uint8Array(4);
         gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
-        //alert("R:" + color[0] + " G:" + color[1] + " B:" + color[2] + "; x: " + x + " y: " + y);
+        //alert("R:" + color[0] + " G:" + color[1] + " B:" + color[2] + "; x: " + x + " y: " + y); // for testing
 
         var colorNames = [
             "background",
