@@ -1,14 +1,12 @@
 /*
-
 This file essentially contains all the global variables that our project uses!
-
 */
 
 // Basic global variables that need to be created!
 var canvas;
 var gl;
 
-// Other global variables!
+
 var length = 1;
 var time = 0.0;
 var timer = new Timer();
@@ -16,7 +14,6 @@ var mushroomTime = 0.0;
 var mushroomTimer = new Timer();
 var omega = 360;
 
-var numTimesToSubdivide = 1;
 
 // Points and Normals for shapes!
 var cubePoints = []; //position of cube information
@@ -78,22 +75,10 @@ var UNIFORM_specularProduct;
 var UNIFORM_lightPosition;
 var UNIFORM_shininess;
 
-var ifRotate = 0; // control  the rotation of both cubes.
-var textureRotate = 0; // start and stop the rotation of the texture maps on all faces of the first cube
-var textureScroll = 1; // start and stop the continuous scrolling the texture map on the second cube
-
-var theta = 0.00;
+var theta = 0.00; // for little rotate character when turn left/right.
 
 var distance = 1;
 var fovy = 90;
-
-// for orthographics projection
-var l = -1;
-var r = 1;
-var t = 1;
-var b = -1;
-var n = -1;
-var f = 1;
 
 // for naviggation system
 var unit = 3;
@@ -111,9 +96,11 @@ var walking = 0;
 // monster variable
 var monsterNumber = 3; //initial number of monster
 
-
-// collision detection
+/*	For collision detection
+	each object will have a bounding box to check whether objsct collide other bounding boxes. 
+*/
 var bodyBox = new boundingBox();
+// for monster 1 to 5
 var monsterBoxes = new Array();
 monsterBoxes.push(new boundingBox());
 monsterBoxes.push(new boundingBox());

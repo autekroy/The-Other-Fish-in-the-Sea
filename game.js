@@ -50,12 +50,6 @@ window.onload = function init()
     sphereIndex = 0;
     createSphere(3, spherePoints, sphereNormals, sphereUV)
 
-    // define different texture. (texture.js)
-    defineTexture();
-    defineBumpMappingTexture();
-    defineAlphabetTexture();
-    defineMonsterTexture();
-
     // Process Shaders (or something like that)
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
@@ -118,6 +112,13 @@ window.onload = function init()
     UNIFORM_shininess = gl.getUniformLocation(program, "shininess");
 
     UNIFORM_usebumpmap = gl.getUniformLocation(program, "usebumpmap");
+
+    // define different texture. (see texture.js)
+    defineTexture();
+    defineBumpMappingTexture();
+    defineAlphabetTexture();
+    defineMonsterTexture();
+    defineColorTexture();
 
     timer.reset();
     gl.enable(gl.DEPTH_TEST);
@@ -221,19 +222,24 @@ var oceanDeg = 0, oceanDegUnit = 0.1;
 var movePosition = 0, movePositionUnit = 0.005;
 
 var islandIndex = 0; // the island index
-var finalLisland = 3; // the last island
+var finalLisland = 3; // the last island, there will be finalLisland game levels.
 var congraMessage = 0;
 
-var waterLevelTime = [8, 8, 8];
-var waterLevelIndex = 0;
-var waterLevelNext = 1;
+/* water level: there're 3 water level from 0 - 2
+level 0: the shallow water. You can not swimming up or down, and won't be affect by waves
+level 1: the deeper water with rock. You can swim up or down, and won't be affect by waves due to rocks.
+level 2: the deepest water without rock. You can swim up or down, and would be affect by waves due to rocks.
+*/
+var waterLevelTime = [8, 8, 8]; // the time period of each water level
+var waterLevelIndex = 0;        // indicate the water level from 0 to 2.
+var waterLevelNext = 1;         // This variable will be 1 or -1. Use waterLevelIndex + waterLevelNext to get the next water level.
 
 var backgroundPos = 0, prebgPos = 0;
 var transparentStatus = 0;
 
 //////////////////////////////////////////////
 var personColor = "Pink";//"Blue";  // the character color
-var gender = 1; // the gender player wants to see
+var gender = 1; // the gender player wants to see, 1 is female, 2, is male
 //////////////////////////////////////////////
 
 function render()
@@ -253,12 +259,10 @@ function render()
     lightPosition = vec3(0, 70.0, 20);
     gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
 
-    // projectionMatrix = ortho(left, right, bottom, ytop, near, far);
-
     if(onTheBeach == 1){
-        ////////////////////////////////
+        ////////////////////
         // Render the beach
-        ////////
+        ////////////////////
         inWave = 0;
         if(walkForward == 1)
             movePosition += movePositionUnit;
@@ -329,16 +333,10 @@ function render()
             if (islandIndex != finalLisland && notPickUp[1] == 1)  createFood(-2.4, -1, -1);
 
             //////////////////////////
-            // render final tresure
+            // render Celebrity
             //////////////////////////
-            
             if(islandIndex > 0)
                 createCelebrity(0, 3, -25, islandIndex, gender);
-
-            //////////////////////////
-            // render Texture box
-            //////////////////////////
-            // createTextureBox(-1, 0, -12);
 
             ////////////////////////////
             // render the beach ocean floor
@@ -381,9 +379,7 @@ function render()
             gl.bindTexture(gl.TEXTURE_2D, beachBackgroundTexture);
             gl.drawArrays( gl.TRIANGLES, 0, 36);
 
-            ////////////////////////////////
-            // Render the sphere!
-            ////////////////
+            // get sphere position information
             modelViewMatrix = mult(modelViewMatrix, translate(0, 0, movePosition));
             // Bind position buffer
             gl.bindBuffer( gl.ARRAY_BUFFER, spherePositionBuffer );
@@ -408,14 +404,17 @@ function render()
             gl.uniform1f(UNIFORM_shininess,  shininess);
             gl.uniform1i(UNIFORM_sampler, 0);
 
+            ////////////////////////
+            // Render the character
+            ///////////////////////
             createPeople(moveLeft, 0, moveForward, onTheBeach, walking, personColor);
         }
     }
     else{ // underwater scene
+
         ////////////////////////////////
         // Render the Ocean Floor!
         ////////////////////////////////
-
         if(time >= waterLevelTime[ waterLevelIndex ]){
             movePosition += 0.01;
 
@@ -463,15 +462,13 @@ function render()
 
 
             // scrolling the cube (beach)
-            if(textureScroll == 1){
-                for(var i = 0; i < 36; i++){
-                    cubeUV[i][1] -= 0.02;
-                    cubeUV[i][0] -= textureLeft/100;
-                    // reset all the texture coordinate incase they are too low to get overflow.
-                    if(cubeUV[i][1] <= -1000000){
-                        for(var j = 0; j < 36; j++)
-                            cubeUV[j][1] += 10;
-                    }
+            for(var i = 0; i < 36; i++){
+                cubeUV[i][1] -= 0.02;
+                cubeUV[i][0] -= textureLeft/100;
+                // reset all the texture coordinate incase they are too low to get overflow.
+                if(cubeUV[i][1] <= -1000000){
+                    for(var j = 0; j < 36; j++)
+                        cubeUV[j][1] += 10;
                 }
             }
 
@@ -508,9 +505,9 @@ function render()
             }
             gl.uniform1i(UNIFORM_usebumpmap, 0);
 
-            /////////////////////////
+            ///////////////////////////
             // render ocean background
-            ////////////////////
+            ///////////////////////////
             modelViewMatrix = lookAt(eye, at, up);
             gl.bindBuffer( gl.ARRAY_BUFFER, cubeUVBuffer );
             gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );
@@ -521,18 +518,16 @@ function render()
             if(waterLevelIndex == 1 && waterLevelNext == 1)
                 backgroundPos = prebgPos + level1High * time/waterLevelTime[ waterLevelIndex ];
             else if(waterLevelIndex == 2 && waterLevelNext == 1)
-                backgroundPos = prebgPos;// + 2 * time/waterLevelTime[ waterLevelIndex ];
+                backgroundPos = prebgPos;
             else if(waterLevelIndex == 1 && waterLevelNext == -1)
                 backgroundPos = prebgPos - level1High * time/waterLevelTime[ waterLevelIndex ];
-            // else if(waterLevelIndex == 2 && waterLevelNext == -1)
-                // backgroundPos = prebgPos - 2 * time/waterLevelTime[ waterLevelIndex ];
 
-            rockWall = mat4();
-            rockWall = mult(rockWall, translate(0, 30 + backgroundPos, -15));
-            rockWall = mult(rockWall, scale(40, 30, 20));
-            rockWall = mult(rockWall, modelViewMatrix);    
+            ctm = mat4();
+            ctm = mult(ctm, translate(0, 30 + backgroundPos, -15));
+            ctm = mult(ctm, scale(40, 30, 20));
+            ctm = mult(ctm, modelViewMatrix);    
 
-            gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
+            gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm));
 
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, waterBackgroundTexture);
@@ -546,15 +541,13 @@ function render()
 
             if(waterLevelIndex != 0){
                 // scrolling the cube (beach)
-                if(textureScroll == 1){
-                    for(var i = 0; i < 36; i++){
-                        moveNormalUV[i][0] -= 0.001;
-                        // moveNormalUV[i][0] -= textureLeft/100;
-                        // reset all the texture coordinate incase they are too low to get overflow.
-                        if(moveNormalUV[i][1] <= -1000000){
-                            for(var j = 0; j < 36; j++)
-                                moveNormalUV[j][1] += 10;
-                        }
+                for(var i = 0; i < 36; i++){
+                    moveNormalUV[i][0] -= 0.001;
+                    // moveNormalUV[i][0] -= textureLeft/100;
+                    // reset all the texture coordinate incase they are too low to get overflow.
+                    if(moveNormalUV[i][1] <= -1000000){
+                        for(var j = 0; j < 36; j++)
+                            moveNormalUV[j][1] += 10;
                     }
                 }
 
@@ -566,8 +559,6 @@ function render()
                 var rockWall = mat4();
                 rockWall = mult(rockWall, translate(-14, 5 + backgroundPos, 5));
                 rockWall = mult(rockWall, scale(1, 5, 10));
-                // rockWall = mult(rockWall, rotate(30, [0, 0, 1]));
-                // rockWall = mult(rockWall, rotate(270, [1, 0, 0]));
                 rockWall = mult(rockWall, modelViewMatrix);   
 
                 gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(rockWall));
@@ -626,8 +617,6 @@ function render()
                 mushroomTime += mushroomTimer.getElapsedTime() / 1000;
                 if(mushroomTime >= 5)   transparentStatus = 0;
             }
-
-
 
             ////////////////////////////////
             // Render monster
@@ -694,7 +683,7 @@ function render()
             createBubble(2, 2, -15);
             disableAlphaBlending();
 
-            // // createSwaweed(3, 0, -1);
+            // createSwaweed(3, 0, -1);
 
             // check the water level, if it's level 2, there will be wave effect.
             if(waterLevelIndex == 2)    inWave = 1;
@@ -748,10 +737,7 @@ function render()
 
     }// end of underwater
 
-    // print instruction on the top
-    // lightPosition = vec3(10, 40, 80);
-    // gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
-    // printStr("B");
+
 
     // make life points
     lightPosition = vec3(0, 10.0, 40);

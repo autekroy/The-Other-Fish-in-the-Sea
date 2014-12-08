@@ -1,3 +1,10 @@
+/*
+
+This javascript library is for advanced topic, collision detection.
+
+Main Author: Sergio
+*/
+
 function boundingBox()
 {
     this.minX = {};

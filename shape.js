@@ -7,6 +7,7 @@ Some of the variables it affects are in the "globalVars.js" file
 Main Author: Yao-Jen Chang
 */
 
+// create cube position
 function Cube(length, points, normals, uv, uv2) {
 
     vertices = [
@@ -64,6 +65,7 @@ function Cube(length, points, normals, uv, uv2) {
     Quad(vertices, points, normals, uv, uv2, 1, 5, 3, 7, vec3(1, 1, 0));
 }
 
+// create sphere position
 function createSphere(numberDivisions, points, normals, uv)
 {
     var va = vec3(0.0, 0.0, -1.0);
@@ -115,6 +117,11 @@ function createSphere(numberDivisions, points, normals, uv)
     tetrahedron(va,vb,vc,vd,numberDivisions);
 }
 
+/*
+    Draw Bubble in different position
+    In this function, there are 2 bubbles together.
+    They will increase their sizes when going up as real bubble.
+*/
 var upDis = -1.4, bubbleSize = 0.05, backMove = 0;
 function createBubble(xvalue, yvalue, zvalue) {
 
@@ -151,51 +158,10 @@ function createBubble(xvalue, yvalue, zvalue) {
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );       
 }
 
-var goBackPos = -9, goBackUnit = 0.1;
 
-function createSwaweed(xvalue, yvalue, zvalue) {
-    worldViewMatrix();
-
-    goBackPos += goBackUnit;
-    if(goBackPos > 12)   goBackPos = -9;
-
-    ctm = mat4();
-    ctm = mult(ctm, modelViewMatrix);
-    ctm = mult(ctm, rotate(-theta * 3 , [0, 1, 0]));      //wheb rotate the whole world, seaweed would rotate
-    ctm = mult(ctm, translate(xvalue, yvalue + 2, zvalue + goBackPos));
-    
-    ctm = mult(ctm, scale(0.1, 1, 0.1));
-
-    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
-
-    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
-
-}
-
-
-function createTextureBox(xvalue, yvalue, zvalue){
-    ctm = mat4();
-    ctm = mult(ctm, translate(xvalue, yvalue + 1, zvalue + movePosition * 20));
-    ctm = mult(ctm, rotate(30, [0, 1, 0]));
-    ctm = mult(ctm, scale(1.5, 1, 1));
-
-    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
-    
-    var uvBuffer2 = gl.createBuffer();
-
-    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(stableUV), gl.STATIC_DRAW );      //uv data
-    gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
-    gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
-
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, goldenTexture);
-
-    gl.drawArrays( gl.TRIANGLES, 0, 36); 
-
-}
-
-
+/*  
+    Draw the food cubes on the beach. Use mouse to pick them up as life points
+*/
 function createFood(xvalue, yvalue, zvalue){
     ctm = mat4();
     ctm = mult(ctm, translate(xvalue, yvalue + 2, zvalue + movePosition * 20));
@@ -293,9 +259,11 @@ function createSword(xPos, Ypos, Zpos, xRotate){
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );  
 }
 
-////////////////
-// use orthogonal projection
-////////////////
+
+/*  to draw life points 
+    NumLifePoints indicate the number of life points.
+    Life points will show on the left top.
+*/
 var numLifePoints = 3;
 function createLifePoints(num){
     // Bind position buffer
@@ -333,3 +301,26 @@ function createLifePoints(num){
         gl.drawArrays( gl.TRIANGLES, 0, 6); 
     }
 }
+
+/*
+// Try to draw a sweed, but it looks ugly. We don't use it in last version.
+var goBackPos = -9, goBackUnit = 0.1;
+function createSwaweed(xvalue, yvalue, zvalue) {
+    worldViewMatrix();
+
+    goBackPos += goBackUnit;
+    if(goBackPos > 12)   goBackPos = -9;
+
+    ctm = mat4();
+    ctm = mult(ctm, modelViewMatrix);
+    ctm = mult(ctm, rotate(-theta * 3 , [0, 1, 0]));      //wheb rotate the whole world, seaweed would rotate
+    ctm = mult(ctm, translate(xvalue, yvalue + 2, zvalue + goBackPos));
+    
+    ctm = mult(ctm, scale(0.1, 1, 0.1));
+
+    gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+
+    gl.drawArrays( gl.TRIANGLES, 0, sphereIndex );   
+
+}
+*/

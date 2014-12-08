@@ -7,6 +7,9 @@ Some of the variables it affects are in the "globalVars.js" file.
 Main Author: Yao-Jen Chang
 */
 
+/************************************************
+    Function for creating fishes
+************************************************/
 var fishXpos = [];
 var fishYpos = [];
 var fishZpos = [];
@@ -60,7 +63,9 @@ function createFish(fishindex) {
 
 }
 
-
+/************************************************
+    Function for creating monsters
+************************************************/
 var monsterXpos = [];
 var monsterYpos = [];
 var monsterZpos = [];
@@ -121,10 +126,9 @@ function createMonster(monsterindex) {
 
 }
 
-////////////////////////////////////////////////
-// Function for creating the player character!
-////////////////////////////////////////////////
-
+/************************************************
+    Function for creating the player character!
+************************************************/
 var deg  = 180;
 var degUnit = 15;
 var moveForward = 0;// for character to move forward or backward. 'W' and 'S' key
@@ -240,6 +244,11 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk, color) {
 }
 
 
+/************************************************
+    Function for creating mushroom
+    Mushroom only appear in water level 2 one time!
+    Mushroom can make character be transparent and monster can't hit character.
+************************************************/
 var mushroomXpos = -0.6;
 var mushroomYpos = 3;
 var mushroomZpos = -15;
@@ -278,8 +287,13 @@ function createMushroom() {
 }
 
 
-
-
+/************************************************
+    Function for creating sword cube
+    After eating sword cube
+    character will hold a sword (variable: hasSword will be 1)
+    If character has a sword, he/she can hit a monster and doesn't lose life point.
+    After hitting monster, the sword will disappear. (variable: hasSword will be 0)
+************************************************/
 var swordCubeXpos = -0.6;
 var swordCubeYpos = 3;
 var swordCubeZpos = -15;
@@ -322,8 +336,10 @@ function createSwordCube() {
     putExtremesInBoundaryObject(cubePoints, ctm, swordCubeBox);
 }
 
-
-
+/************************************************
+    Function for creating Celebrity
+    Show the Celebrity as reward on the beach except the initial beach.
+************************************************/
 function createCelebrity(xvalue, yvalue, zvalue, celebrityIndex, gender){
     ctm = mat4();
     ctm = mult(ctm, translate(xvalue, yvalue + 2, -5 + zvalue + movePosition * 20));
