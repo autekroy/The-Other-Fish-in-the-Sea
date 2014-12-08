@@ -2,7 +2,7 @@
 
 This file contains the init() and render() functions!
 
-Main Autohr: Yao-Jen Chang
+Game Main Autohr: Yao-Jen Chang
 Collision detection: Sergio
 Picking: Michael
 Bump Mapping: Katie
@@ -22,7 +22,7 @@ window.onload = function init()
     gl.viewport( 0, 0, canvas.width, canvas.height );
     gl.clearColor( 0.4, 0.4, 0.8, 1.0 );
     
-    // Camera settings I guess
+    // Camera settings
     modelViewMatrix = lookAt(eye, at, up);
     projectionMatrix = perspective(fieldOfView, aspectRatio, 0.001, 1000);
     projectionMatrix = mult(projectionMatrix, translate(0,-2,-4));
@@ -221,10 +221,10 @@ var oceanDeg = 0, oceanDegUnit = 0.1;
 var movePosition = 0, movePositionUnit = 0.005;
 
 var islandIndex = 0; // the island index
-var finalLisland = 2; // the last island
+var finalLisland = 3; // the last island
 var congraMessage = 0;
 
-var waterLevelTime = [10, 10, 10];
+var waterLevelTime = [8, 8, 8];
 var waterLevelIndex = 0;
 var waterLevelNext = 1;
 

@@ -111,7 +111,8 @@ function createMonster(monsterindex) {
     if(monsterindex == 0)       gl.bindTexture(gl.TEXTURE_2D, monsterTexture);
     else if(monsterindex == 1)  gl.bindTexture(gl.TEXTURE_2D, monsterTexture2);
     else if(monsterindex == 2)  gl.bindTexture(gl.TEXTURE_2D, monsterTexture3);
-    else                        gl.bindTexture(gl.TEXTURE_2D, monsterTexture4);
+    else if(monsterindex == 3)  gl.bindTexture(gl.TEXTURE_2D, monsterTexture4);
+    else                        gl.bindTexture(gl.TEXTURE_2D, monsterTexture5);
 
     gl.drawArrays( gl.TRIANGLES, 0, 36); 
 
@@ -337,8 +338,9 @@ function createCelebrity(xvalue, yvalue, zvalue, celebrityIndex){
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
     // celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; 
-    if(celebrityIndex == 1) celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; 
-    else                    celebrityTexture.image.src =  "/resource/megan.png";
+    if(celebrityIndex == 1)         celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; 
+    else if(celebrityIndex == 2)    celebrityTexture.image.src =  "/resource/megan.png";
+    else                            celebrityTexture.image.src =  "/resource/catfish.png";
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, celebrityTexture);

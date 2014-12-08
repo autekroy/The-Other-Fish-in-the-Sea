@@ -66,17 +66,6 @@ uniform float uAlpha;
 
 void main()
 {
-    // vec4 texColor = texture2D(uSampler, fUV);  // UNIFORM_sampler is 0 now
-    // vec4 ambient = ambientProduct * texColor;
-    // float kd = max(dot(fL, fN), 0.0);
-    // vec4 diffuse = kd * diffuseProduct * texColor;
-
-    // float ks = pow(max(dot(fN, fH), 0.0), shininess);
-    // vec4 specular = 0.3 * ks * vec4(1.0, 1.0, 1.0, 1.0);
-
-    // vec4 fColor = ambient + diffuse + specular;
-    // fColor.a  = 1.0;
-
     vec4 bumpMap = texture2D(bSampler,fUV);
     vec4 texColor = texture2D(uSampler, fUV);  // UNIFORM_sampler is 0 now
 
@@ -96,7 +85,7 @@ void main()
     vec4 fColor = ambient + diffuse + specular;
     fColor.a  = uAlpha;
 
-//*****************************Michael's*******************************
+    /******************** for picking  ********************/
     vec4 c[9];
     c[0] = fColor;
     c[1] = vec4(1.0, 0.0, 0.0, 1.0);
@@ -117,8 +106,7 @@ void main()
     else if (colorSelector == 6) {gl_FragColor = c[6];}
     else if (colorSelector == 7) {gl_FragColor = c[7];}
     else if (colorSelector == 8) {gl_FragColor = c[8];}
-//*****************************Michael's*******************************
-
+    /******************** for picking  ********************/
 }
 </script>
 

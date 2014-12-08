@@ -9,7 +9,8 @@ var oceanTexture;
 var beachOceanTexture;
 var beachTexture;
 var silverTexture, goldenTexture;
-var meganFoxTexture, monsterTexture;
+var monsterTexture, monsterTexture2, monsterTexture3, monsterTexture4, monsterTexture5;
+var celebrityTexture;
 var BubbleTexture, rockTexture;
 
 var waterBackgroundTexture, beachBackgroundTexture;
@@ -404,6 +405,24 @@ function defineMonsterTexture(){
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
     monsterTexture4.image.src = "/resource/cubeMonster4.png";    
+
+    monsterTexture5 = gl.createTexture();
+    monsterTexture5.image = new Image();
+    monsterTexture5.image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, monsterTexture5);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, monsterTexture5.image);
+
+        //for the zoomed texture, use tri-linear filtering
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    monsterTexture5.image.src = "/resource/cubeMonster5.png";        
 }
 
 // for bump mapping
