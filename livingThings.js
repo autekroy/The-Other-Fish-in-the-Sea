@@ -133,7 +133,7 @@ var moveLeft = 0;
 var inWave = 0, inWavePos = 0, waveUnit = 0.05;// indicate if people in a wave (bouncing in x axis)
 var hasSword = 0;
 
-function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
+function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk, color) {
     worldViewMatrix();
     modelViewMatrix = mult(modelViewMatrix, rotate(theta, [0, 1, 0]));      //rotate the whole world   
 
@@ -155,7 +155,8 @@ function createPeople(xPos, Ypos, Zpos, checkOnTheBeach, checkWalk) {
 
     gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, oceanTexture);
+    if(color == "Blue")     gl.bindTexture(gl.TEXTURE_2D, blueTexture);
+    else                    gl.bindTexture(gl.TEXTURE_2D, pinkTexture);
     gl.drawArrays( gl.TRIANGLES, 0, sphereIndex ); 
 
     // draw body
@@ -323,7 +324,7 @@ function createSwordCube() {
 
 
 
-function createCelebrity(xvalue, yvalue, zvalue, celebrityIndex){
+function createCelebrity(xvalue, yvalue, zvalue, celebrityIndex, gender){
     ctm = mat4();
     ctm = mult(ctm, translate(xvalue, yvalue + 2, -5 + zvalue + movePosition * 20));
     // ctm = mult(ctm, rotate(10, [0, 1, 0]));
@@ -337,9 +338,11 @@ function createCelebrity(xvalue, yvalue, zvalue, celebrityIndex){
     gl.bindBuffer( gl.ARRAY_BUFFER, uvBuffer2 );
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
-    // celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; 
-    if(celebrityIndex == 1)         celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; 
-    else if(celebrityIndex == 2)    celebrityTexture.image.src =  "/resource/megan.png";
+    // gender 1 means female, 2 means males
+    if(celebrityIndex == 1 && gender == 1)         celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; 
+    else if(celebrityIndex == 2 && gender == 1)    celebrityTexture.image.src =  "/resource/megan.png";
+    else if(celebrityIndex == 1 && gender == 2)    celebrityTexture.image.src =  "/resource/GeorgeClooney.png"; 
+    else if(celebrityIndex == 2 && gender == 2)    celebrityTexture.image.src =  "/resource/thor.png";   
     else                            celebrityTexture.image.src =  "/resource/catfish.png";
 
     gl.activeTexture(gl.TEXTURE0);

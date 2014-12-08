@@ -231,6 +231,11 @@ var waterLevelNext = 1;
 var backgroundPos = 0, prebgPos = 0;
 var transparentStatus = 0;
 
+//////////////////////////////////////////////
+var personColor = "Pink";//"Blue";  // the character color
+var gender = 1; // the gender player wants to see
+//////////////////////////////////////////////
+
 function render()
 {
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -326,8 +331,9 @@ function render()
             //////////////////////////
             // render final tresure
             //////////////////////////
+            
             if(islandIndex > 0)
-                createCelebrity(0, 0, -25, islandIndex);
+                createCelebrity(0, 3, -25, islandIndex, gender);
 
             //////////////////////////
             // render Texture box
@@ -402,7 +408,7 @@ function render()
             gl.uniform1f(UNIFORM_shininess,  shininess);
             gl.uniform1i(UNIFORM_sampler, 0);
 
-            createPeople(moveLeft, 0, moveForward, onTheBeach, walking);
+            createPeople(moveLeft, 0, moveForward, onTheBeach, walking, personColor);
         }
     }
     else{ // underwater scene
@@ -697,11 +703,11 @@ function render()
             // Render person
             if(transparentStatus == 1){
                 enableAlphaBlending();    
-                createPeople(moveLeft, swimUP, moveForward, onTheBeach, walkForward);
+                createPeople(moveLeft, swimUP, moveForward, onTheBeach, walkForward, personColor);
                 disableAlphaBlending();
             }
             else
-                createPeople(moveLeft, swimUP, moveForward, onTheBeach, walkForward);
+                createPeople(moveLeft, swimUP, moveForward, onTheBeach, walkForward, personColor);
             
             // check collision between person and monsters
             var hasCollisionHappened;
@@ -755,15 +761,15 @@ function render()
     // check if game over
     if(numLifePoints == 0){
         // numLifePoints = 3;
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
+        // gl.activeTexture(gl.TEXTURE0);
+        // gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
 
-        ctm = mat4();
-        ctm = mult(ctm, translate(0, 2, 0));
-        ctm = mult(ctm, scale(1.3, 1.3, 1.3));
-        gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+        // ctm = mat4();
+        // ctm = mult(ctm, translate(0, 2, 0));
+        // ctm = mult(ctm, scale(1.3, 1.3, 1.3));
+        // gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
 
-        gl.drawArrays( gl.TRIANGLES, 0, 6);      
+        // gl.drawArrays( gl.TRIANGLES, 0, 6);      
 
         // alert("GAME OVER!");
         // return;
