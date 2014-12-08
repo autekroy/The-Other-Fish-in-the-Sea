@@ -37,7 +37,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    oceanTexture.image.src =  "/resource/underwater.jpg";//"/resource/underwaterBlue.jpg";
+    oceanTexture.image.src =  "/TextureImage/underwater.jpg";//"/TextureImage/underwaterBlue.jpg";
 
     beachOceanTexture = gl.createTexture();
     beachOceanTexture.image = new Image();
@@ -55,7 +55,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    beachOceanTexture.image.src =  "/resource/beachBgWater.jpg";//"/resource/underwater2.jpg";
+    beachOceanTexture.image.src =  "/TextureImage/beachBgWater.jpg";//"/TextureImage/underwater2.jpg";
 
     beachTexture = gl.createTexture();
     beachTexture.image = new Image();
@@ -73,7 +73,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    beachTexture.image.src =  "/resource/sandycheeks.jpg";
+    beachTexture.image.src =  "/TextureImage/sandycheeks.jpg";
 
     // celebrityTexture
     celebrityTexture = gl.createTexture();
@@ -92,7 +92,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    celebrityTexture.image.src =  "/resource/EmmaWatson.jpg"; //"/resource/megan.png";
+    celebrityTexture.image.src =  "/TextureImage/EmmaWatson.jpg"; //"/TextureImage/megan.png";
 
     // Texture for sphere
     BubbleTexture = gl.createTexture();
@@ -111,7 +111,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    BubbleTexture.image.src = "/resource/bubble.png";
+    BubbleTexture.image.src = "/TextureImage/bubble.png";
 
 
     //texture for underwater background
@@ -136,7 +136,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    waterBackgroundTexture.image.src = "/resource/underwaterBackground.jpg";
+    waterBackgroundTexture.image.src = "/TextureImage/underwaterBackground.jpg";
 
     //texture for beach background
     beachBackgroundTexture = gl.createTexture();
@@ -154,7 +154,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    beachBackgroundTexture.image.src = "/resource/beachBackground.jpg";
+    beachBackgroundTexture.image.src = "/TextureImage/beachBackground.jpg";
 
     //texture for food
     foodTexture = gl.createTexture();
@@ -175,7 +175,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    foodTexture.image.src = "/resource/food.png";
+    foodTexture.image.src = "/TextureImage/food.png";
 
     //texture for life points
     lifePointTexture = gl.createTexture();
@@ -193,7 +193,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    lifePointTexture.image.src = "/resource/heart.jpg";
+    lifePointTexture.image.src = "/TextureImage/heart.jpg";
 
 
     //texture for world rocks
@@ -215,7 +215,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    rockTexture.image.src = "/resource/rockwall.jpg";
+    rockTexture.image.src = "/TextureImage/rockwall.jpg";
 
 
     mushroomTexture = gl.createTexture();
@@ -234,7 +234,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    mushroomTexture.image.src = "/resource/Mushroom.jpg";
+    mushroomTexture.image.src = "/TextureImage/Mushroom.jpg";
 
     fishTexture = gl.createTexture();
     fishTexture.image = new Image();
@@ -252,7 +252,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    fishTexture.image.src = "/resource/fish.jpg";
+    fishTexture.image.src = "/TextureImage/fish.jpg";
 
 
     swordCubeTexture = gl.createTexture();
@@ -271,7 +271,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    swordCubeTexture.image.src = "/resource/Master_Sword.png";
+    swordCubeTexture.image.src = "/TextureImage/Master_Sword.png";
 
 
     gameOverTexture = gl.createTexture();
@@ -290,7 +290,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    gameOverTexture.image.src = "/resource/shark.png";
+    gameOverTexture.image.src = "/TextureImage/shark.png";
 
 
 }
@@ -312,7 +312,7 @@ function defineMonsterTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    monsterTexture.image.src = "/resource/cubeMonster.png";
+    monsterTexture.image.src = "/TextureImage/cubeMonster.png";
 
     monsterTexture2 = gl.createTexture();
     monsterTexture2.image = new Image();
@@ -330,7 +330,7 @@ function defineMonsterTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    monsterTexture2.image.src = "/resource/cubeMonster2.png";    
+    monsterTexture2.image.src = "/TextureImage/cubeMonster2.png";    
 
     monsterTexture3 = gl.createTexture();
     monsterTexture3.image = new Image();
@@ -348,7 +348,7 @@ function defineMonsterTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    monsterTexture3.image.src = "/resource/cubeMonster3.png";    
+    monsterTexture3.image.src = "/TextureImage/cubeMonster3.png";    
 
     monsterTexture4 = gl.createTexture();
     monsterTexture4.image = new Image();
@@ -366,7 +366,7 @@ function defineMonsterTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    monsterTexture4.image.src = "/resource/cubeMonster4.png";    
+    monsterTexture4.image.src = "/TextureImage/cubeMonster4.png";    
 
     monsterTexture5 = gl.createTexture();
     monsterTexture5.image = new Image();
@@ -384,7 +384,7 @@ function defineMonsterTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    monsterTexture5.image.src = "/resource/cubeMonster5.png";        
+    monsterTexture5.image.src = "/TextureImage/cubeMonster5.png";        
 }
 
 // for simple color
@@ -406,7 +406,7 @@ function defineColorTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    silverTexture.image.src =  "/resource/white.png";
+    silverTexture.image.src =  "/TextureImage/white.png";
 
     goldenTexture = gl.createTexture();
     goldenTexture.image = new Image();
@@ -424,7 +424,7 @@ function defineColorTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    goldenTexture.image.src =  "/resource/yellow.png";
+    goldenTexture.image.src =  "/TextureImage/yellow.png";
 
 
     blueTexture = gl.createTexture();
@@ -443,7 +443,7 @@ function defineColorTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    blueTexture.image.src =  "/resource/blue.png";
+    blueTexture.image.src =  "/TextureImage/blue.png";
 
     pinkTexture = gl.createTexture();
     pinkTexture.image = new Image();
@@ -461,7 +461,7 @@ function defineColorTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    pinkTexture.image.src =  "/resource/pink.png";
+    pinkTexture.image.src =  "/TextureImage/pink.png";
 }
 
 // for bump mapping
@@ -484,7 +484,7 @@ function defineBumpMappingTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    wallBumpMap.image.src = "/Bump Mapping/wallbump.png";
+    wallBumpMap.image.src = "/Bump Mapping images/wallbump.png";
 
 
     floorBumpMap = gl.createTexture();
@@ -503,7 +503,7 @@ function defineBumpMappingTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    floorBumpMap.image.src = "/Bump Mapping/waterFloorbump3.jpg";
+    floorBumpMap.image.src = "/Bump Mapping images/waterFloorbump3.jpg";
 
     oceanFloorBumpMap = gl.createTexture();
     oceanFloorBumpMap.image = new Image();
@@ -522,7 +522,7 @@ function defineBumpMappingTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    oceanFloorBumpMap.image.src = "/Bump Mapping/waterFloorbump.png";
+    oceanFloorBumpMap.image.src = "/Bump Mapping images/waterFloorbump.png";
 
     sandBumpMap = gl.createTexture();
     sandBumpMap.image = new Image();
@@ -540,54 +540,6 @@ function defineBumpMappingTexture(){
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    sandBumpMap.image.src = "/Bump Mapping/sandbump2.jpg";
-
-}
-
-
-function defineAlphabetTexture(){
-
-    // for(var i = 0; i < 6; i++){
-        alphabetTexture = gl.createTexture();
-        alphabetTexture.image = new Image();
-
-        alphabetTexture.image.onload = function() {
-            gl.bindTexture(gl.TEXTURE_2D, alphabetTexture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, alphabetTexture.image);
-
-            //for the zoomed texture, use tri-linear filtering
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-            gl.generateMipmap(gl.TEXTURE_2D);
-            gl.bindTexture(gl.TEXTURE_2D, null);
-        }
-        alphabetTexture.image.src = "/Alphabet/B.png";
-        // alphabetTexture.image.src = "/Alphabet/" + String.fromCharCode(65 + 1) + ".png";
-
-
-        // alphabetTextureList[i] = gl.createTexture();
-        // alphabetTextureList[i].image = new Image();
-        // alphabetTextureList[i].image.src = "/Alphabet/" + String.fromCharCode(65 + i) + ".png";
-        // alphabetTextureList[i].image.onload = function() {
-        //     gl.bindTexture(gl.TEXTURE_2D, alphabetTextureList[i]);
-        //     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, alphabetTextureList[i].image);
-
-        //     //for the zoomed texture, use tri-linear filtering
-        //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.GL_LINEAR);
-        //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-
-        //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-        //     gl.generateMipmap(gl.TEXTURE_2D);
-        //     gl.bindTexture(gl.TEXTURE_2D, null);
-        // }
-        
-        // alphabetTextureList.push(alphabetTexture);
-    // }
+    sandBumpMap.image.src = "/Bump Mapping images/sandbump2.jpg";
 
 }

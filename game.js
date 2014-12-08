@@ -115,7 +115,6 @@ window.onload = function init()
     // define different texture. (see texture.js)
     defineTexture();
     defineBumpMappingTexture();
-    defineAlphabetTexture();
     defineMonsterTexture();
     defineColorTexture();
 
