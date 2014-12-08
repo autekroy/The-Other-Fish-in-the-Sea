@@ -34,6 +34,14 @@ Here are steps.
 7. alphaBlending.js
 8. boundingBox.js
 
+#### Folders:
+1. Common: basic webgl utilities and matrix calculation
+2. TextureImage: all texture images
+3. introModal
+4. Bump Mapping images
+5. Sound: 
+6. Collision Detection test: basic test for collision detection, not use for main game
+
 ---------------------------------------
 #### Key control:
 1. 'I' and 'O' move the camera nearer or farer away from cubes.
