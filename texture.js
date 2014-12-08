@@ -290,7 +290,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-    gameOverTexture.image.src = "/TextureImage/shark.png";
+    gameOverTexture.image.src = "/TextureImage/gameOver2.png";
 
 
 }

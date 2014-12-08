@@ -738,18 +738,18 @@ function render()
     // check if game over
     if(numLifePoints <= 0){
         numLifePoints = 0;
-        // gl.activeTexture(gl.TEXTURE0);
-        // gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
 
-        // ctm = mat4();
-        // ctm = mult(ctm, translate(0, 2, 0));
-        // ctm = mult(ctm, scale(1.3, 1.3, 1.3));
-        // gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
+        ctm = mat4();
+        ctm = mult(ctm, translate(0, 2, 0));
+        ctm = mult(ctm, scale(1.3, 1.3, 1.3));
+        gl.uniformMatrix4fv(UNIFORM_modelViewMatrix, false, flatten(ctm) );
 
-        // gl.drawArrays( gl.TRIANGLES, 0, 6);      
+        gl.drawArrays( gl.TRIANGLES, 0, 6);      
 
         // alert("GAME OVER!");
-        // return;
+        return;
     }
 
     window.requestAnimFrame( render );
