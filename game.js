@@ -235,11 +235,6 @@ var waterLevelNext = 1;         // This variable will be 1 or -1. Use waterLevel
 var backgroundPos = 0, prebgPos = 0;
 var transparentStatus = 0;
 
-//////////////////////////////////////////////
-var personColor = "Pink";//"Blue";  // the character color
-var gender = 1; // the gender player wants to see, 1 is female, 2, is male
-//////////////////////////////////////////////
-
 function render()
 {
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -334,7 +329,7 @@ function render()
             // render Celebrity
             //////////////////////////
             if(islandIndex > 0)
-                createCelebrity(0, 3, -25, islandIndex, gender);
+                createCelebrity(0, 3, -25, islandIndex, genderBender.want );
 
             ////////////////////////////
             // render the beach ocean floor
@@ -405,7 +400,7 @@ function render()
             ////////////////////////
             // Render the character
             ///////////////////////
-            createPeople(moveLeft, 0, moveForward, onTheBeach, walking, personColor);
+            createPeople(moveLeft, 0, moveForward, onTheBeach, walking, genderBender.is);
         }
     }
     else{ // underwater scene
@@ -690,11 +685,11 @@ function render()
             // Render person
             if(transparentStatus == 1){
                 enableAlphaBlending();    
-                createPeople(moveLeft, swimUP, moveForward, onTheBeach, walkForward, personColor);
+                createPeople(moveLeft, swimUP, moveForward, onTheBeach, walkForward, genderBender.is);
                 disableAlphaBlending();
             }
             else
-                createPeople(moveLeft, swimUP, moveForward, onTheBeach, walkForward, personColor);
+                createPeople(moveLeft, swimUP, moveForward, onTheBeach, walkForward, genderBender.is);
             
             // check collision between person and monsters
             var hasCollisionHappened;

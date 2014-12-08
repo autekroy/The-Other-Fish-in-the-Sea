@@ -1,0 +1,134 @@
+<style>
+    .errorMsg
+    {
+        color: red;
+    }
+    img
+    {
+        height : 42;
+        width : 42;
+    }
+</style>
+<div class="modal-header">
+    <h3 class="modal-title">Let's Begin!</h3>
+</div>
+<div class="modal-body" data-ng-show="Phase3">
+    <div class="well row"><!-- <div class="alert alert-info" role="alert"> -->
+        <div class="row">
+            <p>
+                When you are on the island, you will see some treasure boxes look like this:
+            </p> 
+        </div>
+        <div class="row">
+            <img src="TextureImage/food.png" alt="treasure">
+        </div>
+        <div class="row">
+            <p>
+                Try to collect as many tresure boxes as possible by clicking on them. Each treasure box you collect gives you one extra life that you will probably need when you fight monsters under the sea.
+            </p>
+        </div>
+        <div class="row"><img src="TextureImage/heart.png" alt="lifepoint"></div>
+        <div class="row">
+            <p>Use W, S, A, D, up and down arrow keys to control your motion. Once you get under the sea, you will see many different monsters.
+            </p>
+        </div>
+        <div class="row"><img src="TextureImage/cubeMonster.png" alt="monster1"><img src="TextureImage/cubeMonster2.png" alt="monster2"><img src="TextureImage/cubeMonster3.png" alt="monster3"><img src="TextureImage/cubeMonster4.png" alt="monster4"><img src="TextureImage/cubeMonster5.png" alt="monster5"></div>
+        <div class="row"><p>Avoid them or kill them using a sword that you can find in sword boxes floating around you.</p></div>
+        <div class="row"><img src="TextureImage/swordOri.jpg" alt="sword"></div>
+        <div class="row">
+            <p>
+                From time to time, you may also see some Magic Mushroom boxes.
+            </p>
+        </div>
+        <div class="row"><img src="TextureImage/Mushroom.jpg" alt="mushroom"></div>
+        <div class="row">
+            <p>
+                Eating the magic mushrooms in the box makes you transparent so that the monster cannot see you even if you hit on them.
+            </p>    
+        </div>
+        <div class="row">
+            <p>
+                By the way, the fish swimming around you are harmless.
+            </p>
+        </div>
+        <div class="row"> <img src="TextureImage/fish.jpg" alt="fish"> </div>
+        <div class="row">
+            <p>
+                Don't be afraid of them! Remember, when you are under the sea, you collect boxes by hiting on them, not clicking them like when you are on an island. You will need to conquer a few islands before you get to the final destination. Have fun!
+            </p>
+        </div>
+    </div>
+</div>
+<div class="modal-body" data-ng-show="Phase2">
+    <div class="well"><!-- <div class="alert alert-info" role="alert"> -->
+        <p>Oh man!!! That pilot said he was dropping me off on the right island. This is not it at all! Let's see here... hmmm... <span class="label label-primary">Kaetphish Island</span> is only a few islands away from here. If I just swim for a little, I should be able to make it all the way there and finally meet the love of my life, <span class="label label-info">Pisces23</span> , here I come!</p>
+    </div>
+</div>
+<div class="modal-body" data-ng-show="Phase1">
+    <!-- <div class="alert alert-info" data-ng-show="true"> -->
+        <div class="row">
+           <div class="col-md-6">
+                <h4 class="text-left" data-ng-class="{errorMsg: errorMessage}">Pick your color:</h4>
+            </div>
+            <div class="col-md-6"></div>
+        </div>
+        <div class="input-group">
+            <div class="row">
+                <form>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <input type="radio" name="choice" id="colorChoice1" value="blue" data-ng-click="blue()"/>
+                        <label style="display:inline;" for="colorChoice1">
+                            <span data-ng-class="">Blue</span>
+                        </label>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <input type="radio" name="choice" id="colorChoice2" value="pink" data-ng-click="pink()"/>
+                        <label style="display:inline;" for="colorChoice2">
+                            <span data-ng-class="">Pink</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+           <div class="col-md-6">
+                <h4 class="text-left" data-ng-class="{errorMsg: errorMessage}">Pick the gender you want:</h4>
+            </div>
+            <div class="col-md-6"></div>
+        </div>
+        <div class="input-group">
+            <div class="row">
+                <form>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <input type="radio" name="choice" id="genderChoice1" value="female" data-ng-click="wantFemale()"/>
+                        <label style="display:inline;" for="genderChoice1">
+                            <span data-ng-class="">Woman</span>
+                        </label>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <input type="radio" name="choice" id="colorChoice2" value="male" data-ng-click="wantMale()"/>
+                        <label style="display:inline;" for="colorChoice2">
+                            <span data-ng-class="">Man</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <!-- </div> -->
+</div>
+<div class="modal-footer">
+    <div class="btn-group" data-ng-show="Phase2">
+        <button class="btn btn-info" data-ng-click="moveOn2()"><span class="glyphicon glyphicon-arrow-right"></span> Continue...</button>
+    </div>
+    <div class="btn-group" data-ng-show="Phase1"> 
+        <button class="btn btn-info" data-ng-click="moveOn1()"><span class="glyphicon glyphicon-arrow-right"></span> Continue...</button>
+    </div>
+    <div class="btn-group" data-ng-show="Phase3"> 
+        <button class="btn btn-primary" data-ng-click="doneSon()"><span class="glyphicon glyphicon-ok-sign"></span> Done</button>
+    </div>
+</div>
