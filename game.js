@@ -182,11 +182,13 @@ window.onload = function init()
             // alert("You just picked up a " + colorNames[nameIndex]);
             notPickUp[0] = 0;
             numLifePoints++;
+            playSound(4);
         }
         if (nameIndex == 2 && onTheBeach == 1) {
             // alert("You just picked up a " + colorNames[nameIndex]);
             notPickUp[1] = 0;
             numLifePoints++;
+            playSound(4);
         }
         // if (nameIndex == 4) {
         //     alert("You just picked up a " + colorNames[nameIndex]);
