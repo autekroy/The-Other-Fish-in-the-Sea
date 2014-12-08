@@ -139,13 +139,10 @@ void main()
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
 
-<pre>
-Press <b>'I'</b> to add monster. Press <b>'O'</b> to minus monster.
-Press <b>'A'</b> and <b>'D'</b> to turn left or right.
-Press <b>'W'</b> and <b>'S'</b> to go forward or backward.
-Press <b>'R'</b> to reset the position/direction of character.
-Press <b>'T'</b> to change the world.
-</pre>
+<!-- <pre>
+Press <b>'I'</b> and <b>'O'</b>  to add/minus monster. Press <b>'R'</b> to reset the position/direction of character.
+Press <b>'A'</b> and <b>'D'</b> to turn left or right, <b>'W'</b> and <b>'S'</b> to go forward or backward.
+</pre> -->
 
 <script>
 window.onkeydown = function(event){
@@ -162,12 +159,12 @@ window.onkeydown = function(event){
             break;
         case 65: //'A' arrow
             if(textureLeft > -3) textureLeft --;
-            if(moveLeft > -3.4)  moveLeft -= 0.3;
+            if(moveLeft > -3.9)  moveLeft -= 0.3;
             if(theta < 9)        theta += unit;
             break;
         case 68: //'D' arrow
             if(textureLeft < 3) textureLeft ++;
-            if(moveLeft < 3.4)  moveLeft += 0.3;
+            if(moveLeft < 3.9)  moveLeft += 0.3;
             if(theta > -9)      theta -= unit;
             break;
             
@@ -177,19 +174,16 @@ window.onkeydown = function(event){
             moveLeft = 0;
             moveForward = 0;
             theta = 0;
+            swimUP = 0;
             break;
 
-        case 38: //up arrow
-            omega += 10;
+        case 38: //up arrow for swimming up
+            if(waterLevelIndex != 0 && swimUP < 2.1)    
+                swimUP += 0.3;
             break;
-        case 40: //down arrow
-            omega -= 10;
-            break;
-        case 37: //left arrow
-            theta -= unit;
-            break;
-        case 39: //right arrow
-            theta += unit;
+        case 40: //down arrow for swimming up
+            if(waterLevelIndex != 0 && swimUP > -2.1)   
+                swimUP -= 0.3;
             break;
 
         // 't' : change the world between island and underwater

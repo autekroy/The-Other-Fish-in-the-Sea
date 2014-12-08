@@ -127,6 +127,7 @@ function createMonster(monsterindex) {
 var deg  = 180;
 var degUnit = 15;
 var moveForward = 0;// for character to move forward or backward. 'W' and 'S' key
+var swimUP = 0;     // for character to swimming up or down. up and down arrow
 var moveLeft = 0;
 var inWave = 0, inWavePos = 0, waveUnit = 0.05;// indicate if people in a wave (bouncing in x axis)
 var hasSword = 0;

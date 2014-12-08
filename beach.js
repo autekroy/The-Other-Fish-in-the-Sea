@@ -260,11 +260,7 @@ function render()
         else if(walkBackward == 1 && movePosition >= 0.03)
             movePosition -= movePositionUnit;
 
-        if(islandIndex == finalLisland && movePosition >= 1){
-            movePosition = 1;
-            // alert("You're in the last!");
-        }
-        else if(movePosition > 2.0){  
+        if(movePosition > 2.0){  
             onTheBeach = 0; //going to underwater
             movePosition = 0;
             walking = 0;
@@ -273,6 +269,11 @@ function render()
             timer.reset(); // reset timer before going to underwater
         }
         else{
+            if(islandIndex == finalLisland && movePosition >= 1){
+                movePosition = 1;
+                // alert("You're in the last!");
+            }
+
             modelViewMatrix = mult(modelViewMatrix, translate(0, 0, movePosition));
 
             // Bind position buffer
@@ -495,8 +496,10 @@ function render()
             gl.uniform3fv(UNIFORM_lightPosition,  flatten(lightPosition));
             gl.uniform1f(UNIFORM_shininess,  shininess);
 
-            if(waterLevelIndex == 0)
+            if(waterLevelIndex == 0){
                 gl.drawArrays( gl.TRIANGLES, 0, 36);
+                swimUP = 0;
+            }
             gl.uniform1i(UNIFORM_usebumpmap, 0);
 
             /////////////////////////
@@ -643,11 +646,11 @@ function render()
             if(hasSword){
                 if(transparentStatus == 1){
                     enableAlphaBlending();
-                    createSword(1.3 + moveLeft, 2.1, -1.3 + moveForward, 0);
+                    createSword(1.3 + moveLeft, 2.1 + swimUP, -1.3 + moveForward, 0);
                     disableAlphaBlending();
                 }
                 else
-                    createSword(1.3 + moveLeft, 2.1, -1.3 + moveForward, 0);
+                    createSword(1.3 + moveLeft, 2.1 + swimUP, -1.3 + moveForward, 0);
             }
             ////////////////////////////////
             // Render the sphere! (for Bubble and people)
@@ -680,8 +683,9 @@ function render()
             enableAlphaBlending();
             createBubble(7, 1, -10);
             createBubble(-3, 1, -7);
-            createBubble(3, 1, -2);
+            createBubble(4, 1, -2);
             createBubble(-5, 1, -3);
+            createBubble(2, 2, -15);
             disableAlphaBlending();
 
             // // createSwaweed(3, 0, -1);
@@ -693,11 +697,11 @@ function render()
             // Render person
             if(transparentStatus == 1){
                 enableAlphaBlending();    
-                createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
+                createPeople(moveLeft, swimUP, moveForward, onTheBeach, walkForward);
                 disableAlphaBlending();
             }
             else
-                createPeople(moveLeft, 0, moveForward, onTheBeach, walkForward);
+                createPeople(moveLeft, swimUP, moveForward, onTheBeach, walkForward);
             
             // check collision between person and monsters
             var hasCollisionHappened;
@@ -749,8 +753,8 @@ function render()
     createLifePoints(numLifePoints);
 
     // check if game over
-    if(numLifePoints < 0){
-        numLifePoints = 3;
+    if(numLifePoints == 0){
+        // numLifePoints = 3;
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, gameOverTexture);
 
