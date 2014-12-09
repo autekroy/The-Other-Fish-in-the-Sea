@@ -32,8 +32,9 @@ Due to security, some browser like Chrome may stop html file to load files autom
 ----------------------------------------------------
 ### Game Indroduction:
 
-#### Background Story:
-
+You want to find your love of your life! But you have been dropped on a wrong island. 
+So you have to swim to cross different to find your love! 
+Eat the food on the island, avoid underwater monsters and collect swords to kill monsters!
 
 ----------------------------------------------------
 ### How to play:
@@ -52,21 +53,21 @@ Due to security, some browser like Chrome may stop html file to load files autom
 
 ----------------------------------------------------
 #### Files:
-1. game.html
-2. game.js
-3. globalVars.js
-4. livingThings.js
-5. shape.js
-6. texture.js
-7. alphaBlending.js
-8. boundingBox.js
+1. game.html:        main game html file
+2. game.js:          main javascript file to run webgl
+3. globalVars.js:    has most the global variables in this project.
+4. livingThings.js:  functions that create various shapes which are moving (living underwater!)
+5. shape.js:         functions that create shapes which are not living
+6. texture.js:       contain functions to create different textures.
+7. alphaBlending.js: function about blending
+8. boundingBox.js:   function about collision detection
 
 #### Folders:
-1. Common: basic webgl utilities and matrix calculation
-2. TextureImage: all texture images
-3. introModal
-4. Bump Mapping images
-5. Sound: 
+1. Common:              basic webgl utilities and matrix calculation
+2. TextureImage:        all texture images
+3. introModal:          library about modal including angular.js and bootstrap
+4. Bump Mapping images: contain all bump mapping images for bump mapping texture
+5. Sound:               all the sounds effect files
 6. Collision Detection test: basic test for collision detection, not use for main game
 
 ----------------------------------------------------
@@ -74,14 +75,15 @@ Due to security, some browser like Chrome may stop html file to load files autom
 1. Transformation: rotate, scale and translate.
 2. Lighting and Shading
 3. Texture
-4. Blending
+4. Blending: for underwater bubbles and mushroom effect.
 
 #### Completed Advanced topic:
-1. Bump Mapping for beach and rock
+1. Bump Mapping for beach and underwater rocks.
 2. Picking: use mouse to click food as life points
 3. Collision detection: detect collisio between character and other objects.
 
 ----------------------------------------------------
 #### Reference:
-* monster resources is from [Monster Cube](https://www.behance.net/gallery/4531779/Monster-Cube)
+* monster images are from [Monster Cube](https://www.behance.net/gallery/4531779/Monster-Cube)
 * Common folder is from [text book and author's website](http://www.cs.unm.edu/~angel/WebGL/7E/)
+* sounds effects are from [FindSound] (http://www.findsounds.com/typesChinese.html)
