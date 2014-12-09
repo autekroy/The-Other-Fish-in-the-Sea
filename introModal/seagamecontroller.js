@@ -227,7 +227,7 @@
 						$scope.emmaWatson = talker.emmaWatson;
 						$scope.meganFox = talker.meganFox;
 						$scope.chrisHemsworth = talker.chrisHemsworth;
-						$scope.catFish = talker.catFish;
+						$scope.Pisces23 = talker.catFish;
 
 						$scope.phaseNumber = 0;
 
@@ -258,7 +258,7 @@
 										}
 										else
 										{
-											$scope.phaseNumber = 4;
+											$scope.phaseNumber = 5;
 										}
 									}
 								}
