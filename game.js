@@ -263,7 +263,7 @@ function render()
             movePosition -= movePositionUnit;
 
         if(movePosition > 2.0){  
-            monsterNumber ++;
+            if(monsterNumber <= 4)  monsterNumber ++;
             onTheBeach = 0; //going to underwater
             movePosition = 0;
             walking = 0;
