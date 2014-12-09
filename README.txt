@@ -13,7 +13,7 @@ The Other Fish in the Sea
 ---------------------------------------------------------------------------
 ### Enviornment and tools:
 1. OS: Mac OS X 10.9.5
-2. Browser: Chrome 37 or Safari 8.0 (Safari Preferred)
+2. Browser: Chrome 37 or Safari 8.0 (Chrome Preferred)
 3. Webgl
 
 ---------------------------------------------------------------------------
