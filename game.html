@@ -220,8 +220,7 @@ Date: 11/22, 2014
                         break;
 
                     case 79: // 'O'  add monster
-                        monsterNumber ++;
-                        if(monsterNumber > 6)  monsterNumber = 5;
+                        if(monsterNumber < 5) monsterNumber ++;
                         break;
                     case 76: // 'L' minus monster
                         monsterNumber --;

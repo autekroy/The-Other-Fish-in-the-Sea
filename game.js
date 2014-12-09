@@ -432,6 +432,8 @@ function render()
                     waterLevelIndex = 0;///////////check 
                     waterLevelNext = 1;
                     islandIndex++;
+                    notPickUp[0] = 1;
+                    notPickUp[1] = 1;
                 }
             }
             modelViewMatrix = lookAt(eye, at, up);
