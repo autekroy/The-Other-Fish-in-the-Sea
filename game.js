@@ -225,7 +225,7 @@ level 0: the shallow water. You can not swimming up or down, and won't be affect
 level 1: the deeper water with rock. You can swim up or down, and won't be affect by waves due to rocks.
 level 2: the deepest water without rock. You can swim up or down, and would be affect by waves due to no rocks.
 */
-var waterLevelTime = [8, 8, 8; // the time period of each water level
+var waterLevelTime = [8, 8, 8]; // the time period of each water level
 var waterLevelIndex = 0;        // indicate the water level from 0 to 2.
 var waterLevelNext = 1;         // This variable will be 1 or -1. Use waterLevelIndex + waterLevelNext to get the next water level.
 
