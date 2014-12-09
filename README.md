@@ -1,5 +1,5 @@
 The Other Fish in the Sea
-=====================================================
+===========================================================================
 ### Computer Graphics Term Project
 * University of California, Los Angeles, CS 174A, 2014 fall
 * Authors:
@@ -10,13 +10,13 @@ The Other Fish in the Sea
  * Brandon Ly      (UCLA ID: 304136729) (brandonly101@g.ucla.edu)
 * Date: 12/08, 2014
 
-----------------------------------------------------
+---------------------------------------------------------------------------
 ### Enviornment and tools:
 1. OS: Mac OS X 10.9.5
 2. Browser: Chrome 37 or Safari 8.0
 3. Webgl
 
-----------------------------------------------------
+---------------------------------------------------------------------------
 ### How to run (Mac OS):
 Due to security, some browser like Chrome may stop html file to load files automatically.
 * Mac OS (recommend): Use SimpleHTTPserver to solve it.
@@ -29,7 +29,7 @@ Due to security, some browser like Chrome may stop html file to load files autom
 3. Then open your browser and use link: http://127.0.0.1:8000/ (cuz the port is 8000)
 4. click to open "game.html" file.
 
-----------------------------------------------------
+---------------------------------------------------------------------------
 ### Game Indroduction:
 
 #### Background Story:
@@ -38,12 +38,22 @@ So you have to swim to cross different to find your love!
 Eat the food on the island, avoid underwater monsters and collect swords to kill monsters!
 
 #### Game Play:
-Read the instruction and story before playing the game!
-If you are standing on the beach. Use mouse to pick food and use key to move forward.
-If you are underwater. Use key to move and swim to avoid monsters.
-PAY ATTENTION TO which are not monsters, they may help you!
+Read the instruction and story before playing the game! 
+There're instruction about key controls below the screen.
 
-----------------------------------------------------
+##### Standing on the beach
+* Use mouse to pick food.
+* Use key to move forward to ocean.
+
+##### Swimming underwater
+* There're 3 underwater levels from 0 to 2
+ 1. level 0: the shallow water. You can not swimming up or down, and won't be affect by waves
+ 2. level 1: the deeper water with rock. You can swim up or down, and won't be affect by waves due to rocks.
+ 3. level 2: the deepest water without rock. You can swim up or down, and would be affect by waves.
+* Use key to move left, right, forward and backward to avoid monsters.
+* In underwater level 1 and level 2, you can swimming up and down.
+
+---------------------------------------------------------------------------
 ### How to play:
 
 #### Mouse control:
@@ -58,7 +68,7 @@ PAY ATTENTION TO which are not monsters, they may help you!
 1. Use 'O' and 'L' to increase or decrease the number of monsters.
 2. Use 'U' and 'J' to increase or decrease the number of life points.
 
-----------------------------------------------------
+---------------------------------------------------------------------------
 #### Files:
 1. game.html:        main game html file
 2. game.js:          main javascript file to run webgl
@@ -77,7 +87,7 @@ PAY ATTENTION TO which are not monsters, they may help you!
 5. Sound:               all the sounds effect files
 6. Collision Detection test: basic test for collision detection, not use for main game
 
-----------------------------------------------------
+---------------------------------------------------------------------------
 #### Completed Basic topics:
 1. Transformation:       rotate, scale and translate.
 2. Camera viewpoint:     change the view when walking on the beach.
@@ -90,7 +100,7 @@ PAY ATTENTION TO which are not monsters, they may help you!
 2. Picking: use mouse to click food as life points
 3. Collision detection: detect collisio between character and other objects.
 
-----------------------------------------------------
+---------------------------------------------------------------------------
 ### Authors' responsibility
  * Yao-Jen Chang: Main game (game.html, game.js, livingThings.js, shape.js, texture.js), sound effect and documents.
  * Sergio Davila: Advanced topic of Collision detection (boundingBox.js) and website modals (introModal folder)
@@ -98,7 +108,7 @@ PAY ATTENTION TO which are not monsters, they may help you!
  * Katie Lu     : Advanced topic of Bump Mapping (game.html, game.js)
  * Brandon Ly   : Blending for bubble and mushroom effect (alphaBlending.js)
 
-----------------------------------------------------
+---------------------------------------------------------------------------
 #### Reference:
 * monster images are from [Monster Cube](https://www.behance.net/gallery/4531779/Monster-Cube)
 * Common folder is from [text book and author's website](http://www.cs.unm.edu/~angel/WebGL/7E/)
