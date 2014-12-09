@@ -1,5 +1,5 @@
 /*
-This file essentially contains all the global variables that our project uses!
+This file essentially contains most the global variables for this project.
 */
 
 // Basic global variables that need to be created!

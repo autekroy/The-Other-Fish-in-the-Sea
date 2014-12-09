@@ -219,14 +219,24 @@ Date: 11/22, 2014
                         onTheBeach = (onTheBeach == 0)? 1: 0;
                         break;
 
-                    case 79: // 'o'  add monster
+                    case 79: // 'O'  add monster
                         monsterNumber ++;
                         if(monsterNumber > 6)  monsterNumber = 5;
                         break;
-                    case 80: // 'p' minus monster
+                    case 76: // 'L' minus monster
                         monsterNumber --;
                         if(monsterNumber < 0)  monsterNumber = 0;
                         break;
+
+                    case 85: // 'U'  add monster
+                        numLifePoints ++;
+                        if(numLifePoints > 10)  numLifePoints = 10;
+                        break;
+                    case 74: // 'J' minus monster
+                        numLifePoints --;
+                        if(numLifePoints < 2)  numLifePoints = 1;
+                        break;
+
                 }
             }
             window.onkeypress = function(event){

@@ -1,7 +1,6 @@
 /*
 
-This file contains all the functions that allow for the creation of various
-shapes which are not living.
+This file contains all the functions that create shapes which are not living.
 Some of the variables it affects are in the "globalVars.js" file
 
 Main Author: Yao-Jen Chang

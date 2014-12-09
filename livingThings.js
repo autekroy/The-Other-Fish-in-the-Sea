@@ -1,5 +1,5 @@
 /*
-This file contains all the functions that allow for the creation of various
+This file contains all the functions that create various
 shapes which are moving (living underwater!).
 
 Main Author: Yao-Jen Chang
