@@ -13,7 +13,7 @@ The Other Fish in the Sea
 ---------------------------------------------------------------------------
 ### Enviornment and tools:
 1. OS: Mac OS X 10.9.5
-2. Browser: Chrome 37 or Safari 8.0
+2. Browser: Chrome 37 or Safari 8.0 (Safari Preferred)
 3. Webgl
 
 ---------------------------------------------------------------------------
@@ -34,7 +34,7 @@ Due to security, some browser like Chrome may stop html file to load files autom
 
 #### Background Story:
 You want to find your love of your life! But you have been dropped on a wrong island. 
-So you have to swim to cross different to find your love! 
+So you have to swim to cross different islands to find your love! 
 Eat the food on the island, avoid underwater monsters and collect swords to kill monsters!
 
 #### Game Play:
@@ -82,7 +82,7 @@ There're instruction about key controls below the screen.
 #### Folders:
 1. Common:              basic webgl utilities and matrix calculation
 2. TextureImage:        all texture images
-3. introModal:          library about modal including angular.js and bootstrap
+3. introModal:          Bootstrap and AngularJS libraries along with JavaScript code for improving user interaction through pop-ups.
 4. Bump Mapping images: contain all bump mapping images for bump mapping texture
 5. Sound:               all the sounds effect files
 6. Collision Detection test: basic test for collision detection, not use for main game
@@ -93,12 +93,12 @@ There're instruction about key controls below the screen.
 2. Camera viewpoint:     change the view when walking on the beach.
 3. Lighting and Shading: objects and character
 4. Texture Mapping:      for every objects
-5. Blending:             for underwater bubbles and mushroom effect.
+5. Blending:             for underwater bubbles and intangibility effect after "eating" a mushroom.
 
 #### Completed Advanced topic:
 1. Bump Mapping for beach and underwater rocks.
 2. Picking: use mouse to click food as life points
-3. Collision detection: detect collisio between character and other objects.
+3. Collision detection: detect collision between character and other objects.
 
 ---------------------------------------------------------------------------
 ### Authors' responsibility
