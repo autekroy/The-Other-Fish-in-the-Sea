@@ -9,7 +9,8 @@ The Other Fish in the Sea
  * Katie Lu        (UCLA ID: 703861941) (rkrlu@sbcglobal.net)
  * Brandon Ly      (UCLA ID: 304136729) (brandonly101@g.ucla.edu)
 * Date: 12/08, 2014
-
+* [GitHub Page](https://github.com/autekroy/The-Other-Fish-in-the-Sea)
+* 
 ---------------------------------------------------------------------------
 ### Enviornment and tools:
 1. OS: Mac OS X 10.9.5
@@ -69,7 +70,7 @@ There're instruction about key controls below the screen.
 2. Use 'U' and 'J' to increase or decrease the number of life points.
 
 ---------------------------------------------------------------------------
-#### Files:
+#### Files: open files to see more clear comments
 1. game.html:        main game html file
 2. game.js:          main javascript file to run webgl
 3. globalVars.js:    has most the global variables in this project.
@@ -109,7 +110,7 @@ There're instruction about key controls below the screen.
  * Brandon Ly   : Blending for bubble and mushroom effect (alphaBlending.js)
 
 ---------------------------------------------------------------------------
-#### Reference:
+### Reference:
 * monster images are from [Monster Cube](https://www.behance.net/gallery/4531779/Monster-Cube)
 * Common folder is from [text book and author's website](http://www.cs.unm.edu/~angel/WebGL/7E/)
 * sounds effects are from [FindSound] (http://www.findsounds.com/typesChinese.html)
