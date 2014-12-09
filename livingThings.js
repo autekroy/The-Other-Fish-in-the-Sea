@@ -1,8 +1,13 @@
 /*
+University of California, Los Angeles, CS 174A, 2014 fall
+Term project: The Other Fish in the Sea
+
 This file contains all the functions that create various
 shapes which are moving (living underwater!).
 
 Main Author: Yao-Jen Chang
+
+Date: 12/08, 2014
 */
 
 /************************************************

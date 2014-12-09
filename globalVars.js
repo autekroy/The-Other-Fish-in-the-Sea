@@ -1,5 +1,12 @@
 /*
+University of California, Los Angeles, CS 174A, 2014 fall
+Term project: The Other Fish in the Sea
+
 This file essentially contains most the global variables for this project.
+
+Game Main Autohr: Yao-Jen Chang
+
+Date: 12/08, 2014
 */
 
 // Basic global variables that need to be created!

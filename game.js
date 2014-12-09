@@ -1,12 +1,14 @@
 /*
-
-This file contains the init() and render() functions!
+University of California, Los Angeles, CS 174A, 2014 fall
+Term project: The Other Fish in the Sea
 
 Game Main Autohr: Yao-Jen Chang
 Collision detection: Sergio
 Picking: Michael
 Bump Mapping: Katie
 Blending: Brandon
+
+Date: 11/08, 2014
 */
 
 var program;
@@ -765,6 +767,7 @@ function render()
 
         gl.drawArrays( gl.TRIANGLES, 0, 6);      
 
+        playSound(5);
         // alert("GAME OVER!");
         return;
     }
