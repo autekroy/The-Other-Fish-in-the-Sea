@@ -71,6 +71,7 @@
 							genderStuff.isSet = true;
 						}
 					};
+
 					var seaGameIntroModalInstanceCtrl = 
 					function ($scope, $modalInstance, wantMale, wantFemale, male, female, xxxo) 
 					{
@@ -135,6 +136,153 @@
 					}
 
 					$scope.introModalOpen();
+
+
+					$scope.openCelebrityModal =function()
+					{
+						if(timeToTalk.now)
+						{
+							$scope.resetWhichCelebrity();
+							$scope.updateTalker();
+							$scope.createModalInstanceForCelebrity();
+						}
+						
+					};
+
+					$scope.whichCelebrity = {};
+					$scope.whichCelebrity.emmaWatson = false;
+					$scope.whichCelebrity.meganFox = false;
+					$scope.whichCelebrity.georgeClooney = false;
+					$scope.whichCelebrity.chrisHemsworth = false;
+					$scope.whichCelebrity.catFish = false;
+
+					$scope.resetWhichCelebrity = function()
+					{
+						$scope.whichCelebrity.emmaWatson = false;
+						$scope.whichCelebrity.meganFox = false;
+						$scope.whichCelebrity.georgeClooney = false;
+						$scope.whichCelebrity.chrisHemsworth = false;
+						$scope.whichCelebrity.catFish = false;
+					};
+					// var timeToTalk = {};
+					// timeToTalk.now = false;
+					// timeToTalk.talkedAlready = false;
+					// timeToTalk.who = null;
+					$scope.updateTalker = 
+					function()
+					{
+
+
+						if(timeToTalk.who == 1 && $scope.wantMaleOrFemale == 0 )
+						{
+							$scope.whichCelebrity.emmaWatson = true;
+						}
+						else 
+						{
+							if(timeToTalk.who == 1 && $scope.wantMaleOrFemale == 1)
+							{
+								$scope.whichCelebrity.georgeClooney = true;
+							}
+							else
+							{
+								if(timeToTalk.who == 2 && $scope.wantMaleOrFemale == 0)
+								{
+									$scope.whichCelebrity.meganFox = true;
+								}
+								else
+								{
+									if(timeToTalk.who == 2 && $scope.wantMaleOrFemale == 1)
+									{
+										$scope.whichCelebrity.chrisHemsworth =true;
+									}
+									else
+									{
+										$scope.whichCelebrity.catFish = true;
+									}
+								}
+							}
+						}
+					};
+
+					$scope.createModalInstanceForCelebrity =
+					function()
+					{
+						var modalInstance = $modal.open
+						({
+							templateUrl: 'introModal/celebrity_partial.html',
+							controller: seaGameIntroModalInstanceCtrl,
+							size: 'lg',
+							resolve: {
+								talker: function(){return $scope.whichCelebrity;}
+							},
+							backdrop: 'static',
+							keyboard: false
+						});
+					};
+
+					var seaGameIntroModalInstanceCtrl = 
+					function ($scope, $modalInstance, talker) 
+					{
+						$scope.georgeClooney = talker.georgeClooney;
+						$scope.emmaWatson = talker.emmaWatson;
+						$scope.meganFox = talker.meganFox;
+						$scope.chrisHemsworth = talker.chrisHemsworth;
+						$scope.catFish = talker.catFish;
+
+						$scope.phaseNumber = 0;
+
+						$scope.updatePhaseNumber = 
+						function()
+						{
+							if($scope.georgeClooney)
+							{
+								$scope.phaseNumber = 6;
+							}
+							else
+							{
+								if($scope.emmaWatson)
+								{
+									$scope.phaseNumber = 5;
+								}
+								else
+								{
+									if($scope.meganFox)
+									{
+										$scope.phaseNumber = 13;
+									}
+									else
+									{
+										if($scope.chrisHemsworth)
+										{
+											$scope.phaseNumber = 8;
+										}
+										else
+										{
+											$scope.phaseNumber = 4;
+										}
+									}
+								}
+							}
+						};
+
+						$scope.currentPhase = 0;	
+
+						$scope.updatePhaseNumber();
+
+						$scope.moveOn= 
+						function()
+						{
+							if($scope.currentPhase < $scope.phaseNumber)
+							{
+								$scope.currentPhase++;
+
+							}
+							else
+							{
+								$modalInstance.close();
+							}
+						};
+					}
 
 				}
 			]

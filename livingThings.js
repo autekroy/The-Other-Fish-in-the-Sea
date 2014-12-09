@@ -365,6 +365,13 @@ function createCelebrity(xvalue, yvalue, zvalue, celebrityIndex, genderWant){
     gl.bindTexture(gl.TEXTURE_2D, celebrityTexture);
 
     gl.drawArrays( gl.TRIANGLES, 0, 6); 
+
+    var firstSixPoints = [];
+    for(var i = 0; i < 6; i++){
+        firstSixPoints.push(cubePoints[i]);
+    }
+    // for collision
+    putExtremesInBoundaryObject(firstSixPoints, ctm, celebrityBox);
 }
 
 

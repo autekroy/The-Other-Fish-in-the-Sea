@@ -93,9 +93,6 @@ var onTheBeach = 1;
 var walkForward = 0, walkBackward = 0;
 var walking = 0;
 
-// monster variable
-var monsterNumber = 3; //initial number of monster
-
 /*	For collision detection
 	each object will have a bounding box to check whether objsct collide other bounding boxes. 
 */
@@ -109,9 +106,16 @@ monsterBoxes.push(new boundingBox());
 monsterBoxes.push(new boundingBox());
 var mushroomBox = new boundingBox();
 var swordCubeBox = new boundingBox();
+var celebrityBox = new boundingBox();
 
 //gender bender
 var genderBender = {};
 genderBender.isSet = false;
 genderBender.want = null;
 genderBender.is = null;
+
+
+var timeToTalk = {};
+timeToTalk.now = false;
+timeToTalk.talkedAlready = false;
+timeToTalk.who = null;

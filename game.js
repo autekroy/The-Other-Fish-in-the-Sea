@@ -223,7 +223,7 @@ var congraMessage = 0;
 /* water level: there're 3 water level from 0 - 2
 level 0: the shallow water. You can not swimming up or down, and won't be affect by waves
 level 1: the deeper water with rock. You can swim up or down, and won't be affect by waves due to rocks.
-level 2: the deepest water without rock. You can swim up or down, and would be affect by waves due to rocks.
+level 2: the deepest water without rock. You can swim up or down, and would be affect by waves due to no rocks.
 */
 var waterLevelTime = [8, 8, 8]; // the time period of each water level
 var waterLevelIndex = 0;        // indicate the water level from 0 to 2.
@@ -231,6 +231,9 @@ var waterLevelNext = 1;         // This variable will be 1 or -1. Use waterLevel
 
 var backgroundPos = 0, prebgPos = 0;
 var transparentStatus = 0;
+
+// monster variable
+var monsterNumber = 2; //initial number of monster
 
 function render()
 {
@@ -260,6 +263,7 @@ function render()
             movePosition -= movePositionUnit;
 
         if(movePosition > 2.0){  
+            monsterNumber ++;
             onTheBeach = 0; //going to underwater
             movePosition = 0;
             walking = 0;
@@ -268,8 +272,8 @@ function render()
             timer.reset(); // reset timer before going to underwater
         }
         else{
-            if(islandIndex == finalLisland && movePosition >= 1){
-                movePosition = 1;
+            if(islandIndex == finalLisland && movePosition >= 1.5){
+                movePosition = 1.5;
                 // alert("You're in the last!");
             }
 
@@ -397,10 +401,22 @@ function render()
             ////////////////////////
             // Render the character
             ///////////////////////
-            createPeople(moveLeft, 0, moveForward, onTheBeach, walking, genderBender.is);
+            createPeople(moveLeft, 0, moveForward, onTheBeach, walking, genderBender.is); 
+            timeToTalk.now = bodyBox.haveCollided(celebrityBox);
+            if(timeToTalk.now && !timeToTalk.talkedAlready)
+            {
+                timeToTalk.who = islandIndex;
+                $("#dummy").trigger( "click" );
+                timeToTalk.talkedAlready = true;
+            }
         }
     }
-    else{ // underwater scene
+    else{
+        //reset time to talk once you go to the ocean
+        timeToTalk.talkedAlready = false;
+        timeToTalk.who = null;
+        timeToTalk.now = false;
+         // underwater scene
 
         ////////////////////////////////
         // Render the Ocean Floor!
@@ -613,7 +629,7 @@ function render()
             ////////////////////////////////
             // Render monster
             ////////////////////////////////
-            for(var i = 0; i < monsterNumber + islandIndex; i++)// islandIndex is from 0 to 1
+            for(var i = 0; i < monsterNumber; i++)// islandIndex is from 0 to 1
                 createMonster(i);
 
             ///////////////////////
@@ -694,7 +710,7 @@ function render()
             var hasCollisionHappened;
             if(transparentStatus != 1){
                 hasCollisionHappened = false;
-                for(var i = 0; i < 4; i++){   
+                for(var i = 0; i < monsterNumber; i++){   
                     hasCollisionHappened =  bodyBox.haveCollided(monsterBoxes[i]);
                     if(hasCollisionHappened){
                         if(hasSword == 1)   {hasSword = 0;      playSound(2);}
