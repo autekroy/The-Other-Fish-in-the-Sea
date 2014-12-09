@@ -2,7 +2,7 @@ The Other Fish in the Sea
 =====================================================
 ### Computer Graphics Term Project
 * University of California, Los Angeles, CS 174A, 2014 fall
-* Author
+* Authors:
  * Yao-Jen Chang   (UCLA ID: 704405423) (autekwing@ucla.edu)
  * Sergio Davila   (UCLA ID: 404054006) (SDavila03@g.ucla.edu)
  * Xueyuan Han     (UCLA ID: 904062787) (hanxueyuan@g.ucla.edu)
@@ -32,9 +32,16 @@ Due to security, some browser like Chrome may stop html file to load files autom
 ----------------------------------------------------
 ### Game Indroduction:
 
+#### Background Story:
 You want to find your love of your life! But you have been dropped on a wrong island. 
 So you have to swim to cross different to find your love! 
 Eat the food on the island, avoid underwater monsters and collect swords to kill monsters!
+
+#### Game Play:
+Read the instruction and story before playing the game!
+If you are standing on the beach. Use mouse to pick food and use key to move forward.
+If you are underwater. Use key to move and swim to avoid monsters.
+PAY ATTENTION TO which are not monsters, they may help you!
 
 ----------------------------------------------------
 ### How to play:
@@ -72,15 +79,24 @@ Eat the food on the island, avoid underwater monsters and collect swords to kill
 
 ----------------------------------------------------
 #### Completed Basic topics:
-1. Transformation: rotate, scale and translate.
-2. Lighting and Shading
-3. Texture
-4. Blending: for underwater bubbles and mushroom effect.
+1. Transformation:       rotate, scale and translate.
+2. Camera viewpoint:     change the view when walking on the beach.
+3. Lighting and Shading: objects and character
+4. Texture Mapping:      for every objects
+5. Blending:             for underwater bubbles and mushroom effect.
 
 #### Completed Advanced topic:
 1. Bump Mapping for beach and underwater rocks.
 2. Picking: use mouse to click food as life points
 3. Collision detection: detect collisio between character and other objects.
+
+----------------------------------------------------
+### Authors' responsibility
+ * Yao-Jen Chang: Main game (game.html, game.js, livingThings.js, shape.js, texture.js), sound effect and documents.
+ * Sergio Davila: Advanced topic of Collision detection (boundingBox.js) and website modals (introModal folder)
+ * Xueyuan Han  : Advanced topic of Picking (game.html, game.js)
+ * Katie Lu     : Advanced topic of Bump Mapping (game.html, game.js)
+ * Brandon Ly   : Blending for bubble and mushroom effect (alphaBlending.js)
 
 ----------------------------------------------------
 #### Reference:
