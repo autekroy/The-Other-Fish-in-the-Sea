@@ -10,6 +10,7 @@ The Other Fish in the Sea
  * Brandon Ly      (UCLA ID: 304136729) (brandonly101@g.ucla.edu)
 * Date: 12/08, 2014
 * [GitHub Page](https://github.com/autekroy/The-Other-Fish-in-the-Sea)
+* [Project webpage](http://autekroy.github.io/The-Other-Fish-in-the-Sea/game.html) (no sound effect)
 
 ---------------------------------------------------------------------------
 ### Enviornment and tools:
