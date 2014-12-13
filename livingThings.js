@@ -360,11 +360,11 @@ function createCelebrity(xvalue, yvalue, zvalue, celebrityIndex, genderWant){
     gl.vertexAttribPointer( ATTRIBUTE_uv, 2, gl.FLOAT, false, 0, 0 );
 
     // gender 0 means female, 1 means males
-    if(celebrityIndex == 1 && genderWant == 0)         celebrityTexture.image.src =  "/TextureImage/EmmaWatson.jpg"; 
-    else if(celebrityIndex == 2 && genderWant == 0)    celebrityTexture.image.src =  "/TextureImage/megan.png";
-    else if(celebrityIndex == 1 && genderWant == 1)    celebrityTexture.image.src =  "/TextureImage/GeorgeClooney.png"; 
-    else if(celebrityIndex == 2 && genderWant == 1)    celebrityTexture.image.src =  "/TextureImage/thor.png";   
-    else                                               celebrityTexture.image.src =  "/TextureImage/catfish.png";
+    if(celebrityIndex == 1 && genderWant == 0)         celebrityTexture.image.src =  "TextureImage/EmmaWatson.jpg"; 
+    else if(celebrityIndex == 2 && genderWant == 0)    celebrityTexture.image.src =  "TextureImage/megan.png";
+    else if(celebrityIndex == 1 && genderWant == 1)    celebrityTexture.image.src =  "TextureImage/GeorgeClooney.png"; 
+    else if(celebrityIndex == 2 && genderWant == 1)    celebrityTexture.image.src =  "TextureImage/thor.png";   
+    else                                               celebrityTexture.image.src =  "TextureImage/catfish.png";
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, celebrityTexture);

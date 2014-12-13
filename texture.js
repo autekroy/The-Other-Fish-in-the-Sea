@@ -37,11 +37,7 @@ function defineTexture()
         gl.generateMipmap(gl.TEXTURE_2D);
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
-<<<<<<< HEAD
     oceanTexture.image.src =  "TextureImage/underwater.jpg";//"TextureImage/underwaterBlue.jpg";
-=======
-    oceanTexture.image.src =  "TextureImage/underwater.jpg";//"/TextureImage/underwaterBlue.jpg";
->>>>>>> af037f36f3a671fe778f10c8749d4016e75d6453
 
     beachOceanTexture = gl.createTexture();
     beachOceanTexture.image = new Image();
