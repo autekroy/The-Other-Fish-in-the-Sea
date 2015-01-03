@@ -1,6 +1,8 @@
 The Other Fish in the Sea
 ===========================================================================
-### Computer Graphics Term Project
+## Computer Graphics Term Project 
+### [Project Demo webpage](http://autekroy.github.io/The-Other-Fish-in-the-Sea/game.html) (no sound effect)
+
 * University of California, Los Angeles, CS 174A, 2014 fall
 * Authors:
  * Yao-Jen Chang   (UCLA ID: 704405423) (autekwing@ucla.edu)
@@ -10,7 +12,6 @@ The Other Fish in the Sea
  * Brandon Ly      (UCLA ID: 304136729) (brandonly101@g.ucla.edu)
 * Date: 12/08, 2014
 * [GitHub Page](https://github.com/autekroy/The-Other-Fish-in-the-Sea)
-* [Project webpage](http://autekroy.github.io/The-Other-Fish-in-the-Sea/game.html) (no sound effect)
 
 ---------------------------------------------------------------------------
 ### Enviornment and tools:
@@ -115,3 +116,8 @@ There're instruction about key controls below the screen.
 * monster images are from [Monster Cube](https://www.behance.net/gallery/4531779/Monster-Cube)
 * Common folder is from [text book and author's website](http://www.cs.unm.edu/~angel/WebGL/7E/)
 * sounds effects are from [FindSound] (http://www.findsounds.com/typesChinese.html)
+
+---------------------------------------------------------------------------
+### Snap shot:
+![snape shot 1](./img/snapShot1.png)
+![snape shot 2](./img/snapShot2.png)
